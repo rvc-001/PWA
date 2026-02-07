@@ -1,129 +1,184 @@
 "use client";
 
-import React from "react";
+import React, { useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowLeftIcon } from "@/components/Icons";
+import { useParams, useRouter } from "next/navigation";
+import Layout from "@/components/Layout";
 
-const matches = [
-  {
-    id: "1",
-    label: "Match 1",
-    date: "5 May 25",
-    time: "@ 8:00 AM",
-    player1: { name: "Kunal Patel", score: "2 - 1" },
-    player2: { name: "Kunal Verma", score: "" },
-    sets: ["Set 1", "Set 2", "Set 3"],
-    setScores: ["02 -01(-04 - 01)", "", ""],
-    status: "completed",
-  },
-  {
-    id: "2",
-    label: "Match 1",
-    date: "5 May 25",
-    time: "@ 8:00 AM",
-    player1: { name: "Ankit Verma", score: "" },
-    player2: { name: "Akshay Pai", score: "" },
-    sets: ["Set 1", "Set 2", "Set 3"],
-    setScores: ["", "", ""],
-    status: "pending",
-  },
-];
+type MatchRow = {
+  id: string;
+  status: "upcoming" | "live" | "completed";
+  format: "singles" | "doubles";
+  label: string;
+  scheduledAt: string;
+  side0: { name: string; initials: string }[];
+  side1: { name: string; initials: string }[];
+  score?: { side0: number; side1: number };
+};
 
-export default function ManageMatchesPage() {
+const filters = [
+  { id: "all", label: "All" },
+  { id: "upcoming", label: "Upcoming" },
+  { id: "live", label: "Live" },
+  { id: "completed", label: "Completed" },
+] as const;
+
+export default function OrgManageMatchesPage() {
+  const router = useRouter();
+  const params = useParams();
+  const tournamentId = String(params.id);
+  const eventId = String(params.eventId);
+
+  const [activeFilter, setActiveFilter] = useState<(typeof filters)[number]["id"]>("all");
+
+  const matches: MatchRow[] = useMemo(
+    () => [
+      {
+        id: "m-1",
+        status: "upcoming",
+        format: "doubles",
+        label: "Match 1",
+        scheduledAt: "01 May 2026 · 05:00 AM",
+        side0: [
+          { initials: "KV", name: "Kunal Verma" },
+          { initials: "AC", name: "Alex Costa" },
+        ],
+        side1: [
+          { initials: "AK", name: "Anil Kumar" },
+          { initials: "TR", name: "The Rock" },
+        ],
+      },
+      {
+        id: "m-2",
+        status: "completed",
+        format: "singles",
+        label: "Match 2",
+        scheduledAt: "01 May 2026 · 06:30 AM",
+        side0: [{ initials: "KP", name: "Kunal Patel" }],
+        side1: [{ initials: "AV", name: "Ankit Verma" }],
+        score: { side0: 12, side1: 8 },
+      },
+    ],
+    []
+  );
+
+  const filtered = matches.filter((m) => activeFilter === "all" || m.status === activeFilter);
+
   return (
-    <div className="min-h-screen bg-[var(--color-background)]">
-      {/* Header */}
-      <div className="sticky top-0 z-40 bg-[var(--color-surface)] border-b border-[var(--color-border)] p-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Link href="/org/tournaments/1" className="p-2 -ml-2">
-            <ArrowLeftIcon size={20} />
-          </Link>
-          <h1 className="font-semibold">Manage Matches</h1>
+    <Layout
+      showBottomNav={false}
+      title="Manage Matches"
+      showBack
+      onBack={() => router.back()}
+    >
+      <div className="p-4 space-y-4">
+        <div className="rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)] shadow-[var(--shadow-card)] p-4">
+          <p className="text-sm text-[var(--color-muted)]">Tournament</p>
+          <p className="font-semibold">Mumbai Men&apos;s 2026</p>
+          <p className="text-sm text-[var(--color-muted)] mt-1">Event: Pickleball Men&apos;s</p>
         </div>
-        <button className="p-2">⋮</button>
-      </div>
 
-      {/* Tournament Info */}
-      <div className="p-4 bg-primary text-white">
-        <h2 className="font-semibold text-lg">Mumbai Men&apos;s 2025</h2>
-        <p className="text-sm opacity-90">
-          Pickleball Men&apos;s 2025
-        </p>
-        <p className="text-xs opacity-80">
-          Event: 03 Feb 2025, 06:00 AM IST
-        </p>
-      </div>
-
-      <div className="p-4 space-y-4 pb-24">
-        {matches.map((match) => (
-          <Link
-            key={match.id}
-            href={`/org/tournaments/1/events/1/matches/${match.id}`}
-            className="card p-4 block"
-          >
-            {/* Match Header */}
-            <div className="flex items-center justify-between mb-3">
-              <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
-                {match.label}
-              </span>
-              <div className="text-xs text-[var(--color-muted)]">
-                <span>{match.date}</span>
-                <span className="ml-2">{match.time}</span>
-              </div>
-            </div>
-
-            {/* Players */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white text-xs font-medium">
-                  KP
-                </div>
-                <div>
-                  <p className="text-sm font-medium">{match.player1.name}</p>
-                  {match.player1.score && (
-                    <span className="text-xs text-primary font-medium">
-                      {match.player1.score}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <span className="text-[var(--color-muted)]">Vs</span>
-              <div className="flex items-center gap-2">
-                <div>
-                  <p className="text-sm font-medium text-right">{match.player2.name}</p>
-                </div>
-                <div className="w-8 h-8 rounded-full bg-[var(--color-surface-elevated)] border-2 border-[var(--color-border)] flex items-center justify-center text-xs font-medium">
-                  KV
-                </div>
-              </div>
-            </div>
-
-            {/* Sets */}
-            <div className="flex justify-center gap-2">
-              {match.sets.map((set, idx) => (
-                <div
-                  key={set}
-                  className={`px-4 py-2 rounded-lg text-xs text-center ${idx === 0
-                    ? "bg-primary text-white"
-                    : "bg-[var(--color-surface-elevated)]"
-                    }`}
-                >
-                  {set}
-                </div>
-              ))}
-            </div>
-
-            {match.status === "pending" && (
+        <div className="flex items-center gap-2 overflow-auto pb-1">
+          {filters.map((f) => {
+            const active = activeFilter === f.id;
+            return (
               <button
-                className="w-full mt-4 py-2 rounded-lg font-medium text-white"
-                style={{ background: "var(--gradient-orange)" }}
+                key={f.id}
+                type="button"
+                onClick={() => setActiveFilter(f.id)}
+                className={`shrink-0 text-xs px-3 py-1.5 rounded-full border ${
+                  active
+                    ? "bg-primary text-white border-primary"
+                    : "bg-[var(--color-surface)] border-[var(--color-border)] text-[var(--color-muted)]"
+                }`}
+                aria-pressed={active}
               >
-                Manage Match
+                {f.label}
               </button>
-            )}
-          </Link>
-        ))}
+            );
+          })}
+        </div>
+
+        <div className="space-y-3">
+          {filtered.map((m) => {
+            const href = `/org/tournaments/${tournamentId}/events/${eventId}/matches/${m.id}/setup`;
+            return (
+              <div
+                key={m.id}
+                className="rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)] shadow-[var(--shadow-card)] p-4"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-semibold truncate">{m.label}</p>
+                    <p className="text-xs text-[var(--color-muted)] mt-0.5">{m.scheduledAt}</p>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span
+                      className={`text-[11px] px-2 py-0.5 rounded-full ${
+                        m.status === "live"
+                          ? "bg-primary/20 text-primary"
+                          : m.status === "upcoming"
+                            ? "bg-[var(--color-success)]/20 text-[var(--color-success)]"
+                            : "bg-[var(--color-muted)]/20 text-[var(--color-muted)]"
+                      }`}
+                    >
+                      {m.status}
+                    </span>
+                    <span className="text-[11px] px-2 py-0.5 rounded-full bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-muted)]">
+                      {m.format}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-4 grid grid-cols-3 items-center gap-2">
+                  <div className="min-w-0">
+                    <p className="text-xs font-medium text-[var(--color-muted)]">Side A</p>
+                    <p className="text-sm font-semibold truncate">
+                      {m.side0.map((p) => p.initials).join(" / ")}
+                    </p>
+                    <p className="text-xs text-[var(--color-muted)] truncate">
+                      {m.side0.map((p) => p.name).join(", ")}
+                    </p>
+                  </div>
+
+                  <div className="text-center">
+                    <p className="text-[var(--color-muted)] text-sm font-medium">Vs</p>
+                    {m.score && (
+                      <p className="text-sm font-semibold">
+                        {m.score.side0}–{m.score.side1}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="min-w-0 text-right">
+                    <p className="text-xs font-medium text-[var(--color-muted)]">Side B</p>
+                    <p className="text-sm font-semibold truncate">
+                      {m.side1.map((p) => p.initials).join(" / ")}
+                    </p>
+                    <p className="text-xs text-[var(--color-muted)] truncate">
+                      {m.side1.map((p) => p.name).join(", ")}
+                    </p>
+                  </div>
+                </div>
+
+                <Link
+                  href={href}
+                  className="mt-4 inline-flex w-full min-h-[44px] items-center justify-center rounded-[var(--radius-button)] bg-primary text-[var(--color-primary-contrast)] font-medium"
+                >
+                  Manage Match
+                </Link>
+              </div>
+            );
+          })}
+
+          {filtered.length === 0 && (
+            <div className="text-sm text-[var(--color-muted)] p-4 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)]">
+              No matches in this filter.
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 }
+

@@ -87,7 +87,7 @@ export default function MatchCard({
           </span>
         </div>
         {stage && (
-          <p className="text-xs text-[var(--color-muted)]">🎯 {stage}</p>
+          <p className="text-xs text-[var(--color-muted)]">Stage: {stage}</p>
         )}
       </div>
 

@@ -30,7 +30,7 @@ export default function FinalizePage() {
         >
           <h1 className="text-2xl font-bold mb-1">Finalize Registration</h1>
           <p className="text-sm opacity-90">
-            Let's set up your player profile
+            Let&apos;s set up your player profile
           </p>
         </div>
 

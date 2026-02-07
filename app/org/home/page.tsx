@@ -7,7 +7,7 @@ import { CalendarIcon, CheckIcon, CircleIcon } from "@/components/Icons";
 
 export default function OrgHomePage() {
   return (
-    <Layout title="Hey Alex!">
+    <Layout title="Dashboard">
       <div className="p-4 space-y-6 pb-24">
         {/* Organization Badge */}
         <p className="text-sm text-[var(--color-muted)]">Demo Organization</p>
@@ -25,15 +25,15 @@ export default function OrgHomePage() {
             <p className="text-xs text-[var(--color-muted)]">Upcoming</p>
           </div>
           <div className="card p-4 text-center">
-            <div className="w-10 h-10 mx-auto bg-green-500/10 rounded-full flex items-center justify-center mb-2">
-              <CheckIcon size={18} className="text-green-500" />
+            <div className="w-10 h-10 mx-auto bg-[var(--color-success)]/15 rounded-full flex items-center justify-center mb-2">
+              <CheckIcon size={18} className="text-[var(--color-success)]" />
             </div>
             <p className="text-2xl font-bold">04</p>
             <p className="text-xs text-[var(--color-muted)]">Completed</p>
           </div>
           <div className="card p-4 text-center">
-            <div className="w-10 h-10 mx-auto bg-red-500/10 rounded-full flex items-center justify-center mb-2">
-              <CircleIcon size={14} className="text-red-500" />
+            <div className="w-10 h-10 mx-auto bg-[var(--color-error)]/15 rounded-full flex items-center justify-center mb-2">
+              <CircleIcon size={14} className="text-[var(--color-error)]" />
             </div>
             <p className="text-2xl font-bold">02</p>
             <p className="text-xs text-[var(--color-muted)]">Live</p>
@@ -56,7 +56,7 @@ export default function OrgHomePage() {
             </div>
             <h4 className="font-semibold mb-1">Champions League</h4>
             <p className="text-xs text-[var(--color-muted)] mb-3">
-              Pickle ball • Men's • Doubles
+              Pickleball · Men&apos;s · Doubles
             </p>
             <div className="flex items-center gap-2 text-sm text-[var(--color-muted)]">
               <span>Participants</span>
@@ -73,7 +73,7 @@ export default function OrgHomePage() {
             <div className="flex items-center justify-between mb-3">
               <span className="badge badge-live flex items-center gap-1"><CircleIcon size={8} className="text-red-500" /> LIVE</span>
               <span className="text-xs text-[var(--color-muted)]">
-                Premier League • Men's Doubles Replay...
+                Premier League · Men&apos;s Doubles
               </span>
             </div>
 

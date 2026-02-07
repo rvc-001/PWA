@@ -68,6 +68,11 @@ export default function TopNav({ title, showBack = false, onBack, right }: TopNa
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const unreadCount = mockNotifications.filter((n) => n.unread).length;
 
+  const handleBack = () => {
+    if (onBack) return onBack();
+    if (typeof window !== "undefined") window.history.back();
+  };
+
   return (
     <>
       <header
@@ -79,7 +84,7 @@ export default function TopNav({ title, showBack = false, onBack, right }: TopNa
             {showBack ? (
               <button
                 type="button"
-                onClick={onBack}
+                onClick={handleBack}
                 className="p-2 -ml-2 rounded-lg text-[var(--color-text)] hover:bg-[var(--color-surface-elevated)] min-h-[44px] min-w-[44px] flex items-center justify-center"
                 aria-label="Go back"
               >

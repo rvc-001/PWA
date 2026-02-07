@@ -19,7 +19,7 @@ export default function TournamentEventPage() {
                             <GamepadIcon size={28} className="text-white" />
                         </div>
                         <div className="flex-1">
-                            <h1 className="text-xl font-bold mb-1">Mumbai Men's 2025</h1>
+                            <h1 className="text-xl font-bold mb-1">Mumbai Men&apos;s 2025</h1>
                             <p className="text-sm opacity-90">Badminton • Squash</p>
                         </div>
                         <Link
@@ -34,7 +34,7 @@ export default function TournamentEventPage() {
                 <div className="p-4 space-y-6">
                     {/* Event Categories */}
                     <section>
-                        <h3 className="font-semibold mb-4">Men's Singles</h3>
+                        <h3 className="font-semibold mb-4">Men&apos;s Singles</h3>
 
                         <div className="bg-[var(--color-surface)] rounded-[var(--radius-card)] border border-[var(--color-border)] p-4 mb-4">
                             <div className="flex items-center justify-between mb-3">
@@ -66,7 +66,7 @@ export default function TournamentEventPage() {
 
                     {/* Men's Doubles */}
                     <section>
-                        <h3 className="font-semibold mb-4">Men's Doubles</h3>
+                        <h3 className="font-semibold mb-4">Men&apos;s Doubles</h3>
 
                         <div className="bg-[var(--color-surface)] rounded-[var(--radius-card)] border border-[var(--color-border)] p-4">
                             <div className="mb-4">
@@ -107,7 +107,7 @@ export default function TournamentEventPage() {
                                 <div className="space-y-2">
                                     <div className="flex items-center justify-between p-3 bg-[var(--color-surface-elevated)] rounded-lg">
                                         <div>
-                                            <p className="text-sm font-medium">Men's Doubles</p>
+                                            <p className="text-sm font-medium">Men&apos;s Doubles</p>
                                             <p className="text-xs text-[var(--color-muted)]">₹1400 • 8/64</p>
                                         </div>
                                         <Link

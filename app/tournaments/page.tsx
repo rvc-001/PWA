@@ -16,7 +16,6 @@ const upcomingTournaments = [
   {
     id: "1",
     name: "Monsoon Pickleball Open",
-    icon: "🏸",
     location: "Raipur | Men's Doubles | Main-#52",
     dateRange: "Start: 13/12/2024 \nEnd: 15/12/2024",
     entryFee: "Free Entry",
@@ -26,7 +25,6 @@ const upcomingTournaments = [
   {
     id: "2",
     name: "Monsoon Pickleball Open",
-    icon: "🏸",
     location: "Raipur | Men's Doubles | Main-#52",
     dateRange: "Start: 13/12/2024 \nEnd: 15/12/2024",
     entryFee: "₹1400",
@@ -39,7 +37,6 @@ const joinedTournaments = [
   {
     id: "3",
     name: "Mumbai Men's 2025",
-    icon: "🏐",
     location: "Ghatkopar | Squash",
     dateRange: "Start: 01/02/2025 \nEnd: 05/02/2025",
     entryFee: "₹1400",

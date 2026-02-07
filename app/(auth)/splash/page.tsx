@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { GamepadIcon } from "@/components/Icons";
 
 export default function SplashPage() {
   return (
@@ -21,7 +22,7 @@ export default function SplashPage() {
         <div className="relative mb-8">
           <div className="w-48 h-48 rounded-full bg-gradient-to-br from-teal-700 to-teal-900 flex items-center justify-center overflow-hidden shadow-2xl border-4 border-white/10">
             {/* Placeholder for player image - in real implementation would use next/image */}
-            <div className="text-6xl">🏸</div>
+            <GamepadIcon size={56} className="text-white/90" />
           </div>
         </div>
 

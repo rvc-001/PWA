@@ -111,7 +111,7 @@ export default function TournamentWizard({ onComplete, onClose }: TournamentWiza
               type="text"
               value={draft.name}
               onChange={(e) => saveDraft({ name: e.target.value })}
-              placeholder="e.g. Mumbai Men's 2025"
+              placeholder="e.g. Mumbai Men’s 2025"
               className="mt-1 w-full p-3 rounded-[var(--radius-input)] border border-[var(--color-border)] bg-[var(--color-surface)]"
             />
           </label>
@@ -149,7 +149,7 @@ export default function TournamentWizard({ onComplete, onClose }: TournamentWiza
         <section className="space-y-4">
           <h3 className="font-medium">Events</h3>
           <p className="text-sm text-[var(--color-muted)]">
-            Add events (e.g. Men's Singles, Women's Doubles). You can add more in tournament settings.
+            Add events (e.g. Men&apos;s Singles, Women&apos;s Doubles). You can add more in tournament settings.
           </p>
           <button
             type="button"

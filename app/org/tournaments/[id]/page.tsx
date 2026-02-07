@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Tabs, { type TabItem } from "@/components/Tabs";
-import { TrophyIcon, DownloadIcon, CalendarIcon, UserIcon, UsersIcon, ChartIcon, ArrowLeftIcon } from "@/components/Icons";
+import { TrophyIcon, DownloadIcon, CalendarIcon, UserIcon, UsersIcon, ChartIcon, ArrowLeftIcon, ChevronRightIcon, CheckIcon } from "@/components/Icons";
 
 const tabs: TabItem[] = [
   { id: "overview", label: "Overview" },
@@ -74,7 +74,7 @@ export default function TournamentEventDetailsPage({
               <p className="text-xl font-bold">64</p>
               <p className="text-xs text-[var(--color-muted)]">Registered</p>
             </div>
-            <span className="px-3 py-1 rounded-full bg-green-100 text-green-600 text-sm font-medium dark:bg-green-950 dark:text-green-400">
+            <span className="px-3 py-1 rounded-full bg-[var(--color-success)]/20 text-[var(--color-success)] text-sm font-medium">
               Registration
             </span>
           </div>
@@ -151,15 +151,18 @@ export default function TournamentEventDetailsPage({
                       {event.category}
                     </p>
                   </div>
-                  <span className="px-2 py-1 rounded-full bg-green-100 text-green-600 text-xs font-medium dark:bg-green-950 dark:text-green-400">
-                    ✓ Registrations: {event.registrations}
+                  <span className="px-2 py-1 rounded-full bg-[var(--color-success)]/20 text-[var(--color-success)] text-xs font-medium inline-flex items-center gap-1">
+                    <CheckIcon size={14} className="text-[var(--color-success)]" />
+                    Registrations: {event.registrations}
                   </span>
                 </div>
                 <div className="flex items-center gap-4 text-sm text-[var(--color-muted)]">
                   <span className="flex items-center gap-1"><UsersIcon size={14} /> {event.registered}</span>
                   <span className="flex items-center gap-1"><ChartIcon size={14} /> {event.total}</span>
                 </div>
-                <p className="text-xs text-primary mt-2 flex items-center gap-1">View More Details <ChevronRightIcon size={12} /></p>
+                <p className="text-xs text-primary mt-2 flex items-center gap-1">
+                  View More Details <ChevronRightIcon size={12} />
+                </p>
               </Link>
             ))}
           </>

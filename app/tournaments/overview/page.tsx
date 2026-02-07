@@ -55,7 +55,7 @@ export default function TournamentOverviewPage() {
                             <GamepadIcon size={28} className="text-white" />
                         </div>
                         <div className="flex-1">
-                            <h1 className="text-2xl font-bold mb-1">Mumbai Men's 2025</h1>
+                            <h1 className="text-2xl font-bold mb-1">Mumbai Men&apos;s 2025</h1>
                             <p className="text-sm opacity-90">Badminton • Squash</p>
                             <p className="text-sm opacity-90 flex items-center gap-1"><MapPinIcon size={14} /> Ghatkopar</p>
                         </div>
@@ -125,7 +125,7 @@ export default function TournamentOverviewPage() {
                 {activeTab === "events" && (
                     <div className="space-y-4">
                         <div className="flex items-center justify-between">
-                            <h3 className="font-semibold">Men's Singles</h3>
+                            <h3 className="font-semibold">Men&apos;s Singles</h3>
                         </div>
 
                         {events.map((event, idx) => (

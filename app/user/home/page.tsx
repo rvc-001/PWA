@@ -6,6 +6,7 @@ import Tabs, { type TabItem } from "@/components/Tabs";
 import TournamentCard from "@/components/Card/TournamentCard";
 import Link from "next/link";
 import type { TournamentSummary } from "@/types/models";
+import { ChevronRightIcon } from "@/components/Icons";
 
 const homeTabs: TabItem[] = [
   { id: "explore", label: "Explore" },
@@ -39,7 +40,7 @@ export default function UserHomePage() {
   const [activeTab, setActiveTab] = useState("explore");
 
   return (
-    <Layout title="Hey Alex!">
+    <Layout title="Home">
       <div className="p-4 space-y-6">
         <Tabs tabs={homeTabs} activeId={activeTab} onChange={setActiveTab} ariaLabel="Home sections" />
         {activeTab === "explore" && (
@@ -70,7 +71,10 @@ export default function UserHomePage() {
               >
                 <h3 className="font-medium">Quick Match</h3>
                 <p className="text-sm text-[var(--color-muted)] mt-1">Invite players and manage scoring quickly</p>
-                <span className="text-primary text-sm font-medium mt-2 inline-block">→</span>
+                <span className="text-primary text-sm font-medium mt-2 inline-flex items-center gap-1">
+                  Start
+                  <ChevronRightIcon size={16} className="text-primary" />
+                </span>
               </Link>
             </section>
             <section>
@@ -131,14 +135,14 @@ export default function UserHomePage() {
                 href="/user/tournaments"
                 className="block p-4 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)]"
               >
-                Raipur League 2025 · View Tournament Events
+                Raipur League 2025 · View tournament events
               </Link>
             </div>
             <div>
               <h3 className="font-semibold mb-2">Next On Court</h3>
               <div className="rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)] p-4">
                 <p className="font-medium">Pickleball Quarter Final</p>
-                <p className="text-sm text-[var(--color-muted)]">Dec 18 · Regional Semi-Final</p>
+                <p className="text-sm text-[var(--color-muted)]">Dec 18 · Regional semi-final</p>
               </div>
             </div>
             <div>

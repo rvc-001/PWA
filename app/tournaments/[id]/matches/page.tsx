@@ -40,7 +40,7 @@ const matches = [
 
 export default function TournamentEventListPage() {
     return (
-        <Layout title="Men's Singles 2025" showBack>
+        <Layout title="Men&apos;s Singles 2025" showBack>
             <div className="pb-24">
                 {/* Tournament Header */}
                 <div className="p-6 text-white" style={{ background: "var(--gradient-orange)" }}>
@@ -49,7 +49,7 @@ export default function TournamentEventListPage() {
                             <GamepadIcon size={28} className="text-white" />
                         </div>
                         <div className="flex-1">
-                            <h1 className="text-xl font-bold mb-1">Mumbai Men's 2025</h1>
+                            <h1 className="text-xl font-bold mb-1">Mumbai Men&apos;s 2025</h1>
                             <p className="text-sm opacity-90 flex items-center gap-1"><MapPinIcon size={14} /> Badminton • Squash</p>
                             <p className="text-sm opacity-90 flex items-center gap-1"><UsersIcon size={14} /> 64 Players • <CalendarIcon size={14} /> 13-15 Dec</p>
                         </div>

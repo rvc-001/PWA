@@ -7,7 +7,6 @@ import { CalendarIcon, UsersIcon, GamepadIcon } from "@/components/Icons";
 export type ColorfulTournamentCardProps = {
     id: string;
     name: string;
-    icon?: string; // emoji or icon
     location: string;
     dateRange: string;
     entryFee?: string;
@@ -20,7 +19,6 @@ export type ColorfulTournamentCardProps = {
 export default function ColorfulTournamentCard({
     id,
     name,
-    icon = "🏸",
     location,
     dateRange,
     entryFee,

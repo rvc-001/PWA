@@ -10,6 +10,7 @@ import QuickStats from "@/components/QuickStats";
 import ScheduleCard from "@/components/ScheduleCard";
 import Link from "next/link";
 import type { TournamentSummary } from "@/types/models";
+import { ChevronRightIcon } from "@/components/Icons";
 
 const homeTabs: TabItem[] = [
   { id: "explore", label: "Explore" },
@@ -43,7 +44,6 @@ const colorfulTournaments = [
   {
     id: "1",
     name: "Monsoon Pickleball Open",
-    icon: "🏸",
     location: "Raipur | Men's Doubles | Main-#52",
     dateRange: "Start: 15/01/2024End: 20/01/2024",
     entryFee: "₹USD",
@@ -53,7 +53,6 @@ const colorfulTournaments = [
   {
     id: "2",
     name: "Mumbai Men's 2025",
-    icon: "🏐",
     location: "Ghatkopar | Squash",
     dateRange: "Start: 01/02/2025End: 05/02/2025",
     entryFee: "₹1400",
@@ -120,7 +119,7 @@ export default function HomePage() {
   };
 
   return (
-    <Layout title="Hey Alex!">
+    <Layout title="Home">
       <div className="p-4 space-y-6 pb-24">
         <Tabs
           tabs={homeTabs}
@@ -159,8 +158,9 @@ export default function HomePage() {
             <section>
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-semibold">Quick Match</h3>
-                <Link href="/match/demo" className="text-sm text-primary">
-                  Start a match quickly without setup date →
+                <Link href="/match/demo" className="text-sm text-primary inline-flex items-center gap-1">
+                  Start a match
+                  <ChevronRightIcon size={16} className="text-primary" />
                 </Link>
               </div>
               <Link
@@ -169,7 +169,7 @@ export default function HomePage() {
               >
                 <p className="text-sm text-[var(--color-text)]">
                   <span className="font-medium">Invite players</span> and manage
-                  scoring quickly →
+                  scoring quickly
                 </p>
               </Link>
             </section>
@@ -262,7 +262,6 @@ export default function HomePage() {
               <div className="space-y-3">
                 <ScheduleCard
                   sport="Volleyball Semi - Final"
-                  sportIcon="🏐"
                   matchName="Men's Doubles • Super League"
                   venue="Raipur Sports Academy"
                   time="2 hours ago"
@@ -270,7 +269,6 @@ export default function HomePage() {
                 />
                 <ScheduleCard
                   sport="Regional Qualifier Final"
-                  sportIcon="🏀"
                   matchName="Mixed Doubles • Court #1"
                   venue="Baji Prabhu Deshpande"
                   time="3 Mins"
@@ -279,7 +277,6 @@ export default function HomePage() {
                 />
                 <ScheduleCard
                   sport="Badminton Quarter Final"
-                  sportIcon="🏸"
                   matchName="Court 3 (Raipur Sports Academy)"
                   venue="Sunny Center"
                   time="5 Mins"

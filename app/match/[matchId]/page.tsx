@@ -1,29 +1,38 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import React, { useCallback, useMemo, useState } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Layout from "@/components/Layout";
 import Scoreboard from "@/components/Match/Scoreboard";
 import ScoringControls from "@/components/Match/ScoringControls";
 import { appendScoreLog, pushOfflineQueue } from "@/lib/storage";
-import type { LiveMatchState, ScoreEvent } from "@/types/models";
+import type { LiveMatchState, MatchConfig, ScoreEvent } from "@/types/models";
 import { ArrowLeftIcon } from "@/components/Icons";
+import { applyFault, applyRally, createInitialLiveState, maybeAdvanceSet } from "@/lib/matchEngine";
 
-const initialState: LiveMatchState = {
-  matchId: "demo",
-  currentSet: 0,
-  setScores: [[0, 0]],
-  serverSide: 0,
-  startedAt: Date.now(),
-  scoreLog: [],
-};
+function parseConfig(params: URLSearchParams): MatchConfig {
+  const scoringSystem = params.get("scoring") === "rally" ? "rally" : "sideout";
+  const format = params.get("format") === "doubles" ? "doubles" : "singles";
+  const bestOf = Number(params.get("bestOf") ?? "3") || 3;
+  const pointsToWin = Number(params.get("points") ?? "11") || 11;
+  const winByTwo = params.get("winByTwo") !== "false";
+  const initialServer = params.get("server") === "2" ? 2 : 1;
+  return { scoringSystem, format, bestOf, pointsToWin, winByTwo, initialServer };
+}
 
 export default function LiveMatchPage() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const matchId = (params.matchId as string) || "demo";
-  const [state, setState] = useState<LiveMatchState>(initialState);
+
+  const config = useMemo(() => parseConfig(searchParams), [searchParams]);
+
+  const [state, setState] = useState<LiveMatchState>(() =>
+    createInitialLiveState(matchId, config)
+  );
   const [seq, setSeq] = useState(0);
+  const [matchWinner, setMatchWinner] = useState<0 | 1 | null>(null);
 
   const emit = useCallback(
     (type: ScoreEvent["type"], details: Record<string, unknown>, side?: 0 | 1) => {
@@ -41,24 +50,50 @@ export default function LiveMatchPage() {
     [matchId, seq]
   );
 
-  const applyRally = useCallback(
-    (scoringSide: 0 | 1) => {
-      const setScores = state.setScores.map((s, i) =>
-        i === state.currentSet ? [...s] : s
-      );
-      const current = setScores[state.currentSet];
-      if (!current) return;
-      current[scoringSide] += 1;
-      emit("rally", { side: scoringSide });
-      setState((s) => ({ ...s, setScores }));
+  const applyRallyAction = useCallback(
+    (winnerSide: 0 | 1) => {
+      emit("rally", { side: winnerSide });
+      setState((s) => {
+        const next = applyRally(s, config, winnerSide);
+        const advanced = maybeAdvanceSet(next, config);
+        setMatchWinner(advanced.matchWinner);
+        return advanced.state;
+      });
     },
-    [state.currentSet, state.setScores, emit]
+    [emit, config]
+  );
+
+  const applyFaultAction = useCallback(
+    (faultSide: 0 | 1) => {
+      emit("fault", { side: faultSide });
+      setState((s) => {
+        const next = applyFault(s, config, faultSide);
+        const advanced = maybeAdvanceSet(next, config);
+        setMatchWinner(advanced.matchWinner);
+        return advanced.state;
+      });
+    },
+    [emit, config]
   );
 
   const undo = useCallback(() => {
     emit("undo", {});
     // In a full impl we would pop last event and recompute state
   }, [emit]);
+
+  const doublesSides =
+    config.format === "doubles"
+      ? {
+          side0: [
+            { initials: "KV", name: "Kunal Verma" },
+            { initials: "AC", name: "Alex Costa" },
+          ] as const,
+          side1: [
+            { initials: "AK", name: "Anil Kumar" },
+            { initials: "TR", name: "The Rock" },
+          ] as const,
+        }
+      : null;
 
   return (
     <Layout showBottomNav={false}>
@@ -81,27 +116,38 @@ export default function LiveMatchPage() {
             Undo
           </button>
         </div>
+
+        {matchWinner != null && (
+          <div className="p-4 rounded-[var(--radius-card)] bg-primary/10 border border-primary/30 text-center">
+            <p className="font-semibold">Match Complete</p>
+            <p className="text-sm text-[var(--color-muted)]">
+              Winner: {matchWinner === 0 ? "Side A" : "Side B"}
+            </p>
+          </div>
+        )}
         <div aria-live="assertive">
           <Scoreboard
             state={state}
-            player1Name="Kunal Verma"
-            player2Name="Anil Kumar"
-            player1Initials="KV"
-            player2Initials="AK"
+            player1Name="Side A"
+            player2Name="Side B"
+            player1Initials="A"
+            player2Initials="B"
             servingSide={state.serverSide}
-            scoringMode="sideout"
-            format="singles"
+            scoringMode={config.scoringSystem}
+            format={config.format}
+            side0Players={doublesSides?.side0}
+            side1Players={doublesSides?.side1}
           />
         </div>
         <ScoringControls
-          sideOutMode={true}
-          onSide0Rally={() => applyRally(0)}
-          onSide1Rally={() => applyRally(1)}
-          onSide0Fault={() => emit("fault", { side: 0 })}
-          onSide1Fault={() => emit("fault", { side: 1 })}
+          sideOutMode={config.scoringSystem === "sideout"}
+          onSide0Rally={() => applyRallyAction(0)}
+          onSide1Rally={() => applyRallyAction(1)}
+          onSide0Fault={() => applyFaultAction(0)}
+          onSide1Fault={() => applyFaultAction(1)}
           onUndo={undo}
-          side0Label="Kunal V."
-          side1Label="Anil K."
+          side0Label={config.format === "doubles" ? "Pair A" : "Side A"}
+          side1Label={config.format === "doubles" ? "Pair B" : "Side B"}
           canUndo={state.scoreLog.length > 0}
         />
       </div>
