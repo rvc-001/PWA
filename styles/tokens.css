@@ -29,6 +29,16 @@
   --shadow-nav: 0 -2px 10px rgba(0, 0, 0, 0.06);
   --shadow-nav-float: 0 4px 20px rgba(0, 0, 0, 0.12);
   --spacing-touch: 44px; /* min touch target */
+
+  /* Navbar (floating pill) – light */
+  --nav-bar-bg: #f0f0f0;
+  --nav-bar-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  --nav-item-inactive-bg: #ffffff;
+  --nav-item-inactive-color: #808080;
+  --nav-item-inactive-border: rgba(0, 0, 0, 0.06);
+  --nav-item-active-gradient-start: #ffa84f;
+  --nav-item-active-gradient-end: #ff6a3d;
+  --nav-item-active-shadow: 0 4px 14px rgba(255, 106, 61, 0.35);
 }
 
 .dark {
@@ -45,6 +55,16 @@
   --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-nav: 0 -2px 12px rgba(0, 0, 0, 0.4);
   --shadow-nav-float: 0 4px 24px rgba(0, 0, 0, 0.5);
+
+  /* Navbar (floating pill) – dark */
+  --nav-bar-bg: #4b3f7b;
+  --nav-bar-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --nav-item-inactive-bg: transparent;
+  --nav-item-inactive-color: #a8a4b8;
+  --nav-item-inactive-border: transparent;
+  --nav-item-active-gradient-start: #ffa84f;
+  --nav-item-active-gradient-end: #ff6a3d;
+  --nav-item-active-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 
 /* Ensure touch targets meet 44px minimum */
