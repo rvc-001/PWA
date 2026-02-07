@@ -1,111 +1,189 @@
 "use client";
 
 import React, { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import Layout from "@/components/Layout";
-import Tabs, { type TabItem } from "@/components/Tabs";
 import Link from "next/link";
-import { ArrowLeftIcon, EllipsisIcon, XIcon } from "@/components/Icons";
+import Tabs, { type TabItem } from "@/components/Tabs";
+import { TrophyIcon, DownloadIcon, CalendarIcon, UserIcon, UsersIcon, ChartIcon, ArrowLeftIcon } from "@/components/Icons";
 
 const tabs: TabItem[] = [
-  { id: "about", label: "About" },
+  { id: "overview", label: "Overview" },
   { id: "events", label: "Events" },
-  { id: "admins", label: "Admins" },
-  { id: "scorers", label: "Scorers" },
+  { id: "live", label: "Live" },
 ];
 
-const mockEvents = [
-  { id: "e1", name: "Pickle Ball Men's 2025", date: "08 Dec 2025, 9:00 AM", regOpen: true, count: 32 },
+const events = [
+  {
+    id: "1",
+    name: "Pickle Ball Men's",
+    category: "U-17 Open | Pickleball",
+    registrations: "Open",
+    registered: 32,
+    total: 18,
+    status: "open",
+  },
+  {
+    id: "2",
+    name: "Pickle Ball Men's",
+    category: "U-17 Open | Pickleball",
+    registrations: "Open",
+    registered: 32,
+    total: 16,
+    status: "open",
+  },
 ];
 
-export default function OrgTournamentDetailPage() {
-  const params = useParams();
-  const router = useRouter();
-  const id = params.id as string;
-  const [activeTab, setActiveTab] = useState("about");
+const athletes = [
+  { name: "Adit Kumar", avatar: "AK" },
+  { name: "Ajay Chand", avatar: "AC" },
+  { name: "Ajay Gupta", avatar: "AG" },
+  { name: "Akhil Shah", avatar: "AS" },
+  { name: "Akshay Yadav", avatar: "AY" },
+];
+
+export default function TournamentEventDetailsPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const [activeTab, setActiveTab] = useState("overview");
 
   return (
-    <Layout showBottomNav>
-      <div className="p-4 space-y-4">
-        <div className="flex items-center justify-between gap-2">
-          <button type="button" onClick={() => router.back()} className="p-2 rounded-lg hover:bg-[var(--color-surface-elevated)] min-h-[44px] min-w-[44px]" aria-label="Back">
+    <div className="min-h-screen bg-[var(--color-background)]">
+      {/* Header */}
+      <div className="sticky top-0 z-40 bg-[var(--color-surface)] border-b border-[var(--color-border)] p-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Link href="/org/tournaments" className="p-2 -ml-2">
             <ArrowLeftIcon size={20} />
-          </button>
-          <h1 className="text-xl font-semibold truncate flex-1 text-center">Mumbai Men&apos;s 2025</h1>
-          <button type="button" className="p-2 rounded-lg min-w-[44px] hover:bg-[var(--color-surface-elevated)]" aria-label="More">
-            <EllipsisIcon size={20} />
-          </button>
+          </Link>
+          <h1 className="font-semibold">Mumbai Men&apos;s 2025</h1>
         </div>
-        <div className="flex gap-2 p-3 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)]">
-          <span className="text-sm">64 Registered</span>
-          <span className="text-sm text-[var(--color-muted)]">24 spots</span>
-          <span className="ml-auto text-xs px-2 py-0.5 rounded-full bg-[var(--color-success)]/20 text-[var(--color-success)]">Open</span>
-        </div>
-        <Tabs tabs={tabs} activeId={activeTab} onChange={setActiveTab} ariaLabel="Tournament sections" />
-        {activeTab === "about" && (
-          <div className="mt-4 space-y-4">
-            <section>
-              <h3 className="font-medium mb-1">Overview</h3>
-              <p className="text-sm text-[var(--color-muted)]">Date: 12 Jan, 2026 – 24 Jan, 2026</p>
-              <p className="text-sm text-[var(--color-muted)]">Location: Anmol Club, 2B, Mumbai, Maharashtra</p>
-            </section>
-            <section>
-              <h3 className="font-medium mb-1">Description</h3>
-              <p className="text-sm">Join the biggest Pickleball tournament in the city!</p>
-            </section>
-            <section>
-              <h3 className="font-medium mb-1">Contact</h3>
-              <p className="text-sm text-[var(--color-muted)]">Riyash Hantri · +91 … · contact@example.com</p>
-            </section>
+        <button className="text-primary text-sm font-medium"><DownloadIcon size={18} /></button>
+      </div>
+
+      {/* Stats Banner */}
+      <div className="p-4 bg-[var(--color-surface)]">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <TrophyIcon size={20} className="text-primary" />
+            </div>
+            <span className="text-2xl font-bold">64</span>
           </div>
-        )}
-        {activeTab === "events" && (
-          <ul className="mt-4 space-y-3">
-            {mockEvents.map((ev) => (
-              <li key={ev.id} className="p-4 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)]">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="font-semibold">{ev.name}</h3>
-                    <p className="text-sm text-[var(--color-muted)]">{ev.date}</p>
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--color-success)]/20 text-[var(--color-success)]">Registration Open</span>
-                    <span className="text-xs text-[var(--color-muted)] ml-2">{ev.count}</span>
-                  </div>
-                  <div className="flex gap-2 flex-wrap">
-                    <Link href={`/org/tournaments/${id}/events/${ev.id}/participants`} className="min-h-[44px] px-3 py-2 rounded-[var(--radius-button)] bg-[var(--color-success)]/20 text-[var(--color-success)] text-sm font-medium">Participants</Link>
-                    <Link href={`/org/tournaments/${id}/events/${ev.id}/fixtures`} className="min-h-[44px] px-3 py-2 rounded-[var(--radius-button)] bg-primary/20 text-primary text-sm font-medium">Fixtures</Link>
-                    <Link href={`/org/tournaments/${id}/events/${ev.id}/matches`} className="min-h-[44px] px-3 py-2 rounded-[var(--radius-button)] border border-[var(--color-border)] text-sm font-medium">Matches</Link>
-                  </div>
+          <div className="flex items-center gap-4">
+            <div className="text-center">
+              <p className="text-xl font-bold">64</p>
+              <p className="text-xs text-[var(--color-muted)]">Registered</p>
+            </div>
+            <span className="px-3 py-1 rounded-full bg-green-100 text-green-600 text-sm font-medium dark:bg-green-950 dark:text-green-400">
+              Registration
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="px-4 bg-[var(--color-surface)] border-b border-[var(--color-border)]">
+        <Tabs
+          tabs={tabs}
+          activeId={activeTab}
+          onChange={setActiveTab}
+          ariaLabel="Event sections"
+        />
+      </div>
+
+      {/* Content */}
+      <div className="p-4 space-y-4 pb-24">
+        {activeTab === "overview" && (
+          <>
+            {/* Overview Section */}
+            <section className="card p-4">
+              <h3 className="font-semibold mb-2">Overview</h3>
+              <div className="text-sm space-y-1 text-[var(--color-muted)]">
+                <p className="flex items-center gap-1"><CalendarIcon size={14} /> 4 Dec 2025, 21:01</p>
+                <p className="flex items-center gap-1"><CalendarIcon size={14} /> 21 Dec 2025, 21:01</p>
+              </div>
+              <p className="text-sm mt-2">
+                Venue, 2 Doubles, Sunday, Wednesday
+              </p>
+            </section>
+
+            <section className="card p-4">
+              <h3 className="font-semibold mb-2">Description</h3>
+              <p className="text-sm text-[var(--color-muted)]">
+                Join the biggest Pickle ball tournament in the city. Open to all
+                above men&apos;s and all city athle...
+              </p>
+            </section>
+
+            <section className="card p-4">
+              <h3 className="font-semibold mb-3">Contact Information</h3>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                  <UserIcon size={18} className="text-primary" />
                 </div>
-              </li>
+                <div>
+                  <p className="font-medium">Priyash Mandal</p>
+                  <p className="text-sm text-[var(--color-muted)]">
+                    +91 99212 48196
+                  </p>
+                  <p className="text-xs text-primary">
+                    Email2019123@gmail.com
+                  </p>
+                </div>
+              </div>
+            </section>
+          </>
+        )}
+
+        {activeTab === "events" && (
+          <>
+            <h3 className="font-semibold">{events.length} Events</h3>
+            {events.map((event) => (
+              <Link
+                key={event.id}
+                href={`/org/tournaments/${params.id}/events/${event.id}`}
+                className="card p-4 block"
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <div>
+                    <h4 className="font-semibold">{event.name}</h4>
+                    <p className="text-xs text-[var(--color-muted)]">
+                      {event.category}
+                    </p>
+                  </div>
+                  <span className="px-2 py-1 rounded-full bg-green-100 text-green-600 text-xs font-medium dark:bg-green-950 dark:text-green-400">
+                    ✓ Registrations: {event.registrations}
+                  </span>
+                </div>
+                <div className="flex items-center gap-4 text-sm text-[var(--color-muted)]">
+                  <span className="flex items-center gap-1"><UsersIcon size={14} /> {event.registered}</span>
+                  <span className="flex items-center gap-1"><ChartIcon size={14} /> {event.total}</span>
+                </div>
+                <p className="text-xs text-primary mt-2 flex items-center gap-1">View More Details <ChevronRightIcon size={12} /></p>
+              </Link>
             ))}
-          </ul>
+          </>
         )}
-        {activeTab === "admins" && (
-          <div className="mt-4">
-            <div className="flex gap-2 mb-4">
-              <input type="tel" placeholder="Enter Admin's Phone No." className="flex-1 p-3 rounded-[var(--radius-input)] border border-[var(--color-border)] bg-[var(--color-surface)]" />
-              <button type="button" className="min-h-[44px] px-4 rounded-[var(--radius-button)] bg-primary text-[var(--color-primary-contrast)] font-medium">Add</button>
+
+        {activeTab === "live" && (
+          <>
+            <h3 className="font-semibold">Athletes</h3>
+            <div className="space-y-2">
+              {athletes.map((athlete, idx) => (
+                <div
+                  key={idx}
+                  className="card p-3 flex items-center gap-3"
+                >
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-medium text-sm">
+                    {athlete.avatar}
+                  </div>
+                  <span className="font-medium">{athlete.name}</span>
+                </div>
+              ))}
             </div>
-            <ul className="space-y-2">
-              <li className="flex items-center justify-between p-4 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)]">
-                <span className="font-medium">Alex Costa</span>
-                <button type="button" className="p-2 -m-2 rounded-lg text-[var(--color-error)] hover:bg-[var(--color-surface-elevated)]" aria-label="Remove">
-                  <XIcon size={18} />
-                </button>
-              </li>
-            </ul>
-          </div>
-        )}
-        {activeTab === "scorers" && (
-          <div className="mt-4">
-            <div className="flex gap-2 mb-4">
-              <input type="tel" placeholder="Enter Scorer's Phone No." className="flex-1 p-3 rounded-[var(--radius-input)] border border-[var(--color-border)] bg-[var(--color-surface)]" />
-              <button type="button" className="min-h-[44px] px-4 rounded-[var(--radius-button)] bg-primary text-[var(--color-primary-contrast)] font-medium">Add</button>
-            </div>
-            <p className="text-sm text-[var(--color-muted)]">Scorers for this tournament will appear here.</p>
-          </div>
+          </>
         )}
       </div>
-    </Layout>
+    </div>
   );
 }

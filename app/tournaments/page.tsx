@@ -3,73 +3,117 @@
 import React, { useState } from "react";
 import Layout from "@/components/Layout";
 import Tabs, { type TabItem } from "@/components/Tabs";
-import TournamentCard from "@/components/Card/TournamentCard";
+import ColorfulTournamentCard from "@/components/Card/ColorfulTournamentCard";
 import Link from "next/link";
-import type { TournamentSummary } from "@/types/models";
 
 const tabs: TabItem[] = [
-  { id: "live", label: "Live" },
   { id: "upcoming", label: "Upcoming" },
-  { id: "past", label: "Past" },
-  { id: "drafts", label: "Drafts" },
+  { id: "joined", label: "Joined" },
+  { id: "completed", label: "Completed" },
 ];
 
-const mockList: TournamentSummary[] = [
+const upcomingTournaments = [
   {
     id: "1",
-    name: "Champions league - Table tennis tournament",
-    orgId: "o1",
-    startDate: "15/01/2024",
-    status: "live",
+    name: "Monsoon Pickleball Open",
+    icon: "🏸",
+    location: "Raipur | Men's Doubles | Main-#52",
+    dateRange: "Start: 13/12/2024 \nEnd: 15/12/2024",
+    entryFee: "Free Entry",
     registeredCount: 64,
-    location: "Raipur | Chhattisgarh",
+    colorVariant: "orange" as const,
   },
   {
     id: "2",
-    name: "Monsoon Pickleball Raipur Open",
-    orgId: "o1",
-    startDate: "20/02/2024",
-    status: "upcoming",
-    registeredCount: 32,
-    location: "Raipur",
+    name: "Monsoon Pickleball Open",
+    icon: "🏸",
+    location: "Raipur | Men's Doubles | Main-#52",
+    dateRange: "Start: 13/12/2024 \nEnd: 15/12/2024",
+    entryFee: "₹1400",
+    registeredCount: 4,
+    colorVariant: "green" as const,
   },
 ];
 
-export default function TournamentsPage() {
+const joinedTournaments = [
+  {
+    id: "3",
+    name: "Mumbai Men's 2025",
+    icon: "🏐",
+    location: "Ghatkopar | Squash",
+    dateRange: "Start: 01/02/2025 \nEnd: 05/02/2025",
+    entryFee: "₹1400",
+    registeredCount: 8,
+    colorVariant: "red" as const,
+  },
+];
+
+export default function TournamentsListPage() {
   const [activeTab, setActiveTab] = useState("upcoming");
 
   return (
-    <Layout>
-      <div className="p-4">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-xl font-semibold">Your Tournaments</h1>
-          <div className="flex gap-2">
-            <Link
-              href="/tournaments/create"
-              className="p-2 rounded-lg bg-primary text-white min-h-[44px] min-w-[44px] flex items-center justify-center"
-              aria-label="Create tournament"
-            >
-              +
-            </Link>
+    <Layout title="Tournaments">
+      <div className="p-4 space-y-6 pb-24">
+        {/* Search Bar */}
+        <div className="relative">
+          <input
+            type="search"
+            placeholder="Search tournaments..."
+            className="w-full px-4 py-3 pl-10 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text)] placeholder:text-[var(--color-muted)] focus:border-primary focus:outline-none"
+          />
+          <svg
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[var(--color-muted)]"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+        </div>
+
+        {/* Tabs */}
+        <Tabs
+          tabs={tabs}
+          activeId={activeTab}
+          onChange={setActiveTab}
+          ariaLabel="Tournament filters"
+        />
+
+        {/* Upcoming Tournaments */}
+        {activeTab === "upcoming" && (
+          <div className="grid gap-4">
+            {upcomingTournaments.map((t) => (
+              <ColorfulTournamentCard key={t.id} {...t} />
+            ))}
           </div>
-        </div>
-        <Tabs tabs={tabs} activeId={activeTab} onChange={setActiveTab} ariaLabel="Tournament filters" />
-        <div className="mt-4">
-          {activeTab === "past" && mockList.filter((t) => t.status === "past").length === 0 ? (
-            <div className="text-center py-12 text-[var(--color-muted)]">
-              <p className="text-lg mb-2">No past tournaments.</p>
-              <p className="text-sm">Create a tournament to get started!</p>
-            </div>
-          ) : (
-            <ul className="space-y-3">
-              {mockList.map((t) => (
-                <li key={t.id}>
-                  <TournamentCard tournament={t} cta={t.status === "live" ? "Manage" : "View"} />
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        )}
+
+        {/* Joined Tournaments */}
+        {activeTab === "joined" && (
+          <div className="grid gap-4">
+            {joinedTournaments.map((t) => (
+              <ColorfulTournamentCard
+                key={t.id}
+                {...t}
+                ctaText="View Details"
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Completed Tournaments */}
+        {activeTab === "completed" && (
+          <div className="text-center py-12">
+            <p className="text-[var(--color-muted)]">
+              No completed tournaments yet
+            </p>
+          </div>
+        )}
       </div>
     </Layout>
   );
