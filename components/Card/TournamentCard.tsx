@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import type { TournamentSummary } from "@/types/models";
+import { ChevronRightIcon } from "@/components/Icons";
 
 type TournamentCardProps = {
   tournament: TournamentSummary;
@@ -16,7 +17,7 @@ export default function TournamentCard({ tournament, cta = "View", href }: Tourn
     tournament.status === "live"
       ? "bg-primary/20 text-primary"
       : tournament.status === "upcoming"
-        ? "bg-green-500/20 text-green-600 dark:text-green-400"
+        ? "bg-[var(--color-success)]/20 text-[var(--color-success)]"
         : "bg-[var(--color-muted)]/20 text-[var(--color-muted)]";
 
   return (
@@ -44,7 +45,10 @@ export default function TournamentCard({ tournament, cta = "View", href }: Tourn
             )}
           </div>
         </div>
-        <span className="self-center text-primary font-medium text-sm shrink-0">{cta} →</span>
+        <span className="self-center text-primary font-medium text-sm shrink-0 inline-flex items-center gap-1">
+          {cta}
+          <ChevronRightIcon size={16} className="text-primary" />
+        </span>
       </div>
     </Link>
   );

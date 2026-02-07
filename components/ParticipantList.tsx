@@ -54,10 +54,10 @@ export default function ParticipantList({
               {p.ageCategory && (
                 <span className="ml-2 text-sm text-[var(--color-muted)]">{p.ageCategory}</span>
               )}
-              <span
-                className={`ml-2 text-xs px-2 py-0.5 rounded-full ${
-                  p.status === "confirmed"
-                    ? "bg-green-500/20 text-green-600 dark:text-green-400"
+                <span
+                  className={`ml-2 text-xs px-2 py-0.5 rounded-full ${
+                    p.status === "confirmed"
+                    ? "bg-[var(--color-success)]/20 text-[var(--color-success)]"
                     : p.status === "pending"
                       ? "bg-primary/20 text-primary"
                       : "bg-[var(--color-error)]/20 text-[var(--color-error)]"

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { ArrowLeftIcon } from "@/components/Icons";
 
 type ScoringControlsProps = {
   sideOutMode: boolean;
@@ -68,7 +69,10 @@ export default function ScoringControls({
         className="w-full min-h-[44px] rounded-[var(--radius-button)] border border-[var(--color-border)] text-primary disabled:opacity-50"
         aria-label="Undo last action"
       >
-        ← Undo
+        <span className="inline-flex items-center justify-center gap-2">
+          <ArrowLeftIcon size={18} className="text-primary" />
+          Undo
+        </span>
       </button>
     </div>
   );

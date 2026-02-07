@@ -3,6 +3,17 @@
 import React, { useState } from "react";
 import Layout from "@/components/Layout";
 import Link from "next/link";
+import {
+  BellIcon,
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+  HelpCircleIcon,
+  LockIcon,
+  SettingsIcon,
+  UserIcon,
+  UsersIcon,
+} from "@/components/Icons";
 
 export default function UserProfilePage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -20,7 +31,7 @@ export default function UserProfilePage() {
               aria-expanded={showSwitchModal}
             >
               Individual Profile
-              <span className="text-[var(--color-muted)]" aria-hidden>▾</span>
+              <ChevronDownIcon size={16} className="text-[var(--color-muted)]" />
             </button>
           </div>
           <button
@@ -55,45 +66,45 @@ export default function UserProfilePage() {
             href="/user/settings/notifications"
             className="flex items-center gap-3 p-4 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)]"
           >
-            <span className="text-xl" aria-hidden>🔔</span>
+            <BellIcon size={20} className="text-[var(--color-muted)] shrink-0" />
             <div className="flex-1 min-w-0">
               <span className="font-medium">Notifications</span>
               <p className="text-sm text-[var(--color-muted)]">Manage preferences.</p>
             </div>
-            <span aria-hidden>→</span>
+            <ChevronRightIcon size={18} className="text-[var(--color-muted)] shrink-0" />
           </Link>
           <Link
             href="/user/settings/privacy"
             className="flex items-center gap-3 p-4 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)]"
           >
-            <span className="text-xl" aria-hidden>🔒</span>
+            <LockIcon size={20} className="text-[var(--color-muted)] shrink-0" />
             <div className="flex-1 min-w-0">
               <span className="font-medium">Privacy &amp; Policy</span>
               <p className="text-sm text-[var(--color-muted)]">Control your settings.</p>
             </div>
-            <span aria-hidden>→</span>
+            <ChevronRightIcon size={18} className="text-[var(--color-muted)] shrink-0" />
           </Link>
           <Link
             href="/user/settings"
             className="flex items-center gap-3 p-4 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)]"
           >
-            <span className="text-xl" aria-hidden>⚙</span>
+            <SettingsIcon size={20} className="text-[var(--color-muted)] shrink-0" />
             <div className="flex-1 min-w-0">
               <span className="font-medium">Settings</span>
               <p className="text-sm text-[var(--color-muted)]">App preferences.</p>
             </div>
-            <span aria-hidden>→</span>
+            <ChevronRightIcon size={18} className="text-[var(--color-muted)] shrink-0" />
           </Link>
           <Link
             href="/user/settings/help"
             className="flex items-center gap-3 p-4 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)]"
           >
-            <span className="text-xl" aria-hidden>?</span>
+            <HelpCircleIcon size={20} className="text-[var(--color-muted)] shrink-0" />
             <div className="flex-1 min-w-0">
               <span className="font-medium">Help &amp; Support</span>
               <p className="text-sm text-[var(--color-muted)]">Connect with our support team.</p>
             </div>
-            <span aria-hidden>→</span>
+            <ChevronRightIcon size={18} className="text-[var(--color-muted)] shrink-0" />
           </Link>
         </nav>
         <button
@@ -115,24 +126,24 @@ export default function UserProfilePage() {
                 className="flex items-center gap-3 p-4 rounded-[var(--radius-card)] border border-[var(--color-border)] hover:border-primary/50"
                 onClick={() => setShowCreateModal(false)}
               >
-                <span className="text-2xl" aria-hidden>👥</span>
+                <UsersIcon size={22} className="text-[var(--color-muted)] shrink-0" />
                 <div className="flex-1 text-left">
                   <span className="font-medium">Organization Profile</span>
                   <p className="text-sm text-[var(--color-muted)]">Perfect for clubs, teams, or event managers.</p>
                 </div>
-                <span aria-hidden>→</span>
+                <ChevronRightIcon size={18} className="text-[var(--color-muted)] shrink-0" />
               </Link>
               <button
                 type="button"
                 className="w-full flex items-center gap-3 p-4 rounded-[var(--radius-card)] border border-[var(--color-border)] hover:border-primary/50 text-left"
                 onClick={() => setShowCreateModal(false)}
               >
-                <span className="text-2xl" aria-hidden>👤</span>
+                <UserIcon size={22} className="text-[var(--color-muted)] shrink-0" />
                 <div className="flex-1">
                   <span className="font-medium">Individual Profile</span>
                   <p className="text-sm text-[var(--color-muted)]">Set up a personal account to track your progress.</p>
                 </div>
-                <span aria-hidden>→</span>
+                <ChevronRightIcon size={18} className="text-[var(--color-muted)] shrink-0" />
               </button>
             </div>
             <button
@@ -157,7 +168,7 @@ export default function UserProfilePage() {
                   <p className="font-medium">Alex Costa</p>
                   <p className="text-sm text-[var(--color-muted)]">Individual</p>
                 </div>
-                <span className="text-primary" aria-hidden>✓</span>
+                <CheckIcon size={18} className="text-primary shrink-0" />
               </div>
               <Link
                 href="/org/home"
@@ -169,7 +180,7 @@ export default function UserProfilePage() {
                   <p className="font-medium">City Organization Raipur</p>
                   <p className="text-sm text-[var(--color-muted)]">Organization</p>
                 </div>
-                <span aria-hidden>→</span>
+                <ChevronRightIcon size={18} className="text-[var(--color-muted)] shrink-0" />
               </Link>
               <Link
                 href="/user/profile"
@@ -181,7 +192,7 @@ export default function UserProfilePage() {
                   <p className="font-medium">Anil Kumar</p>
                   <p className="text-sm text-[var(--color-muted)]">Individual</p>
                 </div>
-                <span aria-hidden>→</span>
+                <ChevronRightIcon size={18} className="text-[var(--color-muted)] shrink-0" />
               </Link>
               <Link
                 href="/splash"

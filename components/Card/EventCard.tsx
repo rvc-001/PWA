@@ -15,7 +15,7 @@ export default function EventCard({ event, cta = "View", onCta, href }: EventCar
   const isJoined = cta === "Joined";
   const statusColor =
     event.status === "open"
-      ? "bg-green-500/20 text-green-600 dark:text-green-400"
+      ? "bg-[var(--color-success)]/20 text-[var(--color-success)]"
       : event.status === "ended"
         ? "bg-[var(--color-muted)]/20 text-[var(--color-muted)]"
         : "bg-primary/20 text-primary";

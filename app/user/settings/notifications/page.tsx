@@ -3,6 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import Layout from "@/components/Layout";
+import { ArrowLeftIcon } from "@/components/Icons";
 
 export default function NotificationsSettingsPage() {
   const router = useRouter();
@@ -11,7 +12,8 @@ export default function NotificationsSettingsPage() {
     <Layout>
       <div className="p-4 space-y-6">
         <button type="button" onClick={() => router.back()} className="p-2 rounded-lg hover:bg-[var(--color-surface-elevated)] min-h-[44px] flex items-center gap-2" aria-label="Back">
-          ← Notifications
+          <ArrowLeftIcon size={20} />
+          <span className="font-medium">Notifications</span>
         </button>
         <h1 className="text-xl font-semibold">Stay Updated</h1>
         <p className="text-sm text-[var(--color-muted)]">Choose which notifications you want to receive.</p>

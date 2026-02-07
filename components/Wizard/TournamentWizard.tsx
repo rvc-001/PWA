@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { setItem, getItem, removeItem } from "@/lib/storage";
 import { validateTournamentBasic } from "@/lib/validators";
 import type { Tournament, Event } from "@/types/models";
+import { ChevronRightIcon, XIcon } from "@/components/Icons";
 
 const DRAFT_KEY = "tournament-wizard-draft";
 
@@ -91,7 +92,7 @@ export default function TournamentWizard({ onComplete, onClose }: TournamentWiza
           className="p-2 rounded-lg hover:bg-[var(--color-surface-elevated)]"
           aria-label="Close"
         >
-          ×
+          <XIcon size={18} />
         </button>
       </div>
       <div className="h-1 rounded-full bg-[var(--color-border)] mb-6">
@@ -221,7 +222,10 @@ export default function TournamentWizard({ onComplete, onClose }: TournamentWiza
           onClick={handleNext}
           className="flex-1 py-2 rounded-[var(--radius-button)] bg-primary text-white font-medium min-h-[44px]"
         >
-          {isLast ? "Publish Tournament" : "Next"} →
+          <span className="inline-flex items-center justify-center gap-2">
+            {isLast ? "Publish Tournament" : "Next"}
+            <ChevronRightIcon size={18} className="text-white" />
+          </span>
         </button>
       </div>
     </div>

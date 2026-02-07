@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ArrowLeftIcon } from "@/components/Icons";
 
 type TopNavProps = {
   title?: string;
@@ -31,7 +32,7 @@ export default function TopNav({ title, showBack = false, onBack, right }: TopNa
               className="p-2 -ml-2 rounded-lg text-[var(--color-text)] hover:bg-[var(--color-surface-elevated)] min-h-[44px] min-w-[44px] flex items-center justify-center"
               aria-label="Go back"
             >
-              <span className="text-xl">←</span>
+              <ArrowLeftIcon size={20} />
             </button>
           ) : (
             <Link

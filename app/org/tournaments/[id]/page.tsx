@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Layout from "@/components/Layout";
 import Tabs, { type TabItem } from "@/components/Tabs";
 import Link from "next/link";
+import { ArrowLeftIcon, EllipsisIcon, XIcon } from "@/components/Icons";
 
 const tabs: TabItem[] = [
   { id: "about", label: "About" },
@@ -27,9 +28,13 @@ export default function OrgTournamentDetailPage() {
     <Layout showBottomNav>
       <div className="p-4 space-y-4">
         <div className="flex items-center justify-between gap-2">
-          <button type="button" onClick={() => router.back()} className="p-2 rounded-lg hover:bg-[var(--color-surface-elevated)] min-h-[44px] min-w-[44px]" aria-label="Back">←</button>
+          <button type="button" onClick={() => router.back()} className="p-2 rounded-lg hover:bg-[var(--color-surface-elevated)] min-h-[44px] min-w-[44px]" aria-label="Back">
+            <ArrowLeftIcon size={20} />
+          </button>
           <h1 className="text-xl font-semibold truncate flex-1 text-center">Mumbai Men&apos;s 2025</h1>
-          <button type="button" className="p-2 rounded-lg min-w-[44px]" aria-label="More">⋯</button>
+          <button type="button" className="p-2 rounded-lg min-w-[44px] hover:bg-[var(--color-surface-elevated)]" aria-label="More">
+            <EllipsisIcon size={20} />
+          </button>
         </div>
         <div className="flex gap-2 p-3 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)]">
           <span className="text-sm">64 Registered</span>
@@ -84,7 +89,9 @@ export default function OrgTournamentDetailPage() {
             <ul className="space-y-2">
               <li className="flex items-center justify-between p-4 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)]">
                 <span className="font-medium">Alex Costa</span>
-                <button type="button" className="text-[var(--color-error)]" aria-label="Remove">✕</button>
+                <button type="button" className="p-2 -m-2 rounded-lg text-[var(--color-error)] hover:bg-[var(--color-surface-elevated)]" aria-label="Remove">
+                  <XIcon size={18} />
+                </button>
               </li>
             </ul>
           </div>

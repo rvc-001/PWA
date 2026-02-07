@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Layout from "@/components/Layout";
+import { ArrowLeftIcon, XIcon } from "@/components/Icons";
 
 export default function OrgMembersPage() {
   const router = useRouter();
@@ -15,7 +16,15 @@ export default function OrgMembersPage() {
   return (
     <Layout>
       <div className="p-4 space-y-6">
-        <button type="button" onClick={() => router.back()} className="p-2 rounded-lg hover:bg-[var(--color-surface-elevated)] min-h-[44px]" aria-label="Back">← Organization Members</button>
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="p-2 rounded-lg hover:bg-[var(--color-surface-elevated)] min-h-[44px] flex items-center gap-2"
+          aria-label="Back"
+        >
+          <ArrowLeftIcon size={20} />
+          <span className="font-medium">Organization Members</span>
+        </button>
         <h1 className="text-xl font-semibold">Organization Members</h1>
         <p className="text-sm text-[var(--color-muted)]">Add or remove organization members.</p>
         <div className="flex gap-2">
@@ -35,7 +44,13 @@ export default function OrgMembersPage() {
                 <p className="font-medium">{m.name}</p>
                 <p className="text-sm text-[var(--color-muted)]">{m.role} · {m.status}</p>
               </div>
-              <button type="button" className="p-2 text-[var(--color-error)]" aria-label={`Remove ${m.name}`}>✕</button>
+              <button
+                type="button"
+                className="p-2 rounded-lg text-[var(--color-error)] hover:bg-[var(--color-error)]/10"
+                aria-label={`Remove ${m.name}`}
+              >
+                <XIcon size={18} />
+              </button>
             </li>
           ))}
         </ul>

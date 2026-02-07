@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { XIcon } from "@/components/Icons";
 
 type GapDetectorProps = {
   topic: string;
@@ -49,7 +50,7 @@ export default function GapDetector({
               className="p-2 rounded-lg text-[var(--color-error)] hover:bg-[var(--color-error)]/10 min-h-[44px] min-w-[44px]"
               aria-label={`Remove confusion ${i + 1}`}
             >
-              ×
+              <XIcon size={18} className="text-[var(--color-error)]" />
             </button>
           </li>
         ))}

@@ -4,6 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import Layout from "@/components/Layout";
 import { useTheme } from "@/components/ThemeProvider";
+import { ArrowLeftIcon } from "@/components/Icons";
 
 export default function UserSettingsPage() {
   const router = useRouter();
@@ -18,7 +19,8 @@ export default function UserSettingsPage() {
           className="p-2 rounded-lg hover:bg-[var(--color-surface-elevated)] mb-4 min-h-[44px] flex items-center gap-2"
           aria-label="Back"
         >
-          <span aria-hidden>←</span> Settings
+          <ArrowLeftIcon size={20} />
+          <span className="font-medium">Settings</span>
         </button>
         <h1 className="text-xl font-semibold mb-4">App Preferences</h1>
         <p className="text-sm text-[var(--color-muted)] mb-4">Change app preferences.</p>

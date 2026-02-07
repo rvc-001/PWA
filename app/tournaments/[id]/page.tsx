@@ -7,6 +7,7 @@ import Tabs, { type TabItem } from "@/components/Tabs";
 import EventCard from "@/components/Card/EventCard";
 import Link from "next/link";
 import type { Event } from "@/types/models";
+import { ArrowLeftIcon } from "@/components/Icons";
 
 const tabs: TabItem[] = [
   { id: "about", label: "About" },
@@ -55,13 +56,13 @@ export default function TournamentDetailPage() {
             className="p-2 rounded-lg hover:bg-[var(--color-surface-elevated)] min-h-[44px] min-w-[44px]"
             aria-label="Back"
           >
-            ←
+            <ArrowLeftIcon size={20} />
           </button>
           <h1 className="text-xl font-semibold truncate">Mumbai Men&apos;s 2025</h1>
         </div>
         <div className="flex gap-2 mb-4">
           <span className="text-sm text-[var(--color-muted)]">64 Registered</span>
-          <span className="text-xs px-2 py-0.5 rounded-full bg-green-500/20 text-green-600 dark:text-green-400">
+          <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--color-success)]/20 text-[var(--color-success)]">
             Registration Open
           </span>
         </div>

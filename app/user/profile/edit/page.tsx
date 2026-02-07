@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Layout from "@/components/Layout";
+import { ArrowLeftIcon, CameraIcon } from "@/components/Icons";
 
 export default function UserProfileEditPage() {
   const router = useRouter();
@@ -16,11 +17,21 @@ export default function UserProfileEditPage() {
   return (
     <Layout>
       <div className="p-4 space-y-6">
-        <button type="button" onClick={() => router.back()} className="p-2 rounded-lg hover:bg-[var(--color-surface-elevated)] min-h-[44px]" aria-label="Back">← Edit Profile</button>
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="p-2 rounded-lg hover:bg-[var(--color-surface-elevated)] min-h-[44px] flex items-center gap-2"
+          aria-label="Back"
+        >
+          <ArrowLeftIcon size={20} />
+          <span className="font-medium">Edit Profile</span>
+        </button>
         <div className="flex justify-center">
           <div className="w-24 h-24 rounded-full bg-primary/20 flex items-center justify-center text-3xl font-bold text-primary relative">
             A
-            <span className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm">📷</span>
+            <span className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm" aria-hidden>
+              <CameraIcon size={16} className="text-white" />
+            </span>
           </div>
         </div>
         <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); router.back(); }}>

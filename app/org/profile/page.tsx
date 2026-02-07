@@ -3,6 +3,16 @@
 import React, { useState } from "react";
 import Layout from "@/components/Layout";
 import Link from "next/link";
+import {
+  BellIcon,
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+  HelpCircleIcon,
+  LockIcon,
+  SettingsIcon,
+  UsersIcon,
+} from "@/components/Icons";
 
 export default function OrgProfilePage() {
   const [showSwitchModal, setShowSwitchModal] = useState(false);
@@ -18,7 +28,7 @@ export default function OrgProfilePage() {
             aria-expanded={showSwitchModal}
           >
             Organizer Profile
-            <span className="text-[var(--color-muted)]" aria-hidden>▾</span>
+            <ChevronDownIcon size={16} className="text-[var(--color-muted)]" />
           </button>
           <button
             type="button"
@@ -52,56 +62,56 @@ export default function OrgProfilePage() {
             href="/org/settings/notifications"
             className="flex items-center gap-3 p-4 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)]"
           >
-            <span className="text-xl" aria-hidden>🔔</span>
+            <BellIcon size={20} className="text-[var(--color-muted)] shrink-0" />
             <div className="flex-1 min-w-0">
               <span className="font-medium">Notifications</span>
               <p className="text-sm text-[var(--color-muted)]">Manage preferences.</p>
             </div>
-            <span aria-hidden>→</span>
+            <ChevronRightIcon size={18} className="text-[var(--color-muted)] shrink-0" />
           </Link>
           <Link
             href="/org/settings/members"
             className="flex items-center gap-3 p-4 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)]"
           >
-            <span className="text-xl" aria-hidden>👥</span>
+            <UsersIcon size={20} className="text-[var(--color-muted)] shrink-0" />
             <div className="flex-1 min-w-0">
               <span className="font-medium">Organization Members</span>
               <p className="text-sm text-[var(--color-muted)]">Manage members.</p>
             </div>
-            <span aria-hidden>→</span>
+            <ChevronRightIcon size={18} className="text-[var(--color-muted)] shrink-0" />
           </Link>
           <Link
             href="/org/settings/privacy"
             className="flex items-center gap-3 p-4 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)]"
           >
-            <span className="text-xl" aria-hidden>🔒</span>
+            <LockIcon size={20} className="text-[var(--color-muted)] shrink-0" />
             <div className="flex-1 min-w-0">
               <span className="font-medium">Privacy &amp; Policy</span>
               <p className="text-sm text-[var(--color-muted)]">Control your settings.</p>
             </div>
-            <span aria-hidden>→</span>
+            <ChevronRightIcon size={18} className="text-[var(--color-muted)] shrink-0" />
           </Link>
           <Link
             href="/org/settings"
             className="flex items-center gap-3 p-4 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)]"
           >
-            <span className="text-xl" aria-hidden>⚙</span>
+            <SettingsIcon size={20} className="text-[var(--color-muted)] shrink-0" />
             <div className="flex-1 min-w-0">
               <span className="font-medium">Settings</span>
               <p className="text-sm text-[var(--color-muted)]">App preferences.</p>
             </div>
-            <span aria-hidden>→</span>
+            <ChevronRightIcon size={18} className="text-[var(--color-muted)] shrink-0" />
           </Link>
           <Link
             href="/org/settings/help"
             className="flex items-center gap-3 p-4 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)]"
           >
-            <span className="text-xl" aria-hidden>?</span>
+            <HelpCircleIcon size={20} className="text-[var(--color-muted)] shrink-0" />
             <div className="flex-1 min-w-0">
               <span className="font-medium">Help &amp; Support</span>
               <p className="text-sm text-[var(--color-muted)]">Get support from our support team.</p>
             </div>
-            <span aria-hidden>→</span>
+            <ChevronRightIcon size={18} className="text-[var(--color-muted)] shrink-0" />
           </Link>
         </nav>
         <button
@@ -127,7 +137,7 @@ export default function OrgProfilePage() {
                   <p className="font-medium">Alex Costa</p>
                   <p className="text-sm text-[var(--color-muted)]">Individual</p>
                 </div>
-                <span aria-hidden>→</span>
+                <ChevronRightIcon size={18} className="text-[var(--color-muted)] shrink-0" />
               </Link>
               <div className="flex items-center gap-3 p-3 rounded-[var(--radius-card)] border border-primary/50 bg-primary/5">
                 <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary">C</div>
@@ -135,7 +145,7 @@ export default function OrgProfilePage() {
                   <p className="font-medium">City Organization Raipur</p>
                   <p className="text-sm text-[var(--color-muted)]">Organization</p>
                 </div>
-                <span className="text-primary" aria-hidden>✓</span>
+                <CheckIcon size={18} className="text-primary shrink-0" />
               </div>
               <Link href="/splash" className="flex items-center gap-3 p-3 rounded-[var(--radius-card)] border border-[var(--color-border)] text-[var(--color-muted)]">
                 <span className="text-xl">+</span>

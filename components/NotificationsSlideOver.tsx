@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { XIcon } from "@/components/Icons";
 
 export type NotificationItem = {
   id: string;
@@ -54,7 +55,7 @@ export default function NotificationsSlideOver({
             className="p-2 rounded-lg hover:bg-[var(--color-surface-elevated)] min-h-[44px] min-w-[44px]"
             aria-label="Close"
           >
-            ×
+            <XIcon size={18} />
           </button>
         </div>
         <div className="flex gap-2 px-4 py-2 border-b border-[var(--color-border)] text-sm">

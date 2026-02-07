@@ -114,21 +114,21 @@ export default function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-40 flex justify-center pointer-events-none px-4"
+      className="fixed bottom-0 left-0 right-0 z-40 flex justify-center pointer-events-none px-3"
       role="navigation"
       aria-label="Main"
       style={{ paddingBottom: "max(env(safe-area-inset-bottom), 12px)" }}
     >
       <div
-        className="pointer-events-auto flex items-center justify-center rounded-[28px] h-[78px] w-full max-w-[480px] overflow-visible border border-[color:var(--nav-bar-border)]"
+        className="pointer-events-auto flex items-center justify-center rounded-[22px] h-[62px] w-[min(288px,calc(100vw-24px))] overflow-visible border border-[color:var(--nav-bar-border)]"
         style={{
           background: "var(--nav-bar-bg)",
           boxShadow: "var(--nav-bar-shadow)",
-          backdropFilter: "blur(18px)",
-          WebkitBackdropFilter: "blur(18px)",
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
         }}
       >
-        <div className="flex items-center justify-between h-full w-full gap-2 px-2.5">
+        <div className="flex items-center justify-between h-full w-full gap-1.5 px-1.5">
           {links.map(({ href, label, icon: Icon }) => {
             const active = pathname === href || pathname.startsWith(href + "/");
             return (
@@ -136,10 +136,10 @@ export default function BottomNav() {
                 key={href}
                 href={href}
                 className={`
-                  flex flex-col items-center justify-center rounded-[22px] select-none
+                  flex flex-col items-center justify-center rounded-[18px] select-none
                   transition-[transform,background-color,box-shadow,color] duration-200 ease-out
-                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60
-                  ${active ? "relative z-10 text-white h-[66px] flex-[1.35] px-5 -my-2 scale-[1.01]" : "text-[var(--nav-item-inactive-color)] h-[56px] flex-1 px-2"}
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-primary)]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-background)]
+                  ${active ? "relative z-10 text-white h-[56px] flex-[1.2] px-4 -my-1.5 scale-[1.01]" : "text-[var(--nav-item-inactive-color)] h-[46px] flex-1 px-2 hover:bg-[color:var(--nav-item-hover-bg)]"}
                 `}
                 style={
                   active
@@ -157,9 +157,9 @@ export default function BottomNav() {
                 data-touch-target
               >
                 <span className="flex items-center justify-center shrink-0">
-                  <Icon size={active ? 28 : 24} />
+                  <Icon size={active ? 26 : 22} />
                 </span>
-                <span className={`truncate w-full text-center leading-tight ${active ? "text-sm mt-1 font-semibold" : "text-[11px] mt-1 font-medium"}`}>
+                <span className={`truncate w-full text-center leading-tight ${active ? "text-[13px] mt-0.5 font-semibold" : "text-[10px] mt-0.5 font-medium"}`}>
                   {label}
                 </span>
               </Link>

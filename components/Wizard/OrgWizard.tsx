@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { validateOrgBasic, validateOrgContact } from "@/lib/validators";
 import { setItem, getItem, removeItem } from "@/lib/storage";
 import type { Org, Address } from "@/types/models";
+import { ChevronRightIcon, XIcon } from "@/components/Icons";
 
 const DRAFT_KEY = "org-wizard-draft";
 
@@ -119,7 +120,7 @@ export default function OrgWizard({ onComplete, onClose }: OrgWizardProps) {
           className="p-2 rounded-lg hover:bg-[var(--color-surface-elevated)]"
           aria-label="Close"
         >
-          ×
+          <XIcon size={18} />
         </button>
       </div>
       <div className="h-1 rounded-full bg-[var(--color-border)] mb-6">
@@ -260,7 +261,10 @@ export default function OrgWizard({ onComplete, onClose }: OrgWizardProps) {
           onClick={handleNext}
           className="flex-1 py-2 rounded-[var(--radius-button)] bg-primary text-white font-medium min-h-[44px]"
         >
-          {isLast ? "Create Organization" : "Next"} →
+          <span className="inline-flex items-center justify-center gap-2">
+            {isLast ? "Create Organization" : "Next"}
+            <ChevronRightIcon size={18} className="text-white" />
+          </span>
         </button>
       </div>
     </div>

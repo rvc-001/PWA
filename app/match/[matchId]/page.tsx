@@ -7,6 +7,7 @@ import Scoreboard from "@/components/Match/Scoreboard";
 import ScoringControls from "@/components/Match/ScoringControls";
 import { appendScoreLog, pushOfflineQueue } from "@/lib/storage";
 import type { LiveMatchState, ScoreEvent } from "@/types/models";
+import { ArrowLeftIcon } from "@/components/Icons";
 
 const initialState: LiveMatchState = {
   matchId: "demo",
@@ -69,7 +70,7 @@ export default function LiveMatchPage() {
             className="p-2 rounded-lg hover:bg-[var(--color-surface-elevated)] min-h-[44px] min-w-[44px]"
             aria-label="Back"
           >
-            ←
+            <ArrowLeftIcon size={20} />
           </button>
           <h1 className="text-lg font-semibold">Live Match</h1>
           <button

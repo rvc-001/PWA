@@ -7,6 +7,7 @@ import Tabs, { type TabItem } from "@/components/Tabs";
 import EventCard from "@/components/Card/EventCard";
 import Link from "next/link";
 import type { Event } from "@/types/models";
+import { ArrowLeftIcon, ShareIcon, UserIcon } from "@/components/Icons";
 
 const tabs: TabItem[] = [
   { id: "about", label: "About" },
@@ -66,13 +67,18 @@ export default function UserTournamentDetailPage() {
             className="p-2 rounded-lg hover:bg-[var(--color-surface-elevated)] min-h-[44px] min-w-[44px]"
             aria-label="Back"
           >
-            ←
+            <ArrowLeftIcon size={20} />
           </button>
           <h1 className="text-xl font-semibold truncate flex-1 text-center">Mumbai Men&apos;s 2025</h1>
-          <button type="button" className="p-2 rounded-lg min-w-[44px]" aria-label="Share">⎘</button>
+          <button type="button" className="p-2 rounded-lg min-w-[44px] hover:bg-[var(--color-surface-elevated)]" aria-label="Share">
+            <ShareIcon size={20} />
+          </button>
         </div>
         <div className="flex gap-2 mb-4 p-3 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)]">
-          <span className="text-sm text-[var(--color-muted)] flex items-center gap-1">👤 64 Registered</span>
+          <span className="text-sm text-[var(--color-muted)] flex items-center gap-1">
+            <UserIcon size={16} className="text-[var(--color-muted)]" />
+            64 Registered
+          </span>
           <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--color-success)]/20 text-[var(--color-success)]">Registration Open</span>
         </div>
         <Tabs tabs={tabs} activeId={activeTab} onChange={setActiveTab} ariaLabel="Tournament sections" />

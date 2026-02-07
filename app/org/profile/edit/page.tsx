@@ -5,11 +5,12 @@ import { useRouter } from "next/navigation";
 import Layout from "@/components/Layout";
 import { ArrowLeftIcon } from "@/components/Icons";
 
-export default function OrgNotificationsPage() {
+export default function OrgProfileEditPage() {
   const router = useRouter();
+
   return (
-    <Layout>
-      <div className="p-4">
+    <Layout showBottomNav={false} title="Edit Profile">
+      <div className="p-4 space-y-4">
         <button
           type="button"
           onClick={() => router.back()}
@@ -17,10 +18,14 @@ export default function OrgNotificationsPage() {
           aria-label="Back"
         >
           <ArrowLeftIcon size={20} />
-          <span className="font-medium">Notifications</span>
+          <span className="font-medium">Back</span>
         </button>
-        <h1 className="text-xl font-semibold mt-4">Notifications</h1>
-        <p className="text-sm text-[var(--color-muted)]">Manage preferences.</p>
+
+        <div className="p-4 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)] shadow-[var(--shadow-card)]">
+          <p className="text-sm text-[var(--color-muted)]">
+            This is a placeholder page. Add organization profile fields here.
+          </p>
+        </div>
       </div>
     </Layout>
   );

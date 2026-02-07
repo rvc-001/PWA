@@ -31,12 +31,13 @@
   --spacing-touch: 44px; /* min touch target */
 
   /* Navbar (floating pill) – light */
-  --nav-bar-bg: rgba(240, 240, 240, 0.86);
-  --nav-bar-border: rgba(0, 0, 0, 0.06);
-  --nav-bar-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  --nav-item-inactive-bg: #ffffff;
-  --nav-item-inactive-color: #808080;
-  --nav-item-inactive-border: rgba(0, 0, 0, 0.06);
+  --nav-bar-bg: rgba(255, 255, 255, 0.86);
+  --nav-bar-border: rgba(0, 0, 0, 0.08);
+  --nav-bar-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  --nav-item-inactive-bg: transparent;
+  --nav-item-inactive-color: var(--color-muted);
+  --nav-item-inactive-border: transparent;
+  --nav-item-hover-bg: rgba(0, 0, 0, 0.04);
   --nav-item-active-gradient-start: #ffa84f;
   --nav-item-active-gradient-end: #ff6a3d;
   --nav-item-active-shadow: 0 4px 14px rgba(255, 106, 61, 0.35);
@@ -64,6 +65,7 @@
   --nav-item-inactive-bg: transparent;
   --nav-item-inactive-color: #a8a4b8;
   --nav-item-inactive-border: transparent;
+  --nav-item-hover-bg: rgba(255, 255, 255, 0.06);
   --nav-item-active-gradient-start: #ffa84f;
   --nav-item-active-gradient-end: #ff6a3d;
   --nav-item-active-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);

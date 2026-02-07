@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ArrowLeftIcon } from "@/components/Icons";
 
 export default function FinalizePage() {
   const router = useRouter();
@@ -21,8 +22,9 @@ export default function FinalizePage() {
 
   return (
     <div className="max-w-lg mx-auto p-6">
-      <Link href="/splash" className="inline-flex items-center gap-1 text-sm text-[var(--color-muted)] mb-6">
-        ← Back
+      <Link href="/splash" className="inline-flex items-center gap-2 text-sm text-[var(--color-muted)] mb-6">
+        <ArrowLeftIcon size={16} className="text-[var(--color-muted)]" />
+        Back
       </Link>
       <h1 className="text-xl font-semibold mb-1">Finalize Registration</h1>
       <p className="text-sm text-[var(--color-muted)] mb-6">Let&apos;s set up your player profile.</p>

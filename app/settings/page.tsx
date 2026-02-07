@@ -3,6 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import Layout from "@/components/Layout";
+import { ArrowLeftIcon } from "@/components/Icons";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -13,10 +14,11 @@ export default function SettingsPage() {
         <button
           type="button"
           onClick={() => router.back()}
-          className="p-2 rounded-lg hover:bg-[var(--color-surface-elevated)] mb-4 min-h-[44px]"
+          className="p-2 rounded-lg hover:bg-[var(--color-surface-elevated)] mb-4 min-h-[44px] flex items-center gap-2"
           aria-label="Back"
         >
-          ← Settings
+          <ArrowLeftIcon size={20} />
+          <span className="font-medium">Settings</span>
         </button>
         <h1 className="text-xl font-semibold mb-4">Notifications</h1>
         <ul className="space-y-2">
