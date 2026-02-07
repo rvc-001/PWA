@@ -31,7 +31,8 @@
   --spacing-touch: 44px; /* min touch target */
 
   /* Navbar (floating pill) – light */
-  --nav-bar-bg: #f0f0f0;
+  --nav-bar-bg: rgba(240, 240, 240, 0.86);
+  --nav-bar-border: rgba(0, 0, 0, 0.06);
   --nav-bar-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   --nav-item-inactive-bg: #ffffff;
   --nav-item-inactive-color: #808080;
@@ -57,7 +58,8 @@
   --shadow-nav-float: 0 4px 24px rgba(0, 0, 0, 0.5);
 
   /* Navbar (floating pill) – dark */
-  --nav-bar-bg: #4b3f7b;
+  --nav-bar-bg: rgba(75, 63, 123, 0.72);
+  --nav-bar-border: rgba(255, 255, 255, 0.10);
   --nav-bar-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   --nav-item-inactive-bg: transparent;
   --nav-item-inactive-color: #a8a4b8;
