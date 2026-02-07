@@ -11,10 +11,10 @@ export default function CreateOrgPage() {
 
   const handleComplete = (org: Partial<Org>) => {
     // In production: persist org and redirect to org dashboard
-    router.push("/org/demo");
+    router.push("/org/home");
   };
 
-  const handleClose = () => router.push("/home");
+  const handleClose = () => router.push("/user/profile");
 
   return (
     <Layout showBottomNav={false}>

@@ -8,13 +8,13 @@ export default function Home() {
         Your all-in-one tournament hub. Manage. Play. Compete.
       </p>
       <Link
-        href="/auth/splash"
+        href="/splash"
         className="min-h-[44px] px-6 py-3 rounded-[var(--radius-button)] bg-primary text-white font-medium"
       >
         Get Started
       </Link>
       <Link
-        href="/home"
+        href="/user/home"
         className="mt-4 text-primary text-sm"
       >
         Go to Home →

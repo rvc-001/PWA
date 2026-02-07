@@ -13,6 +13,9 @@ type TopNavProps = {
 
 export default function TopNav({ title, showBack = false, onBack, right }: TopNavProps) {
   const pathname = usePathname();
+  const isOrg = pathname.startsWith("/org");
+  const homeHref = isOrg ? "/org/home" : "/user/home";
+  const profileHref = isOrg ? "/org/profile" : "/user/profile";
 
   return (
     <header
@@ -32,7 +35,7 @@ export default function TopNav({ title, showBack = false, onBack, right }: TopNa
             </button>
           ) : (
             <Link
-              href="/home"
+              href={homeHref}
               className="font-semibold text-primary truncate"
               aria-label="Forehand home"
             >
@@ -47,7 +50,7 @@ export default function TopNav({ title, showBack = false, onBack, right }: TopNa
         </div>
         <div className="flex items-center gap-1 shrink-0">
           <Link
-            href="/profile"
+            href={profileHref}
             className="p-2 rounded-lg hover:bg-[var(--color-surface-elevated)] min-h-[44px] min-w-[44px] flex items-center justify-center"
             aria-label="Profile"
           >

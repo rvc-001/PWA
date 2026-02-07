@@ -16,12 +16,12 @@ export default function FinalizePage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // In production: persist profile then redirect
-    router.push("/home");
+    router.push("/user/home");
   };
 
   return (
     <div className="max-w-lg mx-auto p-6">
-      <Link href="/auth/splash" className="inline-flex items-center gap-1 text-sm text-[var(--color-muted)] mb-6">
+      <Link href="/splash" className="inline-flex items-center gap-1 text-sm text-[var(--color-muted)] mb-6">
         ← Back
       </Link>
       <h1 className="text-xl font-semibold mb-1">Finalize Registration</h1>
@@ -88,10 +88,11 @@ export default function FinalizePage() {
           >
             <option value="">Select</option>
             <option value="pickleball">Pickleball</option>
-            <option value="tennis">Tennis</option>
-            <option value="badminton">Badminton</option>
-            <option value="table-tennis">Table Tennis</option>
+            <option value="tennis" disabled>Tennis (Coming soon)</option>
+            <option value="badminton" disabled>Badminton (Coming soon)</option>
+            <option value="table-tennis" disabled>Table Tennis (Coming soon)</option>
           </select>
+          <p className="text-xs text-[var(--color-muted)] mt-1">More sports coming soon.</p>
         </label>
         <button
           type="submit"

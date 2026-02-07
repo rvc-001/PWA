@@ -14,8 +14,8 @@ export default function SplashPage() {
         </p>
       </div>
       <Link
-        href="/auth/finalize"
-        className="w-full max-w-xs min-h-[44px] flex items-center justify-center rounded-[var(--radius-button)] bg-primary text-white font-medium"
+        href="/finalize"
+        className="w-full max-w-xs min-h-[44px] flex items-center justify-center rounded-[var(--radius-button)] bg-primary text-[var(--color-primary-contrast)] font-medium"
       >
         Login with Google
       </Link>
