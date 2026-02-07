@@ -1,0 +1,52 @@
+/**
+ * Design tokens for Forehand PWA.
+ * Light/dark themes via CSS variables; components reference these only.
+ */
+
+:root {
+  /* Brand */
+  --color-primary: #ff7a1a;
+  --color-primary-hover: #e66a0f;
+  --color-primary-contrast: #ffffff;
+
+  /* Light theme */
+  --color-surface: #ffffff;
+  --color-surface-elevated: #f8f9fa;
+  --color-background: #f5f5f5;
+  --color-text: #1a1a1a;
+  --color-text-secondary: #4a4a4a;
+  --color-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+
+  /* Elevation & spacing */
+  --radius-card: 12px;
+  --radius-button: 8px;
+  --radius-input: 8px;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-nav: 0 -2px 10px rgba(0, 0, 0, 0.06);
+  --spacing-touch: 44px; /* min touch target */
+}
+
+.dark {
+  --color-surface: #1c1330;
+  --color-surface-elevated: #251b3d;
+  --color-background: #160e28;
+  --color-text: #f3f4f6;
+  --color-text-secondary: #d1d5db;
+  --color-muted: #9ca3af;
+  --color-border: #374151;
+  --color-success: #34d399;
+  --color-warning: #fbbf24;
+  --color-error: #f87171;
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-nav: 0 -2px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Ensure touch targets meet 44px minimum */
+[data-touch-target] {
+  min-height: var(--spacing-touch);
+  min-width: var(--spacing-touch);
+}
