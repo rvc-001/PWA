@@ -1,16 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
-import Layout from "@/components/Layout";
+import TopNav from "@/components/TopNav";
+import BottomNav from "@/components/BottomNav";
 import Tabs, { type TabItem } from "@/components/Tabs";
-import TournamentCard from "@/components/Card/TournamentCard";
-import ColorfulTournamentCard from "@/components/Card/ColorfulTournamentCard";
-import MatchCard from "@/components/Card/MatchCard";
-import QuickStats from "@/components/QuickStats";
 import ScheduleCard from "@/components/ScheduleCard";
+import ColorfulTournamentCard from "@/components/Card/ColorfulTournamentCard";
 import Link from "next/link";
-import type { TournamentSummary } from "@/types/models";
-import { ChevronRightIcon } from "@/components/Icons";
+import { TrophyIcon } from "@/components/Icons";
+// 👇 IMPORT THE NEW QUICK MATCH COMPONENT
+import QuickMatchFlow from "@/components/QuickMatch/QuickMatchFlow";
+
+// --- Mock Data ---
 
 const homeTabs: TabItem[] = [
   { id: "explore", label: "Explore" },
@@ -18,275 +19,229 @@ const homeTabs: TabItem[] = [
   { id: "myspace", label: "My Space" },
 ];
 
-const mockTournaments: TournamentSummary[] = [
+const exploreTournaments = [
   {
-    id: "1",
-    name: "Monsoon Pickleball Raipur Open",
-    orgId: "o1",
-    startDate: "15/01/2024",
-    endDate: "20/01/2024",
-    status: "upcoming",
-    registeredCount: 64,
-    location: "Raipur | Chhattisgarh",
-  },
-  {
-    id: "2",
-    name: "Champions League",
-    orgId: "o1",
-    startDate: "01/02/2024",
-    status: "live",
-    registeredCount: 32,
-    location: "Mumbai",
-  },
-];
-
-const colorfulTournaments = [
-  {
-    id: "1",
+    id: "101",
     name: "Monsoon Pickleball Open",
-    location: "Raipur | Men's Doubles | Main-#52",
-    dateRange: "Start: 15/01/2024End: 20/01/2024",
-    entryFee: "₹USD",
+    location: "Raipur | Chhattisgarh",
+    dateRange: "Jan 15 - 20",
     registeredCount: 64,
     colorVariant: "orange" as const,
+    entryFee: "₹500",
   },
   {
-    id: "2",
-    name: "Mumbai Men's 2025",
-    location: "Ghatkopar | Squash",
-    dateRange: "Start: 01/02/2025End: 05/02/2025",
-    entryFee: "₹1400",
-    registeredCount: 4,
+    id: "102",
+    name: "National Tennis Championship",
+    location: "Delhi Sports Complex",
+    dateRange: "Feb 10 - 15",
+    registeredCount: 120,
     colorVariant: "green" as const,
+    entryFee: "₹1200",
   },
 ];
 
 const liveMatches = [
   {
-    id: "m1",
-    tournament: "Raipur Racket Sports League",
-    location: "Men's Doubles • Match #42",
-    stage: "Stage 2",
-    team1: {
-      players: [
-        { name: "S. Williams", initials: "SW" },
-        { name: "V. Gupta", initials: "VG" },
-      ],
-      score: 11,
-    },
-    team2: {
-      players: [
-        { name: "J. Bhasin", initials: "JB" },
-        { name: "K. Patil", initials: "KP" },
-      ],
-      score: 9,
-    },
-    status: "live" as const,
+    id: "l1",
+    sport: "Badminton",
+    matchName: "Finals · Men's Singles",
+    venue: "Court 1",
+    time: "LIVE NOW",
+    score: "21-19, 15-10",
+    colorVariant: "badminton" as const,
   },
   {
-    id: "m2",
-    tournament: "Bhopal Summer Open",
-    location: "Men's Doubles • Match #12",
-    stage: "Stage 2",
-    team1: {
-      players: [
-        { name: "S. Williams", initials: "SW" },
-        { name: "V. Gupta", initials: "VG" },
-      ],
-      score: 11,
-    },
-    team2: {
-      players: [
-        { name: "J. Bhasin", initials: "JB" },
-        { name: "K. Patil", initials: "KP" },
-      ],
-      score: 9,
-    },
-    status: "live" as const,
+    id: "l2",
+    sport: "Tennis",
+    matchName: "Semi-Final · Women's Doubles",
+    venue: "Center Court",
+    time: "LIVE NOW",
+    score: "6-4, 2-1",
+    colorVariant: "volleyball" as const,
   },
 ];
 
-export default function HomePage() {
+export default function UserHomePage() {
   const [activeTab, setActiveTab] = useState("explore");
-  const [followingMatches, setFollowingMatches] = useState<string[]>([]);
-
-  const toggleFollow = (matchId: string) => {
-    setFollowingMatches((prev) =>
-      prev.includes(matchId)
-        ? prev.filter((id) => id !== matchId)
-        : [...prev, matchId]
-    );
-  };
 
   return (
-    <Layout title="Home">
-      <div className="p-4 space-y-6 pb-24">
-        <Tabs
-          tabs={homeTabs}
-          activeId={activeTab}
-          onChange={setActiveTab}
-          ariaLabel="Home sections"
-        />
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-[#020617] transition-colors duration-300">
+      
+      {/* 1. Fixed Header with Centered Tabs */}
+      <div className="sticky top-0 z-50 bg-white/90 dark:bg-[#020617]/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+        <TopNav />
+        {/* Centering Wrapper for Tabs */}
+        <div className="px-4 pb-0 flex justify-center w-full">
+          <div className="w-full max-w-md">
+            <Tabs 
+              tabs={homeTabs} 
+              activeId={activeTab} 
+              onChange={setActiveTab} 
+              ariaLabel="Home sections" 
+            />
+          </div>
+        </div>
+      </div>
 
-        {/* EXPLORE TAB */}
+      {/* 2. Main Scrollable Content */}
+      <main className="flex-1 flex flex-col gap-6 p-4 pb-28 overflow-y-auto">
+        
+        {/* === TAB: EXPLORE === */}
         {activeTab === "explore" && (
-          <>
-            {/* Browse & Join Section */}
-            <section>
-              <h2 className="text-xl font-bold mb-1">BROWSE & JOIN</h2>
-              <p className="text-sm text-[var(--color-muted)] mb-4">
-                Upcoming tournaments near you
-              </p>
-              <div className="flex gap-2 mb-4">
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            {/* Hero Banner */}
+            <section className="rounded-2xl bg-primary/10 border border-primary/20 p-5">
+              <h2 className="text-xs font-bold uppercase tracking-wider text-primary mb-1">Browse & Join</h2>
+              <p className="text-lg font-bold text-gray-900 dark:text-white">Upcoming tournaments</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Compete with the best players near you.</p>
+              <div className="flex gap-3 mt-5">
                 <Link
-                  href="/tournaments"
-                  className="px-5 py-2.5 rounded-[var(--radius-button)] text-white text-sm font-semibold min-h-[44px] flex items-center transition-transform active:scale-95"
-                  style={{ background: "var(--gradient-orange)" }}
+                  href="/user/tournaments"
+                  className="flex-1 h-10 px-4 rounded-xl bg-primary text-white text-sm font-medium flex items-center justify-center shadow-lg shadow-primary/25 active:scale-95 transition-transform"
                 >
                   Register Now
                 </Link>
                 <Link
-                  href="/tournaments"
-                  className="px-5 py-2.5 rounded-[var(--radius-button)] border-2 border-primary text-primary text-sm font-semibold min-h-[44px] flex items-center transition-colors hover:bg-primary/5"
+                  href="/user/tournaments"
+                  className="flex-1 h-10 px-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm font-medium flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
-                  Explore All
+                  View All
                 </Link>
               </div>
             </section>
 
-            {/* Quick Match Section */}
-            <section>
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold">Quick Match</h3>
-                <Link href="/match/demo" className="text-sm text-primary inline-flex items-center gap-1">
-                  Start a match
-                  <ChevronRightIcon size={16} className="text-primary" />
-                </Link>
+            {/* 👇👇👇 NEW QUICK MATCH UI 👇👇👇 */}
+            <QuickMatchFlow />
+            {/* 👆👆👆 THIS REPLACES THE OLD LINK */}
+
+            {/* Featured List */}
+            <section className="space-y-3">
+              <div className="flex justify-between items-center">
+                <h3 className="font-semibold text-gray-900 dark:text-white">Featured Events</h3>
+                <Link href="/user/tournaments" className="text-xs font-medium text-primary uppercase">View All</Link>
               </div>
+              <div className="flex flex-col gap-4">
+                {exploreTournaments.map((t) => (
+                  <ColorfulTournamentCard 
+                    key={t.id}
+                    id={t.id}
+                    name={t.name}
+                    location={t.location}
+                    dateRange={t.dateRange}
+                    registeredCount={t.registeredCount}
+                    colorVariant={t.colorVariant}
+                    entryFee={t.entryFee}
+                    ctaText="Details"
+                  />
+                ))}
+              </div>
+            </section>
+          </div>
+        )}
+
+        {/* === TAB: LIVE FEED === */}
+        {activeTab === "live" && (
+          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+             <div className="flex items-center justify-center py-2">
+                <span className="flex h-3 w-3 relative mr-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                </span>
+                <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Live Action</h3>
+             </div>
+
+             {liveMatches.map((match) => (
+                <div key={match.id} className="relative group">
+                    <ScheduleCard 
+                        sport={match.sport}
+                        matchName={match.matchName}
+                        venue={match.venue}
+                        time={match.time}
+                        colorVariant={match.colorVariant}
+                        opponent={`Score: ${match.score}`}
+                    />
+                </div>
+             ))}
+          </div>
+        )}
+
+        {/* === TAB: MY SPACE === */}
+        {activeTab === "myspace" && (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            
+            {/* 1. Stats Grid */}
+            <section className="grid grid-cols-3 gap-3">
+              <div className="flex flex-col items-center justify-center p-4 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm">
+                <span className="text-2xl font-bold text-primary">28</span>
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mt-1">Won</span>
+              </div>
+              <div className="flex flex-col items-center justify-center p-4 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm">
+                <span className="text-2xl font-bold text-gray-900 dark:text-white">38</span>
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mt-1">Played</span>
+              </div>
+              <div className="flex flex-col items-center justify-center p-4 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm">
+                <span className="text-2xl font-bold text-gray-900 dark:text-white">12</span>
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mt-1">Lost</span>
+              </div>
+            </section>
+
+            {/* 2. Your Tournaments */}
+            <section>
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-3 px-1">Your Tournaments</h3>
               <Link
-                href="/match/demo"
-                className="block p-5 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-primary/30 transition-colors shadow-[var(--shadow-card)]"
+                href="/user/tournaments"
+                className="block p-4 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:border-primary/50 transition-colors"
               >
-                <p className="text-sm text-[var(--color-text)]">
-                  <span className="font-medium">Invite players</span> and manage
-                  scoring quickly
-                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-600 flex items-center justify-center">
+                    <TrophyIcon size={20} />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 dark:text-white">Raipur League 2025</h4>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">View tournament events & brackets</p>
+                  </div>
+                </div>
               </Link>
             </section>
 
-            {/* Upcoming Tournaments */}
+            {/* 3. Next On Court */}
             <section>
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold">Upcoming Tournaments</h3>
-                <Link href="/tournaments" className="text-sm text-primary">
-                  VIEW ALL
-                </Link>
-              </div>
-              <div className="grid gap-4">
-                {colorfulTournaments.map((t) => (
-                  <ColorfulTournamentCard key={t.id} {...t} />
-                ))}
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-3 px-1">Next On Court</h3>
+              <div className="rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm p-4 border-l-4 border-l-blue-500">
+                <div className="flex justify-between items-start mb-2">
+                   <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase">Quarter Final</span>
+                   <span className="text-xs text-gray-400">Dec 18</span>
+                </div>
+                <h4 className="font-bold text-lg text-gray-900 dark:text-white">Pickleball Singles</h4>
+                <p className="text-sm text-gray-500 mt-1">Regional Semi-Final · Court 3</p>
               </div>
             </section>
 
-            {/* Ongoing Tournaments */}
+            {/* 4. Past Matches */}
             <section>
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold">Ongoing Tournaments</h3>
-                <Link href="/tournaments" className="text-sm text-primary">
-                  VIEW ALL
-                </Link>
-              </div>
-              <ul className="space-y-3">
-                {mockTournaments.map((t) => (
-                  <li key={t.id}>
-                    <TournamentCard tournament={t} cta="View" />
-                  </li>
-                ))}
-              </ul>
-            </section>
-          </>
-        )}
-
-        {/* LIVE FEED TAB */}
-        {activeTab === "live" && (
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold">Live Matches</h2>
-            {liveMatches.map((match) => (
-              <MatchCard
-                key={match.id}
-                {...match}
-                isFollowing={followingMatches.includes(match.id)}
-                onFollow={() => toggleFollow(match.id)}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* MY SPACE TAB */}
-        {activeTab === "myspace" && (
-          <div className="space-y-6">
-            {/* Quick Stats */}
-            <QuickStats />
-
-            {/* Your Live Match */}
-            <section>
-              <h3 className="font-semibold mb-3">Your Live Match</h3>
-              <MatchCard
-                {...liveMatches[0]}
-                isFollowing={true}
-                onFollow={() => { }}
-              />
-            </section>
-
-            {/* Your Tournaments */}
-            <section>
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold">Your Tournaments</h3>
-                <Link href="/tournaments" className="text-sm text-primary">
-                  VIEW ALL
-                </Link>
-              </div>
-              <ul className="space-y-3">
-                {mockTournaments.slice(0, 2).map((t) => (
-                  <li key={t.id}>
-                    <TournamentCard tournament={t} cta="View" />
-                  </li>
-                ))}
-              </ul>
-            </section>
-
-            {/* Next On Court */}
-            <section>
-              <h3 className="font-semibold mb-3">Next On Court</h3>
-              <div className="space-y-3">
-                <ScheduleCard
-                  sport="Volleyball Semi - Final"
-                  matchName="Men's Doubles • Super League"
-                  venue="Raipur Sports Academy"
-                  time="2 hours ago"
-                  colorVariant="volleyball"
-                />
-                <ScheduleCard
-                  sport="Regional Qualifier Final"
-                  matchName="Mixed Doubles • Court #1"
-                  venue="Baji Prabhu Deshpande"
-                  time="3 Mins"
-                  opponent="Lia & Co."
-                  colorVariant="basketball"
-                />
-                <ScheduleCard
-                  sport="Badminton Quarter Final"
-                  matchName="Court 3 (Raipur Sports Academy)"
-                  venue="Sunny Center"
-                  time="5 Mins"
-                  colorVariant="badminton"
-                />
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-3 px-1">Past Matches</h3>
+              <div className="rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">WIN</span>
+                  <span className="text-xs text-gray-400">Yesterday</span>
+                </div>
+                <h4 className="font-medium text-gray-900 dark:text-white">Raipur Pro League · Doubles</h4>
+                <p className="text-sm text-gray-500 mt-1">
+                  <span className="font-semibold text-gray-700 dark:text-gray-300">You & Arun</span> def. Yug & Harsh
+                </p>
+                <p className="text-lg font-bold text-gray-900 dark:text-white mt-2">21-18</p>
               </div>
             </section>
           </div>
         )}
+
+      </main>
+
+      {/* 3. Fixed Bottom Navigation */}
+      <div className="fixed bottom-0 left-0 right-0 z-50">
+        <BottomNav />
       </div>
-    </Layout>
+
+    </div>
   );
 }

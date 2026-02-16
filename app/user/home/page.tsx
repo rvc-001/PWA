@@ -7,7 +7,8 @@ import Tabs, { type TabItem } from "@/components/Tabs";
 import ScheduleCard from "@/components/ScheduleCard";
 import ColorfulTournamentCard from "@/components/Card/ColorfulTournamentCard";
 import Link from "next/link";
-import { ChevronRightIcon, TrophyIcon } from "@/components/Icons";
+import { TrophyIcon } from "@/components/Icons";
+import QuickMatchFlow from "@/components/QuickMatch/QuickMatchFlow";
 
 // --- Mock Data ---
 
@@ -108,19 +109,7 @@ export default function UserHomePage() {
               </div>
             </section>
 
-            {/* Quick Match CTA */}
-            <Link
-              href="/match/demo"
-              className="flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm active:scale-[0.99] transition-transform"
-            >
-              <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">Quick Match</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Invite players & score quickly</p>
-              </div>
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  <ChevronRightIcon size={20} />
-              </div>
-            </Link>
+            <QuickMatchFlow />
 
             {/* Featured List */}
             <section className="space-y-3">
