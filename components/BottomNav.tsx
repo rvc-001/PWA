@@ -137,13 +137,14 @@ export default function BottomNav() {
             <Link key={href} href={href}>
               <div
                 className={`p-1 my-2 bg-[var(--nav-bar-bg)]
-                  hover:bg-gray-200
+                  hover:bg-[var(--nav-item-hover-bg)]
+                  backdrop-blur-2xl
 
                   border-t-[1px]
                   border-b-[1px]
                   ${first && "border-l-[1px]"}
                   ${last && "border-r-[1px]"}
-                  border-gray-300
+                  border-[var(--nav-bar-border)]
                   ${first && "rounded-tl-md rounded-bl-md"}
                 ${last && "rounded-tr-md rounded-br-md"}
                 ${!first && active && "rounded-tl-2xl"}
