@@ -41,7 +41,7 @@ export default function MatchReadyPopup({
               >
                 <h3 className="text-[18px] font-semibold text-[#1F1F1F] dark:text-white">Before you begin</h3>
                 <p className="mx-auto mt-1 max-w-[270px] text-[12px] leading-[1.4] text-[#555555] dark:text-white/80">
-                  <span className="mr-1">i</span>
+                  <span className="mr-1"></span>
                   Quick match results are for instant tracking only and will not be saved to your profile or history.
                 </p>
                 <button
