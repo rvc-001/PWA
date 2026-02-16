@@ -194,7 +194,7 @@ export default function CourtSlider({ onBack, onStart }: CourtSliderProps) {
           <button type="button" onClick={onBack} className="h-8 w-8" aria-label="Back">
             <ArrowLeft size={20} />
           </button>
-          <h2 className="text-[28px] font-semibold leading-none">Match Setup</h2>
+          <h2 className="text-[22px] font-semibold leading-none">Match Setup</h2>
           <button type="button" onClick={handleReset} className="h-8 w-8 text-[#FF7A1A]" aria-label="Reset">
             <RotateCcw size={18} />
           </button>
@@ -325,7 +325,7 @@ export default function CourtSlider({ onBack, onStart }: CourtSliderProps) {
         </section>
 
         <section className="mb-4">
-          <h3 className="mb-2 text-[32px] font-semibold leading-none tracking-tight">Match Format</h3>
+          <h3 className="mb-2 text-[22px] font-semibold leading-none tracking-tight">Match Format</h3>
           <div className="rounded-2xl border border-[#E9E9E9] p-2 dark:border-[#655588] dark:bg-[#4D3B75]">
             <SelectLine
               value={form.bestOf}
@@ -351,7 +351,7 @@ export default function CourtSlider({ onBack, onStart }: CourtSliderProps) {
 
         <section className="mb-4">
           <div className="mb-2 flex items-center justify-between">
-            <h3 className="text-[32px] font-semibold leading-none tracking-tight">Time out Rules</h3>
+            <h3 className="text-[22px] font-semibold leading-none tracking-tight">Time out Rules</h3>
             <ChevronDown size={18} />
           </div>
           <div className="rounded-2xl border border-[#E9E9E9] p-2 dark:border-[#655588] dark:bg-[#4D3B75]">
@@ -379,7 +379,7 @@ export default function CourtSlider({ onBack, onStart }: CourtSliderProps) {
         </section>
 
         <section className="mb-6">
-          <h3 className="mb-2 text-[32px] font-semibold leading-none tracking-tight">Serve Rotation</h3>
+          <h3 className="mb-2 text-[22px] font-semibold leading-none tracking-tight">Serve Rotation</h3>
           <SelectLine
             value={form.serveRotation}
             onChange={(value) => setForm((previous) => ({ ...previous, serveRotation: value as MatchFormState["serveRotation"] }))}
@@ -407,7 +407,7 @@ export default function CourtSlider({ onBack, onStart }: CourtSliderProps) {
           >
             {"->"}
           </motion.span>
-          <span className="pointer-events-none absolute inset-0 flex items-center justify-center text-[18px] font-semibold">
+          <span className="pointer-events-none absolute inset-0 flex items-center justify-center text-[15px] font-semibold">
             {canStart ? "Swipe to start match" : "Select players to start"}
           </span>
         </button>

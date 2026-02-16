@@ -39,15 +39,15 @@ export default function MatchReadyPopup({
                 onClick={(event) => event.stopPropagation()}
                 className="w-full max-w-[332px] rounded-[12px] border border-[#FFFFFF22] bg-[#FFFFFF] px-4 py-3 text-center dark:bg-[#6B5A8C]"
               >
-                <h3 className="text-[20px] font-semibold text-[#1F1F1F] dark:text-white">Before you begin</h3>
-                <p className="mx-auto mt-1 max-w-[270px] text-[11px] leading-[1.3] text-[#555555] dark:text-white/80">
+                <h3 className="text-[18px] font-semibold text-[#1F1F1F] dark:text-white">Before you begin</h3>
+                <p className="mx-auto mt-1 max-w-[270px] text-[12px] leading-[1.4] text-[#555555] dark:text-white/80">
                   <span className="mr-1">i</span>
                   Quick match results are for instant tracking only and will not be saved to your profile or history.
                 </p>
                 <button
                   type="button"
                   onClick={onPrimaryAction}
-                  className="mx-auto mt-2.5 h-8 w-[150px] rounded-full bg-[#FF7A1A] text-[12px] font-semibold text-white"
+                  className="mx-auto mt-2.5 h-8 w-[150px] rounded-full bg-[#FF7A1A] text-[13px] font-semibold text-white"
                 >
                   Start Match
                 </button>
@@ -65,14 +65,14 @@ export default function MatchReadyPopup({
               <div className="mx-auto mb-2 flex h-8 w-8 items-center justify-center text-[#FF7A1A]">
                 <TimerReset size={21} />
               </div>
-              <h3 className="text-[34px] font-semibold leading-none text-[#1F1F1F] dark:text-white">Switch Serve Now</h3>
-              <p className="mx-auto mt-1 max-w-[260px] text-[12px] leading-[1.35] text-[#686868] dark:text-white/75">
+              <h3 className="text-[28px] font-semibold leading-none text-[#1F1F1F] dark:text-white">Switch Serve Now</h3>
+              <p className="mx-auto mt-1 max-w-[260px] text-[13px] leading-[1.4] text-[#686868] dark:text-white/75">
                 It&apos;s time for the players to switch serve on the court.
               </p>
               <button
                 type="button"
                 onClick={onPrimaryAction}
-                className="mt-3 h-12 w-full rounded-xl bg-[#FF7A1A] text-[25px] font-semibold text-white"
+                className="mt-3 h-12 w-full rounded-xl bg-[#FF7A1A] text-[16px] font-semibold text-white"
               >
                 Switch Sides
               </button>
@@ -90,17 +90,17 @@ export default function MatchReadyPopup({
                 <div className="mb-1 flex justify-center text-[#F7B31B]">
                   <Trophy size={52} strokeWidth={2.2} />
                 </div>
-                <p className="text-[44px] font-semibold text-white">Winner</p>
-                <p className="mt-1 text-[46px] font-bold leading-none text-white">Kunal Verma</p>
-                <p className="mt-1 text-[30px] font-semibold text-white">Final Score: 12-08</p>
-                {courtName && <p className="mt-1 text-[11px] text-white/75">{courtName}</p>}
+                <p className="text-[28px] font-semibold text-white">Winner</p>
+                <p className="mt-1 text-[34px] font-bold leading-none text-white">Kunal Verma</p>
+                <p className="mt-1 text-[24px] font-semibold text-white">Final Score: 12-08</p>
+                {courtName && <p className="mt-1 text-[12px] text-white/75">{courtName}</p>}
               </div>
 
               <div className="absolute inset-x-0 bottom-0 bg-white/8 px-4 pb-6 pt-3 backdrop-blur-md dark:bg-[#5C4B85]/45">
                 <Link
                   href="/match/live"
                   onClick={onClose}
-                  className="mx-auto flex h-12 w-full max-w-[360px] items-center justify-center rounded-xl bg-[#FF7A1A] text-[24px] font-semibold text-white"
+                  className="mx-auto flex h-12 w-full max-w-[360px] items-center justify-center rounded-xl bg-[#FF7A1A] text-[16px] font-semibold text-white"
                 >
                   Confirm Results
                 </Link>

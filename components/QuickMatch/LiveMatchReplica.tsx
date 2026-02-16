@@ -76,7 +76,7 @@ export default function LiveMatchReplica({
           <button type="button" onClick={onBack} className="h-9 w-9 text-[#1E1E1E] dark:text-white">
             <ArrowLeft size={20} />
           </button>
-          <h1 className="text-[33px] font-semibold leading-none">Live Match</h1>
+          <h1 className="text-[22px] font-semibold leading-none">Live Match</h1>
           <button type="button" className="h-9 w-9 text-[#1E1E1E] dark:text-white">
             <MoreVertical size={18} />
           </button>
@@ -110,14 +110,14 @@ export default function LiveMatchReplica({
         </section>
 
         <section className="mb-4 rounded-[12px] border border-[#DBDBDB] bg-[#F6F6F6] p-3 dark:border-[#63528A] dark:bg-[#4D3B75]">
-          <h3 className="mb-2.5 text-center text-[38px] font-semibold leading-none">
+          <h3 className="mb-2.5 text-center text-[24px] font-semibold leading-none">
             Current Set: {String(currentSetNumber).padStart(2, "0")}
           </h3>
 
           <div className="rounded-[10px] border border-[#D3D3D3] p-2 dark:border-[#7A6A9F]">
             <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-center">
               <div>
-                <div className="mx-auto mb-1.5 flex h-12 w-12 items-center justify-center rounded-full border border-[#D3D3D3] text-[34px] font-semibold dark:border-[#8A7BAC]">
+                <div className="mx-auto mb-1.5 flex h-12 w-12 items-center justify-center rounded-full border border-[#D3D3D3] text-[30px] font-semibold dark:border-[#8A7BAC]">
                   KV
                 </div>
                 <p className="text-[9px]">{sideALabel}</p>
@@ -126,10 +126,10 @@ export default function LiveMatchReplica({
                 </span>
               </div>
 
-              <div className="text-[34px] font-semibold text-[#737373] dark:text-white/60">Vs</div>
+              <div className="text-[28px] font-semibold text-[#737373] dark:text-white/60">Vs</div>
 
               <div>
-                <div className="mx-auto mb-1.5 flex h-12 w-12 items-center justify-center rounded-full border border-[#D3D3D3] text-[34px] font-semibold dark:border-[#8A7BAC]">
+                <div className="mx-auto mb-1.5 flex h-12 w-12 items-center justify-center rounded-full border border-[#D3D3D3] text-[30px] font-semibold dark:border-[#8A7BAC]">
                   AK
                 </div>
                 <p className="text-[9px]">{sideBLabel}</p>
@@ -167,28 +167,28 @@ export default function LiveMatchReplica({
           <button
             type="button"
             onClick={onSideARally}
-            className="h-10 rounded-[10px] bg-[#FF7A1A] text-[12px] font-semibold text-white"
+            className="h-10 rounded-[10px] bg-[#FF7A1A] text-[13px] font-semibold text-white"
           >
             Kunal V. Won Rally
           </button>
           <button
             type="button"
             onClick={onSideBRally}
-            className="h-10 rounded-[10px] bg-[#FF7A1A] text-[12px] font-semibold text-white"
+            className="h-10 rounded-[10px] bg-[#FF7A1A] text-[13px] font-semibold text-white"
           >
             Anil K. Scored
           </button>
           <button
             type="button"
             onClick={onSideAFault}
-            className="h-10 rounded-[10px] border border-[#D5D5D5] bg-[#F8F8F8] text-[12px] font-semibold dark:border-[#8A7BAC] dark:bg-[#4B3A73]"
+            className="h-10 rounded-[10px] border border-[#D5D5D5] bg-[#F8F8F8] text-[13px] font-semibold dark:border-[#8A7BAC] dark:bg-[#4B3A73]"
           >
             Kunal V. Fault
           </button>
           <button
             type="button"
             onClick={onSideBFault}
-            className="h-10 rounded-[10px] border border-[#D5D5D5] bg-[#F8F8F8] text-[12px] font-semibold dark:border-[#8A7BAC] dark:bg-[#4B3A73]"
+            className="h-10 rounded-[10px] border border-[#D5D5D5] bg-[#F8F8F8] text-[13px] font-semibold dark:border-[#8A7BAC] dark:bg-[#4B3A73]"
           >
             Anil K. Fault
           </button>
@@ -206,14 +206,14 @@ export default function LiveMatchReplica({
             <div className="mx-auto mb-2 flex h-8 w-8 items-center justify-center text-[#FF7A1A]">
               <TimerReset size={20} />
             </div>
-            <h3 className="text-[40px] font-semibold leading-none">Switch Serve Now</h3>
-            <p className="mx-auto mt-1 max-w-[250px] text-[12px] text-[#656565] dark:text-white/75">
+            <h3 className="text-[28px] font-semibold leading-none">Switch Serve Now</h3>
+            <p className="mx-auto mt-1 max-w-[250px] text-[13px] text-[#656565] dark:text-white/75">
               It&apos;s time for the players to switch serve on the court.
             </p>
             <button
               type="button"
               onClick={onCloseSwitch}
-              className="mt-3 h-10 w-full rounded-xl bg-[#FF7A1A] text-[24px] font-semibold text-white"
+              className="mt-3 h-10 w-full rounded-xl bg-[#FF7A1A] text-[16px] font-semibold text-white"
             >
               Switch Sides
             </button>
@@ -228,16 +228,16 @@ export default function LiveMatchReplica({
             <div className="mb-1 flex justify-center text-[#F7B31B]">
               <Trophy size={52} strokeWidth={2.2} />
             </div>
-            <p className="text-[44px] font-semibold">Winner</p>
-            <p className="text-[56px] font-bold leading-none">{winnerName}</p>
-            <p className="mt-1 text-[43px] font-semibold">Final Score: 12-08</p>
+            <p className="text-[28px] font-semibold">Winner</p>
+            <p className="text-[36px] font-bold leading-none">{winnerName}</p>
+            <p className="mt-1 text-[24px] font-semibold">Final Score: 12-08</p>
           </div>
 
           <div className="absolute inset-x-0 bottom-0 bg-white/10 px-4 pb-6 pt-3 backdrop-blur-md dark:bg-[#5C4B85]/50">
             <Link
               href={confirmHref}
               onClick={onCloseWinner}
-              className="mx-auto flex h-12 w-full max-w-[360px] items-center justify-center rounded-xl bg-[#FF7A1A] text-[24px] font-semibold text-white"
+              className="mx-auto flex h-12 w-full max-w-[360px] items-center justify-center rounded-xl bg-[#FF7A1A] text-[16px] font-semibold text-white"
             >
               Confirm Results
             </Link>

@@ -61,7 +61,7 @@ export default function MatchSplash({ onComplete }: MatchSplashProps) {
             initial={{ scale: 0.7, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 1.2, opacity: 0 }}
-            className="text-[106px] font-bold leading-none text-[#FF7A1A]"
+            className="text-[84px] font-bold leading-none text-[#FF7A1A]"
           >
             {count}
           </motion.span>
