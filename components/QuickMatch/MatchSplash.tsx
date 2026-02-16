@@ -31,19 +31,17 @@ export default function MatchSplash({ onComplete }: MatchSplashProps) {
   const [count, setCount] = useState(3);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCount((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          onComplete();
-          return 0;
-        }
-        return prev - 1;
-      });
+    if (count <= 0) {
+      onComplete();
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setCount((prev) => Math.max(prev - 1, 0));
     }, 700);
 
-    return () => clearInterval(timer);
-  }, [onComplete]);
+    return () => window.clearTimeout(timer);
+  }, [count, onComplete]);
 
   return (
     <motion.div

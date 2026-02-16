@@ -7,14 +7,16 @@ import { ArrowLeft, ChevronDown, MoreVertical, RotateCcw, TimerReset, Trophy } f
 type SetScore = [number | null, number | null];
 
 interface LiveMatchReplicaProps {
+  currentSetNumber: number;
   sideAScore: number;
   sideBScore: number;
-  set1: SetScore;
-  set2: SetScore;
-  set3: SetScore;
+  setScores: SetScore[];
+  bestOf: number;
   scoringLabel: string;
   sideAServing: boolean;
   sideBServing: boolean;
+  sideALabel?: string;
+  sideBLabel?: string;
   showSwitchServe: boolean;
   showWinner: boolean;
   onBack: () => void;
@@ -39,14 +41,16 @@ function SetScoreText({ value }: { value: SetScore }) {
 }
 
 export default function LiveMatchReplica({
+  currentSetNumber,
   sideAScore,
   sideBScore,
-  set1,
-  set2,
-  set3,
+  setScores,
+  bestOf,
   scoringLabel,
   sideAServing,
   sideBServing,
+  sideALabel = "Kunal Verma",
+  sideBLabel = "Anil Kumar",
   showSwitchServe,
   showWinner,
   onBack,
@@ -60,6 +64,11 @@ export default function LiveMatchReplica({
   winnerName = "Kunal Verma",
   confirmHref = "/home",
 }: LiveMatchReplicaProps) {
+  const visibleSetScores: SetScore[] = Array.from({ length: bestOf }).map((_, index) => {
+    const score = setScores[index];
+    return score ? score : [null, null];
+  });
+
   return (
     <div className="min-h-screen bg-[#ECECEC] text-[#1E1E1E] dark:bg-[#3D2B63] dark:text-white">
       <div className="mx-auto w-full max-w-[390px] px-4 pb-6 pt-4">
@@ -101,7 +110,9 @@ export default function LiveMatchReplica({
         </section>
 
         <section className="mb-4 rounded-[12px] border border-[#DBDBDB] bg-[#F6F6F6] p-3 dark:border-[#63528A] dark:bg-[#4D3B75]">
-          <h3 className="mb-2.5 text-center text-[38px] font-semibold leading-none">Current Set: 01</h3>
+          <h3 className="mb-2.5 text-center text-[38px] font-semibold leading-none">
+            Current Set: {String(currentSetNumber).padStart(2, "0")}
+          </h3>
 
           <div className="rounded-[10px] border border-[#D3D3D3] p-2 dark:border-[#7A6A9F]">
             <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-center">
@@ -109,7 +120,7 @@ export default function LiveMatchReplica({
                 <div className="mx-auto mb-1.5 flex h-12 w-12 items-center justify-center rounded-full border border-[#D3D3D3] text-[34px] font-semibold dark:border-[#8A7BAC]">
                   KV
                 </div>
-                <p className="text-[9px]">Kunal Verma</p>
+                <p className="text-[9px]">{sideALabel}</p>
                 <span className={`mt-1 inline-flex rounded-full border px-1.5 py-0.5 text-[8px] ${sideAServing ? "border-[#FF9E63] text-[#FF7A1A]" : "border-[#D3D3D3] text-[#777777] dark:border-[#8A7BAC] dark:text-white/70"}`}>
                   {sideAServing ? "Serving" : "Receiving"}
                 </span>
@@ -121,7 +132,7 @@ export default function LiveMatchReplica({
                 <div className="mx-auto mb-1.5 flex h-12 w-12 items-center justify-center rounded-full border border-[#D3D3D3] text-[34px] font-semibold dark:border-[#8A7BAC]">
                   AK
                 </div>
-                <p className="text-[9px]">Anil Kumar</p>
+                <p className="text-[9px]">{sideBLabel}</p>
                 <span className={`mt-1 inline-flex rounded-full border px-1.5 py-0.5 text-[8px] ${sideBServing ? "border-[#FF9E63] text-[#FF7A1A]" : "border-[#D3D3D3] text-[#777777] dark:border-[#8A7BAC] dark:text-white/70"}`}>
                   {sideBServing ? "Serving" : "Receiving"}
                 </span>
@@ -133,19 +144,22 @@ export default function LiveMatchReplica({
             {scoringLabel}
           </div>
 
-          <div className="mt-2 grid grid-cols-3 overflow-hidden rounded-[9px] border border-[#D5D5D5] dark:border-[#8A7BAC]">
-            <div className="border-r border-[#D5D5D5] p-1.5 text-center dark:border-[#8A7BAC]">
-              <p className="text-[10px]">Set 1</p>
-              <p className="text-[14px] font-semibold"><SetScoreText value={set1} /></p>
-            </div>
-            <div className="border-r border-[#D5D5D5] p-1.5 text-center dark:border-[#8A7BAC]">
-              <p className="text-[10px]">Set 2</p>
-              <p className="text-[14px] font-semibold text-[#7A7A7A] dark:text-white/70"><SetScoreText value={set2} /></p>
-            </div>
-            <div className="p-1.5 text-center">
-              <p className="text-[10px]">Set 3</p>
-              <p className="text-[14px] font-semibold text-[#7A7A7A] dark:text-white/70"><SetScoreText value={set3} /></p>
-            </div>
+          <div
+            className={`mt-2 grid overflow-hidden rounded-[9px] border border-[#D5D5D5] dark:border-[#8A7BAC] ${
+              bestOf === 5 ? "grid-cols-5" : "grid-cols-3"
+            }`}
+          >
+            {visibleSetScores.map((setScore, index) => (
+              <div
+                key={index}
+                className={`p-1.5 text-center ${index < visibleSetScores.length - 1 ? "border-r border-[#D5D5D5] dark:border-[#8A7BAC]" : ""}`}
+              >
+                <p className="text-[10px]">Set {index + 1}</p>
+                <p className={`text-[14px] font-semibold ${setScore[0] == null ? "text-[#7A7A7A] dark:text-white/70" : ""}`}>
+                  <SetScoreText value={setScore} />
+                </p>
+              </div>
+            ))}
           </div>
         </section>
 

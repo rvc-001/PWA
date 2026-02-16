@@ -31,26 +31,28 @@ export default function MatchReadyPopup({
           onClick={variant === "confirm" ? onClose : undefined}
         >
           {variant === "confirm" && (
-            <motion.div
-              initial={{ y: 12, opacity: 0, scale: 0.98 }}
-              animate={{ y: 0, opacity: 1, scale: 1 }}
-              exit={{ y: 12, opacity: 0, scale: 0.98 }}
-              onClick={(event) => event.stopPropagation()}
-              className="absolute left-1/2 top-1/2 w-[90%] max-w-[332px] -translate-x-1/2 -translate-y-1/2 rounded-[12px] border border-[#FFFFFF22] bg-[#FFFFFF] px-4 py-3 text-center dark:bg-[#6B5A8C]"
-            >
-              <h3 className="text-[24px] font-semibold text-[#1F1F1F] dark:text-white">Before you begin</h3>
-              <p className="mx-auto mt-1 max-w-[270px] text-[11px] leading-[1.3] text-[#555555] dark:text-white/80">
-                <span className="mr-1">i</span>
-                Quick match results are for instant tracking only and will not be saved to your profile or history.
-              </p>
-              <button
-                type="button"
-                onClick={onPrimaryAction}
-                className="mx-auto mt-2.5 h-8 w-[150px] rounded-full bg-[#FF7A1A] text-[12px] font-semibold text-white"
+            <div className="flex h-full items-center justify-center p-4">
+              <motion.div
+                initial={{ y: 12, opacity: 0, scale: 0.98 }}
+                animate={{ y: 0, opacity: 1, scale: 1 }}
+                exit={{ y: 12, opacity: 0, scale: 0.98 }}
+                onClick={(event) => event.stopPropagation()}
+                className="w-full max-w-[332px] rounded-[12px] border border-[#FFFFFF22] bg-[#FFFFFF] px-4 py-3 text-center dark:bg-[#6B5A8C]"
               >
-                Start Match
-              </button>
-            </motion.div>
+                <h3 className="text-[20px] font-semibold text-[#1F1F1F] dark:text-white">Before you begin</h3>
+                <p className="mx-auto mt-1 max-w-[270px] text-[11px] leading-[1.3] text-[#555555] dark:text-white/80">
+                  <span className="mr-1">i</span>
+                  Quick match results are for instant tracking only and will not be saved to your profile or history.
+                </p>
+                <button
+                  type="button"
+                  onClick={onPrimaryAction}
+                  className="mx-auto mt-2.5 h-8 w-[150px] rounded-full bg-[#FF7A1A] text-[12px] font-semibold text-white"
+                >
+                  Start Match
+                </button>
+              </motion.div>
+            </div>
           )}
 
           {variant === "switch" && (
@@ -63,7 +65,7 @@ export default function MatchReadyPopup({
               <div className="mx-auto mb-2 flex h-8 w-8 items-center justify-center text-[#FF7A1A]">
                 <TimerReset size={21} />
               </div>
-              <h3 className="text-[40px] font-semibold leading-none text-[#1F1F1F] dark:text-white">Switch Serve Now</h3>
+              <h3 className="text-[34px] font-semibold leading-none text-[#1F1F1F] dark:text-white">Switch Serve Now</h3>
               <p className="mx-auto mt-1 max-w-[260px] text-[12px] leading-[1.35] text-[#686868] dark:text-white/75">
                 It&apos;s time for the players to switch serve on the court.
               </p>
@@ -89,8 +91,8 @@ export default function MatchReadyPopup({
                   <Trophy size={52} strokeWidth={2.2} />
                 </div>
                 <p className="text-[44px] font-semibold text-white">Winner</p>
-                <p className="mt-1 text-[56px] font-bold leading-none text-white">Kunal Verma</p>
-                <p className="mt-1 text-[43px] font-semibold text-white">Final Score: 12-08</p>
+                <p className="mt-1 text-[46px] font-bold leading-none text-white">Kunal Verma</p>
+                <p className="mt-1 text-[30px] font-semibold text-white">Final Score: 12-08</p>
                 {courtName && <p className="mt-1 text-[11px] text-white/75">{courtName}</p>}
               </div>
 

@@ -9,17 +9,32 @@ import MatchSplash from "./MatchSplash";
 import MatchReadyPopup from "./MatchReadyPopup";
 
 type FlowStep = "select" | "confirm" | "loading";
+type SetupPayload = {
+  courtId: string;
+  format: "singles" | "doubles";
+  scoring: "sideout" | "rally";
+  bestOf: 3 | 5;
+  points: 11 | 15 | 21;
+  winByTwo: boolean;
+  initialServer: 1 | 2;
+  players: {
+    leftTop: string | null;
+    leftBottom: string | null;
+    rightTop: string | null;
+    rightBottom: string | null;
+  };
+};
 
 export default function QuickMatchFlow() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState<FlowStep>("select");
+  const [setup, setSetup] = useState<SetupPayload | null>(null);
 
   const closeAll = () => {
     setIsOpen(false);
-    setTimeout(() => {
-      setStep("select");
-    }, 180);
+    setStep("select");
+    setSetup(null);
   };
 
   return (
@@ -61,7 +76,8 @@ export default function QuickMatchFlow() {
             >
               <CourtSlider
                 onBack={closeAll}
-                onStart={() => {
+                onStart={(payload) => {
+                  setSetup(payload);
                   setStep("confirm");
                 }}
               />
@@ -81,8 +97,27 @@ export default function QuickMatchFlow() {
         {isOpen && step === "loading" && (
           <MatchSplash
             onComplete={() => {
+              if (!setup) {
+                closeAll();
+                return;
+              }
+              const matchId = `quick-${Date.now()}`;
+              const params = new URLSearchParams({
+                format: setup.format,
+                scoring: setup.scoring,
+                bestOf: String(setup.bestOf),
+                points: String(setup.points),
+                winByTwo: String(setup.winByTwo),
+                server: String(setup.initialServer),
+                p1: setup.players.leftTop ?? "Kunal Verma",
+                p2: setup.players.rightBottom ?? "Anil Kumar",
+                p3: setup.players.leftBottom ?? "",
+                p4: setup.players.rightTop ?? "",
+                court: setup.courtId,
+                quick: "1",
+              });
               closeAll();
-              router.push("/match/live");
+              router.push(`/match/${matchId}?${params.toString()}`);
             }}
           />
         )}

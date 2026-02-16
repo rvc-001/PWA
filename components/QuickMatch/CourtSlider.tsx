@@ -6,7 +6,16 @@ import { ArrowLeft, Check, ChevronDown, Info, RotateCcw, X } from "lucide-react"
 
 interface CourtSliderProps {
   onBack: () => void;
-  onStart: (courtId: string) => void;
+  onStart: (payload: {
+    courtId: string;
+    format: "singles" | "doubles";
+    scoring: "sideout" | "rally";
+    bestOf: 3 | 5;
+    points: 11 | 15 | 21;
+    winByTwo: boolean;
+    initialServer: 1 | 2;
+    players: Record<SlotId, string | null>;
+  }) => void;
 }
 
 type SlotId = "leftTop" | "leftBottom" | "rightTop" | "rightBottom";
@@ -15,7 +24,7 @@ type MatchFormState = {
   doubles: boolean;
   initialServer: 1 | 2;
   scoringSystem: "sideout" | "rally";
-  bestOf: "1" | "3" | "5";
+  bestOf: "3" | "5";
   pointsToWin: "11" | "15" | "21";
   timeoutPerSet: boolean;
   winByTwo: boolean;
@@ -161,7 +170,16 @@ export default function CourtSlider({ onBack, onStart }: CourtSliderProps) {
     if (current >= maxDrag - 6 && canStart) {
       animate(x, maxDrag, { duration: 0.15 });
       window.setTimeout(() => {
-        onStart(form.doubles ? "c2" : "c1");
+        onStart({
+          courtId: form.doubles ? "c2" : "c1",
+          format: form.doubles ? "doubles" : "singles",
+          scoring: form.scoringSystem,
+          bestOf: Number(form.bestOf) as 3 | 5,
+          points: Number(form.pointsToWin) as 11 | 15 | 21,
+          winByTwo: form.winByTwo,
+          initialServer: form.initialServer,
+          players: slots,
+        });
         x.set(0);
       }, 170);
       return;
@@ -313,7 +331,6 @@ export default function CourtSlider({ onBack, onStart }: CourtSliderProps) {
               value={form.bestOf}
               onChange={(value) => setForm((previous) => ({ ...previous, bestOf: value as MatchFormState["bestOf"] }))}
               options={[
-                { label: "Best of 1", value: "1" },
                 { label: "Best of 3", value: "3" },
                 { label: "Best of 5", value: "5" },
               ]}

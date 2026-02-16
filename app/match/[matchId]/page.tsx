@@ -26,9 +26,12 @@ export default function LiveMatchPage() {
   const config = useMemo(() => parseConfig(searchParams), [searchParams]);
 
   const [state, setState] = useState<LiveMatchState>(() => createInitialLiveState(matchId, config));
+  const [history, setHistory] = useState<LiveMatchState[]>([]);
   const [seq, setSeq] = useState(0);
   const [showSwitchServe, setShowSwitchServe] = useState(false);
   const [matchWinner, setMatchWinner] = useState<0 | 1 | null>(null);
+  const playerAName = searchParams.get("p1") || "Kunal Verma";
+  const playerBName = searchParams.get("p2") || "Anil Kumar";
 
   const emit = useCallback(
     (type: ScoreEvent["type"], details: Record<string, unknown>) => {
@@ -49,6 +52,7 @@ export default function LiveMatchPage() {
     (winnerSide: 0 | 1) => {
       emit("rally", { side: winnerSide });
       setState((previous) => {
+        setHistory((historyPrevious) => [...historyPrevious, previous]);
         const next = applyRally(previous, config, winnerSide);
         const advanced = maybeAdvanceSet(next, config);
         setMatchWinner(advanced.matchWinner);
@@ -62,6 +66,7 @@ export default function LiveMatchPage() {
     (faultSide: 0 | 1) => {
       emit("fault", { side: faultSide });
       setState((previous) => {
+        setHistory((historyPrevious) => [...historyPrevious, previous]);
         const next = applyFault(previous, config, faultSide);
         const advanced = maybeAdvanceSet(next, config);
         setMatchWinner(advanced.matchWinner);
@@ -74,35 +79,37 @@ export default function LiveMatchPage() {
 
   const undo = useCallback(() => {
     emit("undo", {});
+    setHistory((previous) => {
+      const snapshot = previous[previous.length - 1];
+      if (snapshot) {
+        setState(snapshot);
+        setMatchWinner(null);
+      }
+      return previous.slice(0, -1);
+    });
   }, [emit]);
 
   const currentSet: [number, number] = [
     state.setScores[state.currentSet]?.[0] ?? 0,
     state.setScores[state.currentSet]?.[1] ?? 0,
   ];
-  const set1: [number | null, number | null] = [
-    state.setScores[0]?.[0] ?? 0,
-    state.setScores[0]?.[1] ?? 0,
-  ];
-  const set2: [number | null, number | null] = [
-    state.setScores[1]?.[0] ?? null,
-    state.setScores[1]?.[1] ?? null,
-  ];
-  const set3: [number | null, number | null] = [
-    state.setScores[2]?.[0] ?? null,
-    state.setScores[2]?.[1] ?? null,
-  ];
+  const setScores: Array<[number | null, number | null]> = Array.from({ length: config.bestOf }).map((_, index) => [
+    state.setScores[index]?.[0] ?? (index === 0 ? 0 : null),
+    state.setScores[index]?.[1] ?? (index === 0 ? 0 : null),
+  ]);
 
   return (
     <LiveMatchReplica
+      currentSetNumber={Math.min(state.currentSet + 1, config.bestOf)}
       sideAScore={currentSet[0] ?? 0}
       sideBScore={currentSet[1] ?? 0}
-      set1={set1}
-      set2={set2}
-      set3={set3}
+      setScores={setScores}
+      bestOf={config.bestOf}
       scoringLabel={config.scoringSystem === "sideout" ? "Side-Out Scoring" : "Rally Scoring"}
       sideAServing={state.serverSide === 0}
       sideBServing={state.serverSide === 1}
+      sideALabel={playerAName}
+      sideBLabel={playerBName}
       showSwitchServe={showSwitchServe}
       showWinner={matchWinner != null}
       onBack={() => router.back()}
@@ -113,7 +120,7 @@ export default function LiveMatchPage() {
       onSideBFault={() => applyFaultAction(1)}
       onCloseSwitch={() => setShowSwitchServe(false)}
       onCloseWinner={() => setMatchWinner(null)}
-      winnerName={matchWinner === 1 ? "Anil Kumar" : "Kunal Verma"}
+      winnerName={matchWinner === 1 ? playerBName : playerAName}
       confirmHref="/match/live"
     />
   );

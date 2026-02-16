@@ -15,11 +15,11 @@ export default function LiveMatchPage() {
 
   return (
     <LiveMatchReplica
+      currentSetNumber={1}
       sideAScore={sideA}
       sideBScore={sideB}
-      set1={[sideA, sideB]}
-      set2={[null, null]}
-      set3={[null, null]}
+      setScores={[[sideA, sideB], [null, null], [null, null]]}
+      bestOf={3}
       scoringLabel="Side-Out Scoring"
       sideAServing={serverSide === 0}
       sideBServing={serverSide === 1}
