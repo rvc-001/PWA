@@ -38,8 +38,8 @@ export default function RegistrationEventCard({
 
       <div className="mt-2 flex items-end justify-between gap-3">
         <div>
-          <p className="text-3xl font-bold leading-8 text-[#ff7a1a]">
-            {event.entryFee === 0 ? "Free Entry" : `? ${event.entryFee ?? 0}`}
+          <p className="text-3xl font-semibold leading-8 text-[#ff7a1a]">
+            {event.entryFee === 0 ? "Free Entry" : <><span className="currency-inr">&#8377;</span>{event.entryFee ?? 0}</>}
           </p>
           <p className="text-sm text-[#747474] dark:text-[#b6b6b6]">Payment: {event.paymentOption ?? "Venue"}</p>
         </div>
@@ -61,4 +61,3 @@ export default function RegistrationEventCard({
     </article>
   );
 }
-

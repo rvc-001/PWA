@@ -33,6 +33,37 @@ const appLinks = [
   { href: "/profile", label: "Profile", icon: ProfileIcon },
 ] satisfies readonly NavLink[];
 
+function isLinkActive(pathname: string, href: string) {
+  if (pathname === href || pathname.startsWith(`${href}/`)) return true;
+
+  if (href === "/profile") {
+    return (
+      pathname === "/user/profile" ||
+      pathname.startsWith("/user/profile/") ||
+      pathname.startsWith("/user/settings") ||
+      pathname.startsWith("/settings")
+    );
+  }
+
+  if (href === "/user/profile") {
+    return pathname.startsWith("/user/settings");
+  }
+
+  if (href === "/org/profile") {
+    return pathname.startsWith("/org/settings");
+  }
+
+  if (href === "/user/tournaments") {
+    return pathname === "/tournaments" || pathname.startsWith("/tournaments/");
+  }
+
+  if (href === "/org/tournaments") {
+    return pathname.startsWith("/org/tournaments");
+  }
+
+  return false;
+}
+
 function HomeIcon({ size = 24, className }: IconProps) {
   return (
     <svg
@@ -137,7 +168,7 @@ export default function BottomNav() {
     <nav className="fixed bottom-0 left-0 right-0 flex justify-center">
       <div className="flex justify-around items-end">
         {links.map(({ href, label, icon }, index) => {
-          const active = pathname === href || pathname.startsWith(href + "/");
+          const active = isLinkActive(pathname, href);
           const first = index == 0;
           const last = index == links.length - 1;
           return (

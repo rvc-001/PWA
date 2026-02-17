@@ -10,12 +10,15 @@ import {
   ChevronRightIcon,
   HelpCircleIcon,
   LockIcon,
+  MoonIcon,
   SettingsIcon,
   UsersIcon,
 } from "@/components/Icons";
+import { useTheme } from "@/components/ThemeProvider";
 
 export default function OrgProfilePage() {
   const [showSwitchModal, setShowSwitchModal] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <Layout>
@@ -57,6 +60,20 @@ export default function OrgProfilePage() {
             </div>
           </div>
         </div>
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className="w-full flex items-center justify-between gap-3 p-4 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)]"
+        >
+          <div className="flex items-center gap-3">
+            <MoonIcon size={20} className="text-[var(--color-muted)]" />
+            <div className="text-left">
+              <span className="font-medium">Theme</span>
+              <p className="text-sm text-[var(--color-muted)]">{theme === "dark" ? "Dark" : "Light"} mode</p>
+            </div>
+          </div>
+          <span className="rounded-full bg-[var(--color-surface-elevated)] px-3 py-1 text-sm">Switch</span>
+        </button>
         <nav className="space-y-1" aria-label="Settings">
           <Link
             href="/org/settings/notifications"

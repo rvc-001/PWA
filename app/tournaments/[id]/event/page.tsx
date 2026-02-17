@@ -97,8 +97,8 @@ export default function TournamentEventPage() {
               SOFT
             </div>
             <div>
-              <h1 className="text-[29px] font-bold leading-9">Mumbai Men’s 2025</h1>
-              <p className="text-[15px] text-white/90">Andheri West Organization</p>
+              <h1 className="text-[24px] font-semibold leading-8">Mumbai Men’s 2025</h1>
+              <p className="text-[13px] text-white/90">Andheri West Organization</p>
             </div>
           </div>
 
@@ -108,12 +108,12 @@ export default function TournamentEventPage() {
                 <div className="grid h-7 w-7 place-content-center rounded-full border border-[#e2e2e2] text-[#ff7a1a]">
                   <UsersIcon size={14} />
                 </div>
-                <span className="text-3xl font-bold leading-none">64</span>
+                <span className="text-[30px] font-semibold leading-none">64</span>
               </div>
               <p className="mt-0.5 text-[13px] text-[#656565]">Registered</p>
             </div>
             <div className="rounded-2xl bg-white px-3 py-2 text-[#2d2d2d]">
-              <p className="text-2xl font-semibold leading-7">Registration</p>
+              <p className="text-[20px] font-semibold leading-6">Registration</p>
               <div className="mt-2 grid h-6 place-content-center rounded-full bg-[#efe6d8] text-[11px] font-semibold text-[#ff7a1a]">Open</div>
             </div>
           </div>
@@ -231,4 +231,3 @@ export default function TournamentEventPage() {
     </div>
   );
 }
-

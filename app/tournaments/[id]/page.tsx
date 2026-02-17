@@ -241,7 +241,9 @@ export default function TournamentDetailPage() {
 
                 <div className="mt-2 flex items-end justify-between">
                   <div>
-                    <p className="text-[24px] font-bold leading-7 text-[#ff7a1a]">{ev.fee === 0 ? "Free Entry" : `? ${ev.fee}`}</p>
+                    <p className="text-[24px] font-semibold leading-7 text-[#ff7a1a]">
+                      {ev.fee === 0 ? "Free Entry" : <><span className="currency-inr">&#8377;</span>{ev.fee}</>}
+                    </p>
                     <p className="text-[14px] text-[#747474] dark:text-[#b6b6b6]">Payment: {ev.payment}</p>
                   </div>
 
@@ -368,4 +370,3 @@ export default function TournamentDetailPage() {
     </div>
   );
 }
-
