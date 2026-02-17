@@ -22,10 +22,10 @@ export default function RegistrationEventCard({
   const toggle = () => (isSelected ? onDeselect() : onSelect());
 
   return (
-    <article className="rounded-2xl border border-[#d8d8d8] bg-[#efefef] p-3 text-[#252525] dark:border-[#313131] dark:bg-[#191919] dark:text-[#f1f1f1]">
+    <article className="rounded-2xl border border-[#d8d8d8] bg-[#efefef] p-3 text-[#252525] dark:border-[#6a5791] dark:bg-[#4a396f] dark:text-[#f4f1ff]">
       <h3 className="text-lg font-semibold leading-6">{event.name}</h3>
 
-      <div className="mt-2 grid grid-cols-2 gap-2 text-xs text-[#505050] dark:text-[#c2c2c2]">
+      <div className="mt-2 grid grid-cols-2 gap-2 text-xs text-[#505050] dark:text-[#d2cae6]">
         <p className="flex items-center gap-1.5">
           <CalendarIcon size={12} className="text-[#ff7a1a]" />
           Start Date: {event.startDate}
@@ -41,7 +41,7 @@ export default function RegistrationEventCard({
           <p className="text-3xl font-semibold leading-8 text-[#ff7a1a]">
             {event.entryFee === 0 ? "Free Entry" : <><span className="currency-inr">&#8377;</span>{event.entryFee ?? 0}</>}
           </p>
-          <p className="text-sm text-[#747474] dark:text-[#b6b6b6]">Payment: {event.paymentOption ?? "Venue"}</p>
+          <p className="text-sm text-[#747474] dark:text-[#c0b7d9]">Payment: {event.paymentOption ?? "Venue"}</p>
         </div>
 
         <button

@@ -1,49 +1,44 @@
-"use client";
+﻿"use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
 import Layout from "@/components/Layout";
 import Link from "next/link";
-import { ArrowLeftIcon, ChevronRightIcon } from "@/components/Icons";
+import { ChevronRightIcon } from "@/components/Icons";
 
 export default function HelpSupportPage() {
-  const router = useRouter();
   const faqs = [
     "How do I create a tournament?",
-    "How do I register for a tournament?",
-    "How do I join a tournament?",
-    "How do I invite others to a tournament?",
+    "How do I create a tournament?",
+    "How do I create a tournament?",
   ];
 
   return (
-    <Layout>
-      <div className="p-4 space-y-6">
-        <button type="button" onClick={() => router.back()} className="p-2 rounded-lg hover:bg-[var(--color-surface-elevated)] min-h-[44px] flex items-center gap-2" aria-label="Back">
-          <ArrowLeftIcon size={20} />
-          <span className="font-medium">Help &amp; Support</span>
-        </button>
-        <section>
-          <h2 className="font-semibold mb-1">Contact Support</h2>
-          <p className="text-sm text-[var(--color-muted)]">Need help? Our support team is available 24/7.</p>
-          <Link href="mailto:support@forehand.app" className="inline-block mt-2 text-primary font-medium">
-            <span className="inline-flex items-center gap-1">
-              Email Support
-              <ChevronRightIcon size={16} className="text-primary" />
-            </span>
-          </Link>
+    <Layout title="Help & Support" showBack>
+      <div className="p-4 space-y-4 pb-24">
+        <section className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
+          <h2 className="text-sm font-medium">App Preferences</h2>
+          <p className="text-xs text-[var(--color-muted)]">Change app preferences.</p>
         </section>
-        <section>
-          <h2 className="font-semibold mb-2">FAQ</h2>
-          <ul className="space-y-1">
-            {faqs.map((q) => (
-              <li key={q}>
-                <button type="button" className="w-full flex items-center justify-between p-4 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)] text-left">
+
+        <section className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
+          <h2 className="text-sm font-medium">Contact Support</h2>
+          <p className="mt-1 text-xs text-[var(--color-muted)]">Need help? Our support team is available 24/7.</p>
+          <Link href="mailto:support@forehand.app" className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary">
+            Email Support
+            <ChevronRightIcon size={14} className="text-primary" />
+          </Link>
+
+          <div className="mt-4">
+            <h3 className="text-sm font-medium">FAQ</h3>
+            <ul className="mt-2 space-y-1">
+              {faqs.map((q, idx) => (
+                <li key={`${q}-${idx}`} className="flex items-center gap-2 text-xs text-[var(--color-muted)]">
+                  <ChevronRightIcon size={12} />
                   <span>{q}</span>
-                  <ChevronRightIcon size={18} className="text-[var(--color-muted)] shrink-0" />
-                </button>
-              </li>
-            ))}
-          </ul>
+                </li>
+              ))}
+            </ul>
+          </div>
         </section>
       </div>
     </Layout>

@@ -1,31 +1,31 @@
-"use client";
+﻿"use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
 import Layout from "@/components/Layout";
-import { ArrowLeftIcon } from "@/components/Icons";
 
 export default function NotificationsSettingsPage() {
-  const router = useRouter();
-
   return (
-    <Layout>
-      <div className="p-4 space-y-6">
-        <button type="button" onClick={() => router.back()} className="p-2 rounded-lg hover:bg-[var(--color-surface-elevated)] min-h-[44px] flex items-center gap-2" aria-label="Back">
-          <ArrowLeftIcon size={20} />
-          <span className="font-medium">Notifications</span>
-        </button>
-        <h1 className="text-xl font-semibold">Stay Updated</h1>
-        <p className="text-sm text-[var(--color-muted)]">Choose which notifications you want to receive.</p>
+    <Layout title="Notifications" showBack>
+      <div className="p-4 space-y-4 pb-24">
+        <section className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
+          <h2 className="text-base font-semibold">Stay Updated</h2>
+          <p className="mt-1 text-xs text-[var(--color-muted)]">Choose which notifications you want to receive.</p>
+        </section>
+
         <ul className="space-y-2">
-          {["Tournament Alerts", "Match Alerts", "Team Alerts", "General Alerts"].map((label, i) => (
-            <li key={label} className="flex items-center justify-between p-4 rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)]">
+          {Array.from({ length: 7 }).map((_, i) => (
+            <li key={i} className="flex items-center justify-between gap-3 rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
               <div>
-                <p className="font-medium">{label}</p>
-                <p className="text-sm text-[var(--color-muted)]">Get notified about new tournaments.</p>
+                <p className="text-sm font-medium">Tournament Alerts</p>
+                <p className="text-xs text-[var(--color-muted)]">Get notified about new tournaments</p>
               </div>
-              <button type="button" role="switch" aria-checked="true" className="w-12 h-6 rounded-full bg-primary relative shrink-0 ml-2">
-                <span className="absolute right-1 top-1 w-4 h-4 rounded-full bg-white" />
+              <button
+                type="button"
+                role="switch"
+                aria-checked={i !== 2 && i !== 3}
+                className={`relative h-6 w-11 rounded-full ${i !== 2 && i !== 3 ? "bg-primary" : "bg-[var(--color-border)]"}`}
+              >
+                <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white ${i !== 2 && i !== 3 ? "right-0.5" : "left-0.5"}`} />
               </button>
             </li>
           ))}
