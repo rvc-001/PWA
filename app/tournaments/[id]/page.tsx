@@ -352,7 +352,7 @@ export default function TournamentDetailPage() {
           <div className="flex items-center gap-3">
             <div className="min-w-[110px]">
               <p className="text-[14px] text-[#666] dark:text-[#b9b9b9]">Total Amount:</p>
-              <p className="text-[24px] font-bold leading-7 text-[#ff7a1a]">? {total}</p>
+              <p className="text-[24px] font-bold leading-7 text-[#ff7a1a]"><span className="currency-inr">&#8377;</span> {total}</p>
             </div>
             <Link
               href={`/tournaments/${id}/checkout`}

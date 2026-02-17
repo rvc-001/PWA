@@ -220,7 +220,7 @@ export default function TournamentEventPage() {
           <div className="flex items-center gap-3">
             <div className="min-w-[110px]">
               <p className="text-sm text-[#666] dark:text-[#b9b9b9]">Total Amount:</p>
-              <p className="text-4xl font-bold leading-9 text-[#ff7a1a]">? {total}</p>
+              <p className="text-4xl font-bold leading-9 text-[#ff7a1a]"><span className="currency-inr">&#8377;</span> {total}</p>
             </div>
             <Link href={`/tournaments/${id}/checkout`} className="grid h-11 flex-1 place-content-center rounded-full bg-[#ff7a1a] text-xl font-semibold text-white">
               Claim Spot
