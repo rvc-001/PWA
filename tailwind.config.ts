@@ -1,13 +1,19 @@
-import type { Config } from "tailwindcss";
+﻿import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    // Work around transient Windows/OneDrive EBUSY lock on this route file during scan.
+    "!./app/tournaments/[[]id[]]/checkout/page.tsx",
   ],
   darkMode: "class",
   theme: {
     extend: {
+      fontFamily: {
+        heading: ["Zalando Sans", "var(--font-dm-sans)", "DM Sans", "sans-serif"],
+        body: ["var(--font-dm-sans)", "DM Sans", "sans-serif"],
+      },
       colors: {
         primary: "var(--color-primary)",
         "primary-hover": "var(--color-primary-hover)",

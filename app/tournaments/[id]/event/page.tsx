@@ -1,138 +1,234 @@
 "use client";
 
-import React from "react";
-import Layout from "@/components/Layout";
+import React, { useMemo, useState } from "react";
 import Link from "next/link";
-import { GamepadIcon, CalendarIcon, UsersIcon, PlusIcon, ChevronRightIcon } from "@/components/Icons";
+import { useParams, useRouter } from "next/navigation";
+import RegistrationEventCard from "@/components/Card/RegistrationEventCard";
+import type { Event } from "@/types/models";
+import { ArrowLeftIcon, InfoIcon, TrashIcon, UsersIcon, ShareIcon } from "@/components/Icons";
+
+const mockEvents: Event[] = [
+  {
+    id: "e1",
+    tournamentId: "1",
+    name: "Men’s Singles",
+    sport: "Pickleball",
+    format: "singles",
+    startDate: "25 Oct 2025",
+    regDueDate: "20 Oct 2025",
+    entryFee: 1400,
+    paymentOption: "online",
+    status: "open",
+  },
+  {
+    id: "e2",
+    tournamentId: "1",
+    name: "Men’s Doubles",
+    sport: "Pickleball",
+    format: "doubles",
+    startDate: "25 Oct 2025",
+    regDueDate: "20 Oct 2025",
+    entryFee: 1400,
+    paymentOption: "venue",
+    status: "open",
+  },
+  {
+    id: "e3",
+    tournamentId: "1",
+    name: "Mixed Doubles",
+    sport: "Pickleball",
+    format: "mixed",
+    startDate: "25 Oct 2025",
+    regDueDate: "20 Oct 2025",
+    entryFee: 0,
+    paymentOption: "online",
+    status: "open",
+  },
+];
+
+type PairStep = "adding" | "invited" | "pairing" | "paired";
+
+function PersonChip({ name }: { name: string }) {
+  return (
+    <div className="flex items-center gap-2 rounded-lg border border-[#e7e7e7] bg-[#f8f8f8] px-3 py-2 text-sm dark:border-[#3b3b3b] dark:bg-[#202020]">
+      <div className="h-6 w-6 rounded-full bg-[radial-gradient(circle_at_30%_30%,#d1d1d1,#7b7b7b)]" />
+      <span>{name}</span>
+    </div>
+  );
+}
 
 export default function TournamentEventPage() {
-    return (
-        <Layout title="Tournament Event" showBack>
-            <div className="pb-24">
-                {/* Tournament Header */}
-                <div
-                    className="p-6 text-white"
-                    style={{ background: "var(--gradient-orange)" }}
-                >
-                    <div className="flex items-start gap-4">
-                        <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-3xl">
-                            <GamepadIcon size={28} className="text-white" />
-                        </div>
-                        <div className="flex-1">
-                            <h1 className="text-xl font-bold mb-1">Mumbai Men&apos;s 2025</h1>
-                            <p className="text-sm opacity-90">Badminton • Squash</p>
-                        </div>
-                        <Link
-                            href="/tournaments/1/checkout"
-                            className="px-4 py-2 rounded-lg bg-white/20 text-sm font-semibold hover:bg-white/30 transition-colors"
-                        >
-                            Registration
-                        </Link>
-                    </div>
-                </div>
+  const params = useParams();
+  const router = useRouter();
+  const id = String(params.id);
 
-                <div className="p-4 space-y-6">
-                    {/* Event Categories */}
-                    <section>
-                        <h3 className="font-semibold mb-4">Men&apos;s Singles</h3>
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [pairStep, setPairStep] = useState<PairStep>("adding");
 
-                        <div className="bg-[var(--color-surface)] rounded-[var(--radius-card)] border border-[var(--color-border)] p-4 mb-4">
-                            <div className="flex items-center justify-between mb-3">
-                                <div>
-                                    <h4 className="font-semibold text-sm mb-1">Registration Date</h4>
-                                    <p className="text-xs text-[var(--color-muted)] flex items-center gap-1">
-                                        <CalendarIcon size={12} /> Last Date: 05/12/2024 • Reg Close: 07 Dec 20:00
-                                    </p>
-                                </div>
-                            </div>
+  const isSelected = (eventId: string) => selectedIds.includes(eventId);
 
-                            <div className="grid grid-cols-2 gap-3">
-                                <div className="bg-[var(--color-surface-elevated)] rounded-lg p-3">
-                                    <p className="text-xs text-[var(--color-muted)] mb-1">Capacity</p>
-                                    <p className="font-semibold">4/64</p>
-                                </div>
-                                <div className="bg-[var(--color-surface-elevated)] rounded-lg p-3">
-                                    <p className="text-xs text-[var(--color-muted)] mb-1">Entry Fee</p>
-                                    <p className="font-semibold">
-                                        <span className="line-through text-[var(--color-muted)] text-xs mr-1">
-                                            ₹1400
-                                        </span>
-                                        Free Entry
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
+  const toggleSelection = (event: Event) => {
+    setSelectedIds((prev) => {
+      if (prev.includes(event.id)) return prev.filter((entry) => entry !== event.id);
+      return [...prev, event.id];
+    });
+  };
 
-                    {/* Men's Doubles */}
-                    <section>
-                        <h3 className="font-semibold mb-4">Men&apos;s Doubles</h3>
+  const total = useMemo(
+    () => mockEvents.filter((ev) => selectedIds.includes(ev.id)).reduce((sum, ev) => sum + (ev.entryFee ?? 0), 0),
+    [selectedIds]
+  );
 
-                        <div className="bg-[var(--color-surface)] rounded-[var(--radius-card)] border border-[var(--color-border)] p-4">
-                            <div className="mb-4">
-                                <h4 className="font-semibold text-sm mb-2">Registration</h4>
-                                <p className="text-xs text-[var(--color-muted)] flex items-center gap-1">
-                                    <CalendarIcon size={12} /> Last Date: 05/12/2024 • Reg Close: 07 Dec 20:00
-                                </p>
-                            </div>
+  return (
+    <div className="min-h-screen bg-[#ececec] pb-24 text-[#242424] dark:bg-[#121212] dark:text-[#f4f4f4]">
+      <div className="bg-[#ff7a1a] pb-4 pt-[max(env(safe-area-inset-top),12px)] text-white">
+        <div className="px-4">
+          <div className="flex items-center justify-between">
+            <button onClick={() => router.back()} className="grid h-9 w-9 place-content-center rounded-full bg-white/35" aria-label="Back">
+              <ArrowLeftIcon size={18} />
+            </button>
+            <button className="grid h-9 w-9 place-content-center rounded-full bg-white/35" aria-label="Share">
+              <ShareIcon size={16} />
+            </button>
+          </div>
 
-                            <div className="grid grid-cols-2 gap-3 mb-4">
-                                <div className="bg-[var(--color-surface-elevated)] rounded-lg p-3">
-                                    <p className="text-xs text-[var(--color-muted)] mb-1">Capacity</p>
-                                    <p className="font-semibold">8/64</p>
-                                </div>
-                                <div className="bg-[var(--color-surface-elevated)] rounded-lg p-3">
-                                    <p className="text-xs text-[var(--color-muted)] mb-1">Entry Fee</p>
-                                    <p className="font-semibold">₹1400</p>
-                                </div>
-                            </div>
-
-                            {/* Add Your Partner Section */}
-                            <div className="border-t border-[var(--color-border)] pt-4">
-                                <h4 className="font-semibold text-sm mb-3">Add your partner</h4>
-
-                                <div className="flex gap-2 mb-3">
-                                    <button className="flex-1 px-4 py-2.5 rounded-[var(--radius-button)] border border-[var(--color-border)] text-sm font-medium hover:border-primary transition-colors flex items-center justify-center gap-1">
-                                        <UsersIcon size={14} /> Create Your Pair
-                                    </button>
-                                    <button className="flex-1 px-4 py-2.5 rounded-[var(--radius-button)] border border-[var(--color-border)] text-sm font-medium hover:border-primary transition-colors flex items-center justify-center gap-1">
-                                        <PlusIcon size={14} /> Add Me
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Mixed Doubles Section */}
-                            <div className="mt-4 pt-4 border-t border-[var(--color-border)]">
-                                <h4 className="font-semibold text-sm mb-3">Mixed Doubles</h4>
-                                <div className="space-y-2">
-                                    <div className="flex items-center justify-between p-3 bg-[var(--color-surface-elevated)] rounded-lg">
-                                        <div>
-                                            <p className="text-sm font-medium">Men&apos;s Doubles</p>
-                                            <p className="text-xs text-[var(--color-muted)]">₹1400 • 8/64</p>
-                                        </div>
-                                        <Link
-                                            href="/tournaments/1/checkout"
-                                            className="px-4 py-1.5 rounded-[var(--radius-button)] text-sm font-semibold text-white"
-                                            style={{ background: "var(--gradient-orange)" }}
-                                        >
-                                            Register <ChevronRightIcon size={14} />
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* Bottom CTA */}
-                    <Link
-                        href="/tournaments/1/checkout"
-                        className="block w-full min-h-[52px] flex items-center justify-center rounded-xl font-semibold text-white shadow-lg transition-transform active:scale-95"
-                        style={{ background: "var(--gradient-orange)" }}
-                    >
-                        Proceed to Registration
-                    </Link>
-                </div>
+          <div className="mt-4 flex items-start gap-3">
+            <div className="mt-1 h-12 w-12 rounded-full border border-white/70 bg-[#f1f1f1] text-[10px] font-bold text-[#555] grid place-content-center">
+              SOFT
             </div>
-        </Layout>
-    );
+            <div>
+              <h1 className="text-[29px] font-bold leading-9">Mumbai Men’s 2025</h1>
+              <p className="text-[15px] text-white/90">Andheri West Organization</p>
+            </div>
+          </div>
+
+          <div className="mt-4 grid grid-cols-2 gap-3">
+            <div className="rounded-2xl bg-white px-3 py-2 text-[#2d2d2d]">
+              <div className="flex items-center gap-2">
+                <div className="grid h-7 w-7 place-content-center rounded-full border border-[#e2e2e2] text-[#ff7a1a]">
+                  <UsersIcon size={14} />
+                </div>
+                <span className="text-3xl font-bold leading-none">64</span>
+              </div>
+              <p className="mt-0.5 text-[13px] text-[#656565]">Registered</p>
+            </div>
+            <div className="rounded-2xl bg-white px-3 py-2 text-[#2d2d2d]">
+              <p className="text-2xl font-semibold leading-7">Registration</p>
+              <div className="mt-2 grid h-6 place-content-center rounded-full bg-[#efe6d8] text-[11px] font-semibold text-[#ff7a1a]">Open</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 border-y border-[#d1d1d1] bg-[#efefef] dark:border-[#2e2e2e] dark:bg-[#181818]">
+        <Link href={`/tournaments/${id}`} className="grid h-10 place-content-center text-lg font-semibold text-[#979797]">
+          About
+        </Link>
+        <button className="h-10 border-b-2 border-[#ff7a1a] text-lg font-semibold text-[#ff7a1a]">Events</button>
+      </div>
+
+      <div className="space-y-3 p-3 pb-28">
+        {mockEvents.map((event) => {
+          const selected = isSelected(event.id);
+          const showPairBox = event.format === "doubles" && selected;
+
+          return (
+            <RegistrationEventCard
+              key={event.id}
+              event={event}
+              isSelected={selected}
+              onSelect={() => toggleSelection(event)}
+              onDeselect={() => toggleSelection(event)}
+            >
+              {showPairBox ? (
+                <div className="rounded-2xl border border-[#dddddd] bg-[#f2f2f2] p-3 dark:border-[#353535] dark:bg-[#212121]">
+                  {pairStep === "adding" ? (
+                    <>
+                      <p className="text-xl font-semibold">Add your partner</p>
+                      <input
+                        placeholder="Enter partner’s Phone No."
+                        className="mt-2 h-10 w-full rounded-lg border border-[#e0e0e0] bg-white px-3 text-sm outline-none dark:border-[#404040] dark:bg-[#181818]"
+                      />
+                      <p className="mt-1 flex items-start gap-1 text-xs text-[#8a8a8a]">
+                        <InfoIcon size={11} className="mt-0.5" />
+                        Your partner must be registered on the app to enroll.
+                      </p>
+                      <button
+                        onClick={() => setPairStep("invited")}
+                        className="mt-2 h-9 w-full rounded-full border border-[#ff7a1a] text-base font-semibold text-[#ff7a1a]"
+                      >
+                        Add Partner
+                      </button>
+                    </>
+                  ) : null}
+
+                  {pairStep === "invited" ? (
+                    <>
+                      <p className="text-xl font-semibold">Add your partner</p>
+                      <div className="mt-2 flex items-center justify-between rounded-lg border border-[#e2e2e2] bg-[#f7f7f7] p-2 text-sm dark:border-[#3c3c3c] dark:bg-[#242424]">
+                        <div className="flex items-center gap-2">
+                          <div className="h-6 w-6 rounded-full bg-[radial-gradient(circle_at_30%_30%,#d1d1d1,#7b7b7b)]" />
+                          <span>Anil Kumar</span>
+                        </div>
+                        <span className="rounded-md bg-[#fff2e7] px-2 py-0.5 text-[10px] text-[#ff7a1a]">Invite Pending</span>
+                      </div>
+                      <button
+                        onClick={() => setPairStep("pairing")}
+                        className="mt-2 h-9 w-full rounded-full border border-[#ff7a1a] text-base font-semibold text-[#ff7a1a]"
+                      >
+                        Continue
+                      </button>
+                    </>
+                  ) : null}
+
+                  {pairStep === "pairing" ? (
+                    <>
+                      <p className="text-xl font-semibold">Create Your Pair</p>
+                      <div className="mt-2 grid grid-cols-2 gap-2">
+                        <PersonChip name="You" />
+                        <button
+                          onClick={() => setPairStep("adding")}
+                          className="flex items-center justify-center gap-1 rounded-lg bg-[#ffd9d9] px-3 py-2 text-sm text-[#ef4444]"
+                        >
+                          <TrashIcon size={12} /> Remove
+                        </button>
+                      </div>
+                      <button
+                        onClick={() => setPairStep("paired")}
+                        className="mt-2 h-9 w-full rounded-full border border-[#ff7a1a] text-base font-semibold text-[#ff7a1a]"
+                      >
+                        Confirm Your Pair
+                      </button>
+                    </>
+                  ) : null}
+
+                  {pairStep === "paired" ? (
+                    <div className="grid grid-cols-2 gap-2">
+                      <PersonChip name="You" />
+                      <PersonChip name="Anil Kumar" />
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+            </RegistrationEventCard>
+          );
+        })}
+      </div>
+
+      {total > 0 ? (
+        <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-[#dbdbdb] bg-[#efefef] p-3 pb-[max(env(safe-area-inset-bottom),12px)] dark:border-[#2f2f2f] dark:bg-[#151515]">
+          <div className="flex items-center gap-3">
+            <div className="min-w-[110px]">
+              <p className="text-sm text-[#666] dark:text-[#b9b9b9]">Total Amount:</p>
+              <p className="text-4xl font-bold leading-9 text-[#ff7a1a]">? {total}</p>
+            </div>
+            <Link href={`/tournaments/${id}/checkout`} className="grid h-11 flex-1 place-content-center rounded-full bg-[#ff7a1a] text-xl font-semibold text-white">
+              Claim Spot
+            </Link>
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
 }
+

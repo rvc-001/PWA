@@ -83,6 +83,15 @@ export function CheckIcon(props: IconProps) {
   );
 }
 
+export function CheckCircleIcon(props: IconProps) {
+  return (
+    <SvgIcon {...props}>
+      <circle cx="12" cy="12" r="10" />
+      <path d="M9 12l2 2 4-4" />
+    </SvgIcon>
+  );
+}
+
 export function ShareIcon(props: IconProps) {
   return (
     <SvgIcon {...props}>
@@ -200,6 +209,15 @@ export function WalletIcon(props: IconProps) {
       <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" />
       <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" />
       <path d="M18 12a2 2 0 0 0 0 4h4v-4Z" />
+    </SvgIcon>
+  );
+}
+
+export function SearchIcon(props: IconProps) {
+  return (
+    <SvgIcon {...props}>
+      <circle cx="11" cy="11" r="8" />
+      <path d="m21 21-4.35-4.35" />
     </SvgIcon>
   );
 }
