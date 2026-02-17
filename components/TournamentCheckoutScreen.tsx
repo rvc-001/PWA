@@ -45,7 +45,7 @@ export default function TournamentCheckoutScreen() {
   }
 
   return (
-    <div className="min-h-screen bg-[#efefef] pb-24 text-[#202020] dark:bg-[#111] dark:text-[#f3f3f3] font-body">
+    <div className="min-h-screen bg-[#efefef] pb-24 text-[#202020] dark:bg-[#160e28] dark:text-[#f3f3f3] font-body">
       <div className="mx-auto max-w-md px-4 pt-[max(env(safe-area-inset-top),14px)]">
         <div className="flex items-center gap-3">
           <button onClick={() => router.back()} className="grid h-9 w-9 place-content-center rounded-full border border-[#d8d8d8] bg-[#f5f5f5] dark:border-[#333] dark:bg-[#1a1a1a]">
@@ -59,13 +59,13 @@ export default function TournamentCheckoutScreen() {
             SOFT
           </div>
           <div>
-            <h2 className="text-3xl font-semibold">Mumbai Men’s 2025</h2>
+            <h2 className="text-3xl font-medium">Mumbai Men’s 2025</h2>
             <p className="text-sm text-[#5f5f5f] dark:text-[#bcbcbc]">Andheri West Organization</p>
           </div>
         </div>
 
         <section className="mt-5">
-          <h3 className="text-3xl font-semibold">Your Registrations</h3>
+          <h3 className="text-3xl font-medium">Your Registrations</h3>
           <div className="mt-3 space-y-2.5">
             {rows.map((row) => (
               <div key={row.id} className="rounded-2xl border border-[#dddddd] bg-[#f7f7f7] p-2.5 dark:border-[#333] dark:bg-[#181818]">
@@ -78,8 +78,8 @@ export default function TournamentCheckoutScreen() {
                   </button>
                 </div>
                 <div className="mt-1 flex items-end justify-between">
-                  <p className="text-[20px] leading-6 font-semibold">{row.title}</p>
-                  <p className="text-[31px] font-bold text-[#ff7a1a]"><span className="currency-inr">{INR}</span>{row.fee}</p>
+                  <p className="text-[20px] leading-6 font-medium">{row.title}</p>
+                  <p className="text-[31px] font-semibold text-[#ff7a1a]"><span className="currency-inr">{INR}</span>{row.fee}</p>
                 </div>
               </div>
             ))}
@@ -96,7 +96,7 @@ export default function TournamentCheckoutScreen() {
             <span className="font-semibold text-[#ef4444]">-<span className="currency-inr">{INR}</span>1400</span>
           </div>
           <div className="mt-1 flex items-center justify-between">
-            <span className="text-[33px] font-semibold">To Pay Now</span>
+            <span className="text-[33px] font-medium">To Pay Now</span>
             <span className="text-[39px] font-semibold"><span className="currency-inr">{INR}</span>1400</span>
           </div>
         </section>

@@ -34,7 +34,7 @@ select,
 }
 
 .currency-inr {
-  font-family: "Noto Sans", var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
+  font-family: "Noto Sans", "Noto Sans Symbols 2", "Arial Unicode MS", var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
 }
 
 /* Safe area for notched devices */

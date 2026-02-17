@@ -27,6 +27,34 @@ const orgLinks = [
   { href: "/org/profile", label: "Profile", icon: ProfileIcon },
 ] satisfies readonly NavLink[];
 
+const appLinks = [
+  { href: "/home", label: "Home", icon: HomeIcon },
+  { href: "/tournaments", label: "Tournaments", icon: TrophyIcon },
+  { href: "/user/profile", label: "Profile", icon: ProfileIcon },
+] satisfies readonly NavLink[];
+
+function isLinkActive(pathname: string, href: string) {
+  if (pathname === href || pathname.startsWith(`${href}/`)) return true;
+
+  if (href === "/user/profile") {
+    return pathname.startsWith("/user/settings") || pathname.startsWith("/settings") || pathname === "/profile";
+  }
+
+  if (href === "/org/profile") {
+    return pathname.startsWith("/org/settings");
+  }
+
+  if (href === "/user/tournaments") {
+    return pathname === "/tournaments" || pathname.startsWith("/tournaments/");
+  }
+
+  if (href === "/org/tournaments") {
+    return pathname.startsWith("/org/tournaments");
+  }
+
+  return false;
+}
+
 function HomeIcon({ size = 24, className }: IconProps) {
   return (
     <svg
@@ -113,7 +141,8 @@ function ProfileIcon({ size = 24, className }: IconProps) {
 export default function BottomNav() {
   const pathname = usePathname();
   const isOrg = pathname.startsWith("/org");
-  const links = isOrg ? orgLinks : userLinks;
+  const isUser = pathname.startsWith("/user");
+  const links = isOrg ? orgLinks : isUser ? userLinks : appLinks;
 
   const innerElements = ({
     icon: Icon,
@@ -130,7 +159,7 @@ export default function BottomNav() {
     <nav className="fixed bottom-0 left-0 right-0 flex justify-center">
       <div className="flex justify-around items-end">
         {links.map(({ href, label, icon }, index) => {
-          const active = pathname === href || pathname.startsWith(href + "/");
+          const active = isLinkActive(pathname, href);
           const first = index == 0;
           const last = index == links.length - 1;
           return (

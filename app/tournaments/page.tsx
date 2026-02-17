@@ -153,10 +153,10 @@ function TournamentCard({ item }: { item: TournamentItem }) {
   return (
     <Link
       href={`/tournaments/${item.id}`}
-      className="block rounded-2xl border border-[#ff8e40] bg-white p-3.5 dark:bg-[#1b1b1b]"
+      className="block rounded-2xl border border-[#ff8e40] bg-white p-3.5 dark:border-[#3b3354] dark:bg-[#16161d]"
     >
       <div className="flex items-start gap-3">
-        <div className="mt-0.5 h-12 w-12 shrink-0 rounded-full border border-[#c8c8c8] bg-[#f3f3f3] text-[10px] font-bold text-[#6a6a6a] grid place-content-center">
+        <div className="mt-0.5 grid h-12 w-12 shrink-0 place-content-center rounded-full border border-[#c8c8c8] bg-[#f3f3f3] text-[10px] font-bold text-[#6a6a6a] dark:border-[#504a5f] dark:bg-[#e7e7e7]">
           SOFT
         </div>
 
@@ -199,7 +199,7 @@ function TournamentCard({ item }: { item: TournamentItem }) {
           </div>
 
           <div className="mt-3 flex items-center justify-between">
-            <div className="flex items-center gap-1 text-[11px] text-[#444] dark:text-[#ccc]">
+            <div className="flex items-center gap-1 text-[11px] text-[#444] dark:text-[#b8b2cb]">
               <div className="flex -space-x-1">
                 <div className="h-5 w-5 rounded-full bg-[#dbb27a] ring-1 ring-white dark:ring-[#1b1b1b]" />
                 <div className="h-5 w-5 rounded-full bg-[#3ea3bf] ring-1 ring-white dark:ring-[#1b1b1b]" />
@@ -209,7 +209,7 @@ function TournamentCard({ item }: { item: TournamentItem }) {
             </div>
 
             {item.cta === "Register" || item.cta === "View" ? (
-              <span className="inline-flex h-8 min-w-[92px] items-center justify-center rounded-full border border-[#ff8e40] px-4 text-[14px] font-medium text-[#ff7a1a]">
+              <span className="inline-flex h-8 min-w-[92px] items-center justify-center rounded-full border border-[#ff8e40] px-4 text-[14px] font-medium text-[#ff7a1a] dark:border-[#ff7a1a]">
                 {item.cta}
               </span>
             ) : null}
@@ -231,8 +231,8 @@ export default function TournamentsPage() {
   }, [activeTab]);
 
   return (
-    <div className="min-h-screen bg-[#ececec] pb-24 text-[#2d2d2d] dark:bg-[#121212] dark:text-[#f5f5f5]">
-      <div className="bg-[#ff7a1a] px-4 pb-3 pt-[max(env(safe-area-inset-top),14px)] text-white">
+    <div className="min-h-screen bg-[#ececec] pb-24 text-[#2d2d2d] dark:bg-[#0f0f16] dark:text-[#f5f5f5]">
+      <div className="bg-[#ff7a1a] px-4 pb-3 pt-[max(env(safe-area-inset-top),14px)] text-white dark:bg-[#2f204d]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="h-11 w-11 rounded-full border-2 border-white/80 bg-[radial-gradient(circle_at_30%_30%,#fce5c6,#7b523d)]" />
@@ -241,7 +241,7 @@ export default function TournamentsPage() {
               <p className="text-[13px] text-white/90">Browse and join tournaments</p>
             </div>
           </div>
-          <button className="relative grid h-9 w-9 place-content-center rounded-full bg-white/85 text-[#5f5f5f]">
+          <button className="relative grid h-9 w-9 place-content-center rounded-full bg-white/85 text-[#5f5f5f] dark:bg-white/15 dark:text-white">
             <BellIcon size={16} />
             <span className="absolute -right-0.5 -top-0.5 grid h-4 w-4 place-content-center rounded-full bg-[#ff7a1a] text-[10px] font-bold text-white">
               2
@@ -249,12 +249,12 @@ export default function TournamentsPage() {
           </button>
         </div>
 
-        <label className="mt-4 flex h-10 items-center gap-2 rounded-xl bg-white px-3 text-[#8a8a8a]">
+        <label className="mt-4 flex h-10 items-center gap-2 rounded-xl bg-white px-3 text-[#8a8a8a] dark:border dark:border-white/10 dark:bg-white/10 dark:text-white/60">
           <SearchIcon size={16} />
           <input
             type="text"
             placeholder="Search tournaments, cities..."
-            className="w-full bg-transparent text-[13px] text-[#484848] outline-none placeholder:text-[#9f9f9f]"
+            className="w-full bg-transparent text-[13px] text-[#484848] outline-none placeholder:text-[#9f9f9f] dark:text-white/85 dark:placeholder:text-white/45"
           />
         </label>
 
@@ -274,9 +274,9 @@ export default function TournamentsPage() {
         </div>
       </div>
 
-      <div className="border-t border-[#e3e3e3] px-2.5 pt-2 dark:border-[#2a2a2a]">
+      <div className="border-t border-[#e3e3e3] px-2.5 pt-2 dark:border-[#2b233f]">
         <div className="hide-scrollbar flex items-center gap-2 overflow-x-auto pb-2">
-          <button className="grid h-9 w-9 shrink-0 place-content-center rounded-full border border-[#dadada] bg-white text-[#ff7a1a] dark:border-[#333] dark:bg-[#1a1a1a]">
+          <button className="grid h-9 w-9 shrink-0 place-content-center rounded-full border border-[#dadada] bg-white text-[#ff7a1a] dark:border-[#3a3251] dark:bg-[#171424]">
             <FilterIcon size={14} />
           </button>
           {([
@@ -292,7 +292,7 @@ export default function TournamentsPage() {
                 className={`h-9 shrink-0 rounded-xl border px-6 text-[14px] font-medium ${
                   active
                     ? "border-[#ff7a1a] bg-[#ff7a1a] text-white"
-                    : "border-[#d6d6d6] bg-[#ededed] text-[#666] dark:border-[#383838] dark:bg-[#1b1b1b] dark:text-[#b8b8b8]"
+                    : "border-[#d6d6d6] bg-[#ededed] text-[#666] dark:border-[#3a3251] dark:bg-[#171424] dark:text-[#b8b2cb]"
                 }`}
               >
                 {tab.label}
