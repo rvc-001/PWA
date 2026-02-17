@@ -70,7 +70,7 @@ const contacts = [
 
 function PersonChip({ name }: { name: string }) {
   return (
-    <div className="flex items-center gap-2 rounded-lg border border-[#e7e7e7] bg-[#f8f8f8] px-3 py-2 text-[16px] dark:border-[#3b3b3b] dark:bg-[#202020]">
+    <div className="flex items-center gap-2 rounded-lg border border-[#e7e7e7] bg-[#f8f8f8] px-3 py-2 text-[14px] dark:border-[#3b3b3b] dark:bg-[#202020]">
       <div className="h-6 w-6 rounded-full bg-[radial-gradient(circle_at_30%_30%,#d1d1d1,#7b7b7b)]" />
       <span>{name}</span>
     </div>
@@ -135,8 +135,8 @@ export default function TournamentDetailPage() {
               SOFT
             </div>
             <div>
-              <h1 className="text-[38px] font-bold leading-9">Mumbai Men’s 2025</h1>
-              <p className="text-[15px] text-white/90">Andheri West Organization</p>
+              <h1 className="text-[24px] font-bold leading-7">Mumbai Men’s 2025</h1>
+              <p className="text-[13px] text-white/90">Andheri West Organization</p>
             </div>
           </div>
 
@@ -146,28 +146,28 @@ export default function TournamentDetailPage() {
                 <div className="grid h-7 w-7 place-content-center rounded-full border border-[#e2e2e2] text-[#ff7a1a]">
                   <UsersIcon size={14} />
                 </div>
-                <span className="text-[35px] font-bold leading-none">64</span>
+                <span className="text-[24px] font-bold leading-none">64</span>
               </div>
               <p className="mt-0.5 text-[13px] text-[#656565]">Registered</p>
             </div>
             <div className="rounded-2xl bg-white px-3 py-2 text-[#2d2d2d]">
-              <p className="text-[26px] font-semibold leading-7">Registration</p>
+              <p className="text-[18px] font-semibold leading-5">Registration</p>
               <div className="mt-2 grid h-6 place-content-center rounded-full bg-[#efe6d8] text-[11px] font-semibold text-[#ff7a1a]">Open</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 border-y border-[#d1d1d1] bg-[#efefef] dark:border-[#2e2e2e] dark:bg-[#181818]">
+      <div className="sticky top-0 z-30 grid grid-cols-2 border-y border-[#d1d1d1] bg-[#efefef] dark:border-[#2e2e2e] dark:bg-[#181818]">
         <button
           onClick={() => setTab("about")}
-          className={`h-10 text-[29px] font-semibold ${tab === "about" ? "text-[#ff7a1a] border-b-2 border-[#ff7a1a]" : "text-[#979797]"}`}
+          className={`h-10 text-[18px] font-semibold ${tab === "about" ? "text-[#ff7a1a] border-b-2 border-[#ff7a1a]" : "text-[#979797]"}`}
         >
           About
         </button>
         <button
           onClick={() => setTab("events")}
-          className={`h-10 text-[29px] font-semibold ${tab === "events" ? "text-[#ff7a1a] border-b-2 border-[#ff7a1a]" : "text-[#979797]"}`}
+          className={`h-10 text-[18px] font-semibold ${tab === "events" ? "text-[#ff7a1a] border-b-2 border-[#ff7a1a]" : "text-[#979797]"}`}
         >
           Events
         </button>
@@ -177,7 +177,7 @@ export default function TournamentDetailPage() {
         {tab === "about" ? (
           <>
             <section className="rounded-2xl border border-[#d8d8d8] bg-[#efefef] p-3 dark:border-[#313131] dark:bg-[#191919]">
-              <h2 className="text-[32px] font-semibold">Overview</h2>
+              <h2 className="text-[18px] font-semibold">Overview</h2>
               <div className="mt-2 grid grid-cols-2 gap-2">
                 <div className="rounded-xl border border-[#dedede] bg-[#f5f5f5] p-2 dark:border-[#373737] dark:bg-[#222]">
                   <p className="text-[12px] text-[#6f6f6f]">Start Date</p>
@@ -195,21 +195,21 @@ export default function TournamentDetailPage() {
             </section>
 
             <section className="rounded-2xl border border-[#d8d8d8] bg-[#efefef] p-3 dark:border-[#313131] dark:bg-[#191919]">
-              <h2 className="text-[32px] font-semibold">Description</h2>
-              <p className="mt-1 text-[17px] text-[#595959] dark:text-[#bebebe]">
+              <h2 className="text-[18px] font-semibold">Description</h2>
+              <p className="mt-1 text-[14px] text-[#595959] dark:text-[#bebebe]">
                 Join the biggest badminton tournament in the city! Open to all skill levels with exciting prizes.
               </p>
             </section>
 
             <section className="rounded-2xl border border-[#d8d8d8] bg-[#efefef] p-3 dark:border-[#313131] dark:bg-[#191919]">
-              <h2 className="text-[32px] font-semibold">Contact Information</h2>
+              <h2 className="text-[18px] font-semibold">Contact Information</h2>
               <div className="mt-2 space-y-2">
                 {contacts.map((contact) => (
                   <div key={contact.id} className="border-b border-[#dddddd] pb-2 last:border-b-0 dark:border-[#2f2f2f]">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <div className="h-8 w-8 rounded-full bg-[radial-gradient(circle_at_30%_30%,#d1d1d1,#7b7b7b)]" />
-                        <p className="text-[20px] font-medium">{contact.name}</p>
+                        <p className="text-[16px] font-medium">{contact.name}</p>
                       </div>
                       <span className="rounded-full bg-[#26b34a] px-2 py-0.5 text-[11px] font-semibold text-white">Organizer</span>
                     </div>
@@ -233,7 +233,7 @@ export default function TournamentDetailPage() {
 
             return (
               <section key={ev.id} className="rounded-2xl border border-[#d8d8d8] bg-[#efefef] p-3 dark:border-[#313131] dark:bg-[#191919]">
-                <h3 className="text-[31px] font-semibold">{ev.name}</h3>
+                <h3 className="text-[18px] font-semibold">{ev.name}</h3>
                 <div className="mt-2 grid grid-cols-2 gap-2 text-[12px] text-[#4f4f4f] dark:text-[#c3c3c3]">
                   <p className="flex items-center gap-1.5"><CalendarIcon size={12} className="text-[#ff7a1a]" />Start Date: {ev.startDate}</p>
                   <p className="flex items-center gap-1.5"><SearchIcon size={12} className="text-[#ff7a1a]" />Reg. Closes: {ev.closeDate}</p>
@@ -241,17 +241,16 @@ export default function TournamentDetailPage() {
 
                 <div className="mt-2 flex items-end justify-between">
                   <div>
-                    <p className="text-[40px] font-bold leading-10 text-[#ff7a1a]">{ev.fee === 0 ? "Free Entry" : `? ${ev.fee}`}</p>
+                    <p className="text-[24px] font-bold leading-7 text-[#ff7a1a]">{ev.fee === 0 ? "Free Entry" : `? ${ev.fee}`}</p>
                     <p className="text-[14px] text-[#747474] dark:text-[#b6b6b6]">Payment: {ev.payment}</p>
                   </div>
 
                   <button
                     onClick={() => toggleEvent(ev)}
-                    className={`inline-flex h-9 min-w-[102px] items-center justify-center gap-1 rounded-full border px-4 text-[29px] font-semibold ${
-                      isSelected
+                    className={`inline-flex h-9 min-w-[102px] items-center justify-center gap-1 rounded-full border px-4 text-[16px] font-semibold ${isSelected
                         ? "border-[#ff7a1a] bg-[#ff7a1a] text-white"
                         : "border-[#ff7a1a] text-[#ff7a1a]"
-                    }`}
+                      }`}
                   >
                     {isSelected ? "Added" : <><PlusIcon size={12} /> Add</>}
                   </button>
@@ -261,7 +260,7 @@ export default function TournamentDetailPage() {
                   <div className="mt-3 rounded-2xl border border-[#dddddd] bg-[#f2f2f2] p-3 dark:border-[#353535] dark:bg-[#212121]">
                     {pairState === "adding" ? (
                       <>
-                        <p className="text-[32px] font-semibold">Add your partner</p>
+                        <p className="text-[18px] font-semibold">Add your partner</p>
                         <input
                           value={partnerPhone}
                           onChange={(e) => setPartnerPhone(e.target.value)}
@@ -274,7 +273,7 @@ export default function TournamentDetailPage() {
                         </p>
                         <button
                           onClick={() => setPairState("invited")}
-                          className="mt-2 h-9 w-full rounded-full border border-[#ff7a1a] text-[30px] font-semibold text-[#ff7a1a]"
+                          className="mt-2 h-9 w-full rounded-full border border-[#ff7a1a] text-[16px] font-semibold text-[#ff7a1a]"
                         >
                           Add Partner
                         </button>
@@ -283,7 +282,7 @@ export default function TournamentDetailPage() {
 
                     {pairState === "invited" ? (
                       <>
-                        <p className="text-[32px] font-semibold">Add your partner</p>
+                        <p className="text-[18px] font-semibold">Add your partner</p>
                         <div className="mt-2 flex items-center justify-between rounded-lg border border-[#e2e2e2] bg-[#f7f7f7] p-2 text-[14px] dark:border-[#3c3c3c] dark:bg-[#242424]">
                           <div className="flex items-center gap-2">
                             <div className="h-6 w-6 rounded-full bg-[radial-gradient(circle_at_30%_30%,#d1d1d1,#7b7b7b)]" />
@@ -294,7 +293,7 @@ export default function TournamentDetailPage() {
                         <p className="mt-1 flex items-center gap-1 text-[11px] text-[#8a8a8a]"><InfoIcon size={11} /> Waiting for Anil Kumar to accept the invite.</p>
                         <button
                           onClick={() => setPairState("pairing")}
-                          className="mt-2 h-9 w-full rounded-full border border-[#ff7a1a] text-[30px] font-semibold text-[#ff7a1a]"
+                          className="mt-2 h-9 w-full rounded-full border border-[#ff7a1a] text-[16px] font-semibold text-[#ff7a1a]"
                         >
                           Continue
                         </button>
@@ -305,7 +304,7 @@ export default function TournamentDetailPage() {
                       <>
                         <div className="flex items-center gap-2">
                           <ArrowLeftIcon size={14} />
-                          <p className="text-[32px] font-semibold">Create Your Pair</p>
+                          <p className="text-[18px] font-semibold">Create Your Pair</p>
                         </div>
                         <div className="mt-2 grid grid-cols-2 gap-2">
                           <PersonChip name="You" />
@@ -318,7 +317,7 @@ export default function TournamentDetailPage() {
                         </div>
                         <button
                           onClick={() => setPairState("paired")}
-                          className="mt-2 h-9 w-full rounded-full border border-[#ff7a1a] text-[30px] font-semibold text-[#ff7a1a]"
+                          className="mt-2 h-9 w-full rounded-full border border-[#ff7a1a] text-[16px] font-semibold text-[#ff7a1a]"
                         >
                           Confirm Your Pair
                         </button>
@@ -343,7 +342,7 @@ export default function TournamentDetailPage() {
         <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-[#dbdbdb] bg-[#efefef] p-3 pb-[max(env(safe-area-inset-bottom),12px)] dark:border-[#2f2f2f] dark:bg-[#151515]">
           <button
             onClick={() => setTab("events")}
-            className="h-11 w-full rounded-full bg-[#ff7a1a] text-[31px] font-semibold text-white"
+            className="h-11 w-full rounded-full bg-[#ff7a1a] text-[18px] font-semibold text-white"
           >
             Select Event
           </button>
@@ -353,11 +352,11 @@ export default function TournamentDetailPage() {
           <div className="flex items-center gap-3">
             <div className="min-w-[110px]">
               <p className="text-[14px] text-[#666] dark:text-[#b9b9b9]">Total Amount:</p>
-              <p className="text-[42px] font-bold leading-9 text-[#ff7a1a]">? {total}</p>
+              <p className="text-[24px] font-bold leading-7 text-[#ff7a1a]">? {total}</p>
             </div>
             <Link
               href={`/tournaments/${id}/checkout`}
-              className="grid h-11 flex-1 place-content-center rounded-full bg-[#ff7a1a] text-[31px] font-semibold text-white"
+              className="grid h-11 flex-1 place-content-center rounded-full bg-[#ff7a1a] text-[18px] font-semibold text-white"
             >
               Claim Spot
             </Link>

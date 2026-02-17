@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
@@ -28,11 +28,13 @@ type TournamentItem = {
   joinedStatus?: string;
 };
 
+const baseSubtitle = "Pickle ball | Men's | Multiple Modes";
+
 const browseItems: TournamentItem[] = [
   {
     id: "1",
     name: "Monsoon Pickleball Op..",
-    subtitle: "Pickle ball • Men’s • Multiple Modes",
+    subtitle: baseSubtitle,
     start: "15/01/2024",
     end: "15/01/2024",
     entry: "500 Entry",
@@ -43,7 +45,7 @@ const browseItems: TournamentItem[] = [
   {
     id: "2",
     name: "Monsoon Pickleball Op..",
-    subtitle: "Pickle ball • Men’s • Multiple Modes",
+    subtitle: baseSubtitle,
     start: "15/01/2024",
     end: "15/01/2024",
     entry: "500 Entry",
@@ -54,7 +56,7 @@ const browseItems: TournamentItem[] = [
   {
     id: "3",
     name: "Monsoon Pickleball Op..",
-    subtitle: "Pickle ball • Men’s • Multiple Modes",
+    subtitle: baseSubtitle,
     start: "15/01/2024",
     end: "15/01/2024",
     entry: "500 Entry",
@@ -68,7 +70,7 @@ const joinedItems: TournamentItem[] = [
   {
     id: "4",
     name: "Monsoon Pickleball Op..",
-    subtitle: "Pickle ball • Men’s • Multiple Modes",
+    subtitle: baseSubtitle,
     start: "15/01/2024",
     end: "15/01/2024",
     entry: "500 Entry",
@@ -79,7 +81,7 @@ const joinedItems: TournamentItem[] = [
   {
     id: "5",
     name: "Monsoon Pickleball Op..",
-    subtitle: "Pickle ball • Men’s • Multiple Modes",
+    subtitle: baseSubtitle,
     start: "15/01/2024",
     end: "15/01/2024",
     entry: "500 Entry",
@@ -90,7 +92,7 @@ const joinedItems: TournamentItem[] = [
   {
     id: "6",
     name: "Monsoon Pickleball Op..",
-    subtitle: "Pickle ball • Men’s • Multiple Modes",
+    subtitle: baseSubtitle,
     start: "15/01/2024",
     end: "15/01/2024",
     entry: "500 Entry",
@@ -104,7 +106,7 @@ const historyItems: TournamentItem[] = [
   {
     id: "7",
     name: "Champions league",
-    subtitle: "Pickle ball • Men’s • Multiple Modes",
+    subtitle: baseSubtitle,
     start: "15/01/2024",
     end: "15/01/2024",
     location: "Raipur | Chattisgarh",
@@ -115,7 +117,7 @@ const historyItems: TournamentItem[] = [
   {
     id: "8",
     name: "Champions league",
-    subtitle: "Pickle ball • Men’s • Multiple Modes",
+    subtitle: baseSubtitle,
     start: "15/01/2024",
     end: "15/01/2024",
     location: "Raipur | Chattisgarh",
@@ -126,7 +128,7 @@ const historyItems: TournamentItem[] = [
   {
     id: "9",
     name: "Champions league",
-    subtitle: "Pickle ball • Men’s • Multiple Modes",
+    subtitle: baseSubtitle,
     start: "15/01/2024",
     end: "15/01/2024",
     location: "Raipur | Chattisgarh",
@@ -137,7 +139,7 @@ const historyItems: TournamentItem[] = [
   {
     id: "10",
     name: "Champions league",
-    subtitle: "Pickle ball • Men’s • Multiple Modes",
+    subtitle: baseSubtitle,
     start: "15/01/2024",
     end: "15/01/2024",
     location: "Raipur | Chattisgarh",
@@ -147,12 +149,10 @@ const historyItems: TournamentItem[] = [
   },
 ];
 
-
-
 function TournamentCard({ item }: { item: TournamentItem }) {
   return (
     <Link
-      href={item.cta === "Register" ? `/tournaments/${item.id}` : `/tournaments/${item.id}`}
+      href={`/tournaments/${item.id}`}
       className="block rounded-2xl border border-[#ff8e40] bg-white p-3.5 dark:bg-[#1b1b1b]"
     >
       <div className="flex items-start gap-3">
@@ -163,7 +163,7 @@ function TournamentCard({ item }: { item: TournamentItem }) {
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <h3 className="truncate text-[18px] font-bold leading-6 text-[#2d2d2d] dark:text-[#f2f2f2]">{item.name}</h3>
+              <h3 className="truncate text-[16px] font-bold leading-5 text-[#2d2d2d] dark:text-[#f2f2f2]">{item.name}</h3>
               <p className="truncate text-[12px] text-[#5e5e5e] dark:text-[#bfbfbf]">{item.subtitle}</p>
             </div>
             {item.cta === "Chevron" ? (
@@ -182,7 +182,7 @@ function TournamentCard({ item }: { item: TournamentItem }) {
             </div>
             {item.entry ? (
               <div className="flex items-center gap-1.5">
-                <span className="text-primary font-bold">₹</span> {item.entry}
+                <span className="currency-inr text-primary font-bold">&#8377;</span> {item.entry}
               </div>
             ) : (
               <div className="h-4" />
@@ -209,7 +209,7 @@ function TournamentCard({ item }: { item: TournamentItem }) {
             </div>
 
             {item.cta === "Register" || item.cta === "View" ? (
-              <span className="inline-flex h-8 min-w-[92px] items-center justify-center rounded-full border border-[#ff8e40] px-4 text-[16px] font-medium text-[#ff7a1a]">
+              <span className="inline-flex h-8 min-w-[92px] items-center justify-center rounded-full border border-[#ff8e40] px-4 text-[14px] font-medium text-[#ff7a1a]">
                 {item.cta}
               </span>
             ) : null}
@@ -237,8 +237,8 @@ export default function TournamentsPage() {
           <div className="flex items-center gap-2.5">
             <div className="h-11 w-11 rounded-full border-2 border-white/80 bg-[radial-gradient(circle_at_30%_30%,#fce5c6,#7b523d)]" />
             <div>
-              <h1 className="text-[24px] font-bold leading-8 font-heading">Tournaments</h1>
-              <p className="text-[14px] text-white/90">Browse and join tournaments</p>
+              <h1 className="text-[20px] leading-7 font-heading font-semibold">Tournaments</h1>
+              <p className="text-[13px] text-white/90">Browse and join tournaments</p>
             </div>
           </div>
           <button className="relative grid h-9 w-9 place-content-center rounded-full bg-white/85 text-[#5f5f5f]">
@@ -258,7 +258,7 @@ export default function TournamentsPage() {
           />
         </label>
 
-        <div className="mt-3 grid grid-cols-3 text-center text-[25px]">
+        <div className="mt-3 grid grid-cols-3 text-center text-[16px]">
           {(["browse", "joined", "history"] as TopTab[]).map((tab) => {
             const active = activeTab === tab;
             return (
@@ -289,10 +289,11 @@ export default function TournamentsPage() {
               <button
                 key={tab.id}
                 onClick={() => setFormat(tab.id)}
-                className={`h-9 shrink-0 rounded-xl border px-6 text-[20px] font-medium ${active
+                className={`h-9 shrink-0 rounded-xl border px-6 text-[14px] font-medium ${
+                  active
                     ? "border-[#ff7a1a] bg-[#ff7a1a] text-white"
                     : "border-[#d6d6d6] bg-[#ededed] text-[#666] dark:border-[#383838] dark:bg-[#1b1b1b] dark:text-[#b8b8b8]"
-                  }`}
+                }`}
               >
                 {tab.label}
               </button>
@@ -304,11 +305,11 @@ export default function TournamentsPage() {
       <div className="space-y-3 px-2.5 pb-12 pt-1">
         {activeTab === "browse" ? (
           <>
-            <h2 className="px-1 text-[28px] font-semibold">Trending Tournaments</h2>
+            <h2 className="px-1 text-[18px] font-semibold">Trending Tournaments</h2>
             {list.map((item) => (
               <TournamentCard key={item.id} item={item} />
             ))}
-            <h2 className="px-1 pt-1 text-[28px] font-semibold">Tournaments Near You</h2>
+            <h2 className="px-1 pt-1 text-[18px] font-semibold">Tournaments Near You</h2>
             {browseItems.map((item) => (
               <TournamentCard key={`near-${item.id}`} item={item} />
             ))}
@@ -322,4 +323,3 @@ export default function TournamentsPage() {
     </div>
   );
 }
-
