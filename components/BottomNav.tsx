@@ -27,6 +27,12 @@ const orgLinks = [
   { href: "/org/profile", label: "Profile", icon: ProfileIcon },
 ] satisfies readonly NavLink[];
 
+const appLinks = [
+  { href: "/home", label: "Home", icon: HomeIcon },
+  { href: "/tournaments", label: "Tournaments", icon: TrophyIcon },
+  { href: "/profile", label: "Profile", icon: ProfileIcon },
+] satisfies readonly NavLink[];
+
 function HomeIcon({ size = 24, className }: IconProps) {
   return (
     <svg
@@ -113,7 +119,8 @@ function ProfileIcon({ size = 24, className }: IconProps) {
 export default function BottomNav() {
   const pathname = usePathname();
   const isOrg = pathname.startsWith("/org");
-  const links = isOrg ? orgLinks : userLinks;
+  const isUser = pathname.startsWith("/user");
+  const links = isOrg ? orgLinks : isUser ? userLinks : appLinks;
 
   const innerElements = ({
     icon: Icon,
