@@ -30,14 +30,23 @@ const orgLinks = [
 const appLinks = [
   { href: "/home", label: "Home", icon: HomeIcon },
   { href: "/tournaments", label: "Tournaments", icon: TrophyIcon },
-  { href: "/user/profile", label: "Profile", icon: ProfileIcon },
+  { href: "/profile", label: "Profile", icon: ProfileIcon },
 ] satisfies readonly NavLink[];
 
 function isLinkActive(pathname: string, href: string) {
   if (pathname === href || pathname.startsWith(`${href}/`)) return true;
 
+  if (href === "/profile") {
+    return (
+      pathname === "/user/profile" ||
+      pathname.startsWith("/user/profile/") ||
+      pathname.startsWith("/user/settings") ||
+      pathname.startsWith("/settings")
+    );
+  }
+
   if (href === "/user/profile") {
-    return pathname.startsWith("/user/settings") || pathname.startsWith("/settings") || pathname === "/profile";
+    return pathname.startsWith("/user/settings");
   }
 
   if (href === "/org/profile") {
