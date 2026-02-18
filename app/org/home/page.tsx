@@ -4,7 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import Layout from "@/components/Layout";
 import { CalendarIcon, CircleIcon, TimerIcon, TrophyIcon } from "@/components/Icons";
-import { motion, type Variants } from "framer-motion";
+import { motion, useScroll, useTransform, type Variants, type MotionValue } from "framer-motion";
+import { useRef } from "react";
 
 const liveTournaments = [
   { id: "lt-1", name: "Champions League", stage: "Day 2 of 3", participants: "64 students" },
@@ -18,39 +19,136 @@ const liveMatches = [
   { id: "lm-3", score: "02 - 01", label: "Premier League - Men's Doubles Raipur.." },
 ];
 
-// Animation Variants - Explicitly typed to fix TS error
+// Animation Variants
 const listContainerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
       staggerChildren: 0.1,
-      delayChildren: 0.2,
+      delayChildren: 0.1,
     },
   },
 };
 
 const cardVariants: Variants = {
-  hidden: { opacity: 0, x: 20, scale: 0.95 },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
-    x: 0,
-    scale: 1,
+    y: 0,
     transition: { type: "spring", stiffness: 300, damping: 24 },
   },
 };
 
-function PaginationDots() {
+// --- Components ---
+
+const AnimatedCard = ({ 
+  children, 
+  containerRef, 
+  className 
+}: { 
+  children: React.ReactNode; 
+  containerRef: React.RefObject<HTMLDivElement | null>;
+  className?: string;
+}) => {
+  const cardRef = useRef(null);
+
+  const { scrollXProgress } = useScroll({
+    target: cardRef,
+    container: containerRef,
+    axis: "x",
+    offset: ["start end", "end start"],
+  });
+
+  const scale = useTransform(scrollXProgress, [0, 0.5, 1], [0.9, 1, 0.9]);
+  const opacity = useTransform(scrollXProgress, [0, 0.5, 1], [0.6, 1, 0.6]);
+
   return (
-    <div className="flex items-center justify-center gap-2">
-      <span className="h-1.5 w-6 rounded-full bg-primary" />
-      <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-dot)]" />
-      <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-dot)]" />
+    <motion.article
+      ref={cardRef}
+      variants={cardVariants}
+      style={{ scale, opacity }}
+      className={className}
+    >
+      {children}
+    </motion.article>
+  );
+};
+
+// Fixed Dot Component
+const Dot = ({ 
+  index, 
+  itemCount, 
+  scrollXProgress 
+}: { 
+  index: number; 
+  itemCount: number; 
+  scrollXProgress: MotionValue<number>;
+}) => {
+  // Calculate the specific "target" scroll position for this dot (0 to 1)
+  const step = 1 / (itemCount - 1);
+  const target = index * step;
+  
+  // Raw ranges
+  let inputRange = [target - step, target, target + step];
+  let widthOutput = [6, 24, 6];
+  let opacityOutput = [0.2, 1, 0.2];
+
+  // Fix: Truncate values outside [0, 1] to prevent WAAPI errors
+  if (inputRange[0] < 0) {
+    inputRange.shift();
+    widthOutput.shift();
+    opacityOutput.shift();
+  }
+
+  if (inputRange[inputRange.length - 1] > 1) {
+    inputRange.pop();
+    widthOutput.pop();
+    opacityOutput.pop();
+  }
+  
+  const width = useTransform(scrollXProgress, inputRange, widthOutput);
+  const opacity = useTransform(scrollXProgress, inputRange, opacityOutput);
+
+  return (
+    <motion.div
+      style={{ width, opacity }}
+      className="h-1.5 rounded-full bg-primary"
+    />
+  );
+};
+
+const ScrollIndicator = ({ 
+  itemCount, 
+  containerRef 
+}: { 
+  itemCount: number; 
+  containerRef: React.RefObject<HTMLDivElement | null>; 
+}) => {
+  const { scrollXProgress } = useScroll({ container: containerRef });
+
+  if (itemCount <= 1) return null;
+
+  return (
+    <div className="flex items-center justify-center gap-2 h-3">
+      {Array.from({ length: itemCount }).map((_, i) => (
+        <Dot 
+          key={i} 
+          index={i} 
+          itemCount={itemCount} 
+          scrollXProgress={scrollXProgress} 
+        />
+      ))}
     </div>
   );
-}
+};
+
+// --- Main Page ---
 
 export default function OrgHomePage() {
+  const tournamentContainerRef = useRef<HTMLDivElement>(null);
+  const matchContainerRef = useRef<HTMLDivElement>(null);
+
   return (
     <Layout title="Home Dashboard">
       <div className="font-body mx-auto w-full max-w-md space-y-6 px-4 pb-24 pt-4">
@@ -102,17 +200,17 @@ export default function OrgHomePage() {
           </div>
 
           <motion.div 
-            className="no-scrollbar -mx-1 flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-1"
+            ref={tournamentContainerRef}
+            className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4"
             variants={listContainerVariants}
             initial="hidden"
             animate="visible"
           >
             {liveTournaments.map((item) => (
-              <motion.article 
+              <AnimatedCard 
                 key={item.id} 
-                className="card min-w-[85%] snap-start p-4"
-                variants={cardVariants}
-                whileTap={{ scale: 0.98 }}
+                containerRef={tournamentContainerRef}
+                className="card min-w-[85%] snap-center p-4"
               >
                 <div className="mb-2 flex items-center justify-between">
                   <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wide text-[var(--color-success)]">
@@ -127,12 +225,15 @@ export default function OrgHomePage() {
                   <span className="text-xs text-[var(--color-text-secondary)]">Participants</span>
                   <span className="text-sm font-semibold">{item.participants}</span>
                 </div>
-              </motion.article>
+              </AnimatedCard>
             ))}
           </motion.div>
 
-          <div className="mt-3">
-            <PaginationDots />
+          <div className="mt-1">
+            <ScrollIndicator 
+              itemCount={liveTournaments.length} 
+              containerRef={tournamentContainerRef} 
+            />
           </div>
         </section>
 
@@ -141,17 +242,17 @@ export default function OrgHomePage() {
           <h3 className="mb-3 font-heading text-xl font-semibold">Live Matches</h3>
 
           <motion.div 
-            className="no-scrollbar -mx-1 flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-1"
+            ref={matchContainerRef}
+            className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4"
             variants={listContainerVariants}
             initial="hidden"
             animate="visible"
           >
             {liveMatches.map((match) => (
-              <motion.article 
+              <AnimatedCard 
                 key={match.id} 
-                className="card min-w-[85%] snap-start p-4"
-                variants={cardVariants}
-                whileTap={{ scale: 0.98 }}
+                containerRef={matchContainerRef}
+                className="card min-w-[85%] snap-center p-4"
               >
                 <div className="mb-3 flex items-center justify-between">
                   <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wide text-[var(--color-success)]">
@@ -184,12 +285,15 @@ export default function OrgHomePage() {
                 <button type="button" className="mx-auto mt-1 block w-full rounded-lg bg-primary py-2 text-sm font-medium text-white hover:bg-primary/90">
                   Update Score
                 </button>
-              </motion.article>
+              </AnimatedCard>
             ))}
           </motion.div>
 
-          <div className="mt-3">
-            <PaginationDots />
+          <div className="mt-1">
+            <ScrollIndicator 
+              itemCount={liveMatches.length} 
+              containerRef={matchContainerRef} 
+            />
           </div>
         </section>
       </div>
