@@ -32,10 +32,11 @@ const listContainerVariants: Variants = {
 };
 
 const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 20, scale: 0.95 },
   visible: {
     opacity: 1,
     y: 0,
+    scale: 1,
     transition: { type: "spring", stiffness: 300, damping: 24 },
   },
 };
@@ -60,14 +61,15 @@ const AnimatedCard = ({
     offset: ["start end", "end start"],
   });
 
-  const scale = useTransform(scrollXProgress, [0, 0.5, 1], [0.9, 1, 0.9]);
-  const opacity = useTransform(scrollXProgress, [0, 0.5, 1], [0.6, 1, 0.6]);
+  // REMOVED OPACITY transformation here to prevent "vanishing" bug.
+  // We only scale the card. Visibility is handled by the entrance variants.
+  const scale = useTransform(scrollXProgress, [0, 0.5, 1], [0.95, 1, 0.95]);
 
   return (
     <motion.article
       ref={cardRef}
       variants={cardVariants}
-      style={{ scale, opacity }}
+      style={{ scale }} // Only bind scale to scroll
       className={className}
     >
       {children}
@@ -85,26 +87,25 @@ const Dot = ({
   itemCount: number; 
   scrollXProgress: MotionValue<number>;
 }) => {
-  // Calculate the specific "target" scroll position for this dot (0 to 1)
   const step = 1 / (itemCount - 1);
   const target = index * step;
   
-  // Raw ranges
+  // Calculate ranges
   let inputRange = [target - step, target, target + step];
   let widthOutput = [6, 24, 6];
   let opacityOutput = [0.2, 1, 0.2];
 
-  // Fix: Truncate values outside [0, 1] to prevent WAAPI errors
+  // FIX: Truncate values outside [0, 1] to prevent browser crash
   if (inputRange[0] < 0) {
-    inputRange.shift();
-    widthOutput.shift();
-    opacityOutput.shift();
-  }
-
-  if (inputRange[inputRange.length - 1] > 1) {
-    inputRange.pop();
-    widthOutput.pop();
-    opacityOutput.pop();
+    // If the start is < 0, shift the interpolation window
+    inputRange = [0, target, target + step];
+    widthOutput = [24, 24, 6]; // Keep it active at start
+    opacityOutput = [1, 1, 0.2];
+  } else if (inputRange[inputRange.length - 1] > 1) {
+     // If the end is > 1, shift the window
+    inputRange = [target - step, target, 1];
+    widthOutput = [6, 24, 24]; // Keep it active at end
+    opacityOutput = [0.2, 1, 1];
   }
   
   const width = useTransform(scrollXProgress, inputRange, widthOutput);
