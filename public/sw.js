@@ -6,7 +6,8 @@ self.addEventListener("install", (e) => {
     caches
       .open(CACHE)
       .then((cache) =>
-        cache.addAll(["/", "/offline.html", "/manifest.json", "/icons/icon-192.png"])
+        // CHANGED: /icons/icon-192.png -> /pwa-icons/icon-192.png
+        cache.addAll(["/", "/offline.html", "/manifest.json", "/pwa-icons/icon-192.png"])
       )
   );
   self.skipWaiting();
