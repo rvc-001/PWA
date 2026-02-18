@@ -129,10 +129,10 @@ export default function OrgTournamentsPage() {
                   </div>
                   <span
                     className={`px-2 py-1 rounded-full text-xs font-medium ${t.statusColor === "orange"
-                      ? "bg-orange-100 text-orange-600 dark:bg-orange-950 dark:text-orange-400"
+                      ? "bg-primary/15 text-primary"
                       : t.statusColor === "green"
-                        ? "bg-green-100 text-green-600 dark:bg-green-950 dark:text-green-400"
-                        : "bg-red-100 text-red-600 dark:bg-red-950 dark:text-red-400"
+                        ? "bg-[var(--color-success)]/15 text-[var(--color-success)]"
+                        : "bg-[var(--color-error)]/15 text-[var(--color-error)]"
                       }`}
                   >
                     {t.status}
@@ -174,7 +174,7 @@ export default function OrgTournamentsPage() {
               >
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-950 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center">
                       <TrophyIcon size={20} className="text-primary" />
                     </div>
                     <div>

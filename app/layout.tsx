@@ -40,7 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className={`${dmSans.variable} antialiased`}>
+      <body className={`${dmSans.variable} subpixel-antialiased`}>
         <ThemeProvider>
           <ClientInit />
           {children}

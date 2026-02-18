@@ -176,7 +176,7 @@ export default function BottomNav() {
               <div
                 className={`p-1 my-2 bg-[var(--nav-bar-bg)]
                   hover:bg-[var(--nav-item-hover-bg)]
-                  backdrop-blur-2xl
+                  backdrop-blur-none
 
                   border-t-[1px]
                   border-b-[1px]

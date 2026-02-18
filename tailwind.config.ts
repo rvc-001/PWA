@@ -12,6 +12,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
+        sans: ["var(--font-dm-sans)", "DM Sans", "sans-serif"],
         heading: ["Zalando Sans", "var(--font-dm-sans)", "DM Sans", "sans-serif"],
         body: ["var(--font-dm-sans)", "DM Sans", "sans-serif"],
       },
