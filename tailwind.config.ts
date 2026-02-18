@@ -6,6 +6,7 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     // Work around transient Windows/OneDrive EBUSY lock on this route file during scan.
     "!./app/tournaments/[[]id[]]/checkout/page.tsx",
+    "!./app/tournaments/[[]id[]]/page.tsx", // <--- Add this line
   ],
   darkMode: "class",
   theme: {
