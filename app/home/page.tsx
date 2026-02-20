@@ -20,19 +20,25 @@ const exploreTournaments = [
   {
     id: "101",
     name: "Monsoon Pickleball Open",
-    location: "Raipur | Chhattisgarh",
-    dateRange: "Jan 15 - 20",
-    registeredCount: 64,
+    venue: "Raipur Sports Arena",
+    address: "Raipur, Chhattisgarh",
+    sport: "Pickleball",
+    category: "Men's",
+    modes: "Singles",
     colorVariant: "orange" as const,
+    logoText: "MP",
     entryFee: "INR 500",
   },
   {
     id: "102",
     name: "National Tennis Championship",
-    location: "Delhi Sports Complex",
-    dateRange: "Feb 10 - 15",
-    registeredCount: 120,
+    venue: "Delhi Sports Complex",
+    address: "New Delhi",
+    sport: "Tennis",
+    category: "Men's & Women's",
+    modes: "Singles & Doubles",
     colorVariant: "green" as const,
+    logoText: "NT",
     entryFee: "INR 1200",
   },
 ];
@@ -106,12 +112,14 @@ export default function UserHomePage() {
                     key={t.id}
                     id={t.id}
                     name={t.name}
-                    location={t.location}
-                    dateRange={t.dateRange}
-                    registeredCount={t.registeredCount}
+                    venue={t.venue}
+                    address={t.address}
+                    sport={t.sport}
+                    category={t.category}
+                    modes={t.modes}
                     colorVariant={t.colorVariant}
+                    logoText={t.logoText}
                     entryFee={t.entryFee}
-                    ctaText="Details"
                   />
                 ))}
               </div>

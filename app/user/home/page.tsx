@@ -10,6 +10,10 @@ import QuickStats from "@/components/QuickStats";
 import { TrophyIcon } from "@/components/Icons";
 import NotificationsSlideOver, { NotificationItem } from "@/components/NotificationsSlideOver";
 
+
+// --- TYPE DEFINITIONS ---
+
+
 // --- CUSTOM ICONS ---
 function BellIcon({ size = 24 }: { size?: number }) {
   return (
@@ -38,16 +42,28 @@ function ArrowRightIcon({ size = 20 }: { size?: number }) {
 }
 
 // --- MOCK DATA FOR SPLIT CARDS ---
-const upcomingTournaments = [
+const upcomingTournaments: Array<{
+  id: string;
+  name: string;
+  venue: string;
+  address: string;
+  sport: string;
+  category: string;
+  modes: string;
+  colorVariant: "orange" | "blue" | "green" | "red" | "purple";
+  logoText: string;
+  entryFee: string;
+  ctaText: string;
+}> = [
   {
     id: "101",
     name: "Monsoon Pickleball Raipur Open",
     venue: "Sports Arena",
-    address: "24 block street, Raipur",
+    address: "24 Block Street, Raipur",
     sport: "Pickleball",
     category: "Men's",
     modes: "Multiple Modes",
-    colorVariant: "orange" as const,
+    colorVariant: "orange",
     logoText: "MP",
     entryFee: "₹500",
     ctaText: "Register"
@@ -60,11 +76,11 @@ const upcomingTournaments = [
     sport: "Tennis",
     category: "Men's & Women's",
     modes: "Singles & Doubles",
-    colorVariant: "blue" as const,
+    colorVariant: "blue",
     logoText: "NT",
     entryFee: "₹1200",
     ctaText: "Register"
-  },
+  }
 ];
 
 const ongoingTournaments = [
