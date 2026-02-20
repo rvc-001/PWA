@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, UIEvent } from "react";
 import Link from "next/link";
 import BottomNav from "@/components/BottomNav";
 import ScheduleCard from "@/components/ScheduleCard";
@@ -148,14 +148,14 @@ export default function UserHomePage() {
   ];
 
   // Scroll handlers to calculate which card is currently centered
-  const handleUpcomingScroll = (e: React.UIEvent<HTMLDivElement>) => {
+  const handleUpcomingScroll = (e: UIEvent<HTMLDivElement>) => {
     const target = e.currentTarget;
     const itemWidth = (target.firstChild as HTMLElement)?.offsetWidth || target.clientWidth;
     const scrollPosition = target.scrollLeft;
     setActiveUpcomingIndex(Math.round(scrollPosition / itemWidth));
   };
 
-  const handleOngoingScroll = (e: React.UIEvent<HTMLDivElement>) => {
+  const handleOngoingScroll = (e: UIEvent<HTMLDivElement>) => {
     const target = e.currentTarget;
     const itemWidth = (target.firstChild as HTMLElement)?.offsetWidth || target.clientWidth;
     const scrollPosition = target.scrollLeft;
@@ -281,7 +281,19 @@ export default function UserHomePage() {
               >
                 {upcomingTournaments.map((t) => (
                   <div key={t.id} className="min-w-[85vw] sm:min-w-[320px] snap-center shrink-0">
-                    <ColorfulTournamentCard {...t} />
+                    <ColorfulTournamentCard 
+                      id={t.id}
+                      name={t.name}
+                      venue={t.venue}
+                      address={t.address}
+                      sport={t.sport}
+                      category={t.category}
+                      modes={t.modes}
+                      colorVariant={t.colorVariant}
+                      logoText={t.logoText}
+                      entryFee={t.entryFee}
+                      ctaText={t.ctaText}
+                    />
                   </div>
                 ))}
               </div>
@@ -366,7 +378,15 @@ export default function UserHomePage() {
               </h3>
             </div>
             {liveMatches.map((match) => (
-              <ScheduleCard key={match.id} {...match} opponent={`Score: ${match.score}`} />
+              <ScheduleCard 
+                key={match.id} 
+                sport={match.sport} 
+                matchName={match.matchName} 
+                venue={match.venue} 
+                time={match.time} 
+                colorVariant={match.colorVariant} 
+                opponent={`Score: ${match.score}`} 
+              />
             ))}
           </div>
         )}
@@ -404,7 +424,15 @@ export default function UserHomePage() {
               <h3 className="mb-3 font-heading text-lg font-semibold tracking-tight px-1">Past Matches</h3>
               <div className="space-y-3">
                 {pastMatches.map((match) => (
-                   <ScheduleCard key={match.id} {...match} opponent={match.score} />
+                   <ScheduleCard 
+                     key={match.id} 
+                     sport={match.sport} 
+                     matchName={match.matchName} 
+                     venue={match.venue} 
+                     time={match.time} 
+                     colorVariant={match.colorVariant} 
+                     opponent={match.score} 
+                   />
                 ))}
               </div>
             </section>
