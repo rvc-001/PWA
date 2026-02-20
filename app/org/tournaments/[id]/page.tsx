@@ -2,8 +2,19 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
 import Tabs, { type TabItem } from "@/components/Tabs";
-import { TrophyIcon, DownloadIcon, CalendarIcon, UserIcon, UsersIcon, ChartIcon, ArrowLeftIcon, ChevronRightIcon, CheckIcon } from "@/components/Icons";
+import {
+  TrophyIcon,
+  DownloadIcon,
+  CalendarIcon,
+  UserIcon,
+  UsersIcon,
+  ChartIcon,
+  ArrowLeftIcon,
+  ChevronRightIcon,
+  CheckIcon,
+} from "@/components/Icons";
 
 const tabs: TabItem[] = [
   { id: "overview", label: "Overview" },
@@ -40,12 +51,11 @@ const athletes = [
   { name: "Akshay Yadav", avatar: "AY" },
 ];
 
-export default function TournamentEventDetailsPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default function TournamentEventDetailsPage() {
+  const params = useParams<{ id: string }>();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("overview");
+  const id = params.id;
 
   return (
     <div className="min-h-screen bg-[var(--color-background)]">
@@ -57,7 +67,9 @@ export default function TournamentEventDetailsPage({
           </Link>
           <h1 className="font-semibold">Mumbai Men&apos;s 2025</h1>
         </div>
-        <button className="text-primary text-sm font-medium"><DownloadIcon size={18} /></button>
+        <button className="text-primary text-sm font-medium">
+          <DownloadIcon size={18} />
+        </button>
       </div>
 
       {/* Stats Banner */}
@@ -99,12 +111,14 @@ export default function TournamentEventDetailsPage({
             <section className="card p-4">
               <h3 className="font-semibold mb-2">Overview</h3>
               <div className="text-sm space-y-1 text-[var(--color-muted)]">
-                <p className="flex items-center gap-1"><CalendarIcon size={14} /> 4 Dec 2025, 21:01</p>
-                <p className="flex items-center gap-1"><CalendarIcon size={14} /> 21 Dec 2025, 21:01</p>
+                <p className="flex items-center gap-1">
+                  <CalendarIcon size={14} /> 4 Dec 2025, 21:01
+                </p>
+                <p className="flex items-center gap-1">
+                  <CalendarIcon size={14} /> 21 Dec 2025, 21:01
+                </p>
               </div>
-              <p className="text-sm mt-2">
-                Venue, 2 Doubles, Sunday, Wednesday
-              </p>
+              <p className="text-sm mt-2">Venue, 2 Doubles, Sunday, Wednesday</p>
             </section>
 
             <section className="card p-4">
@@ -123,12 +137,8 @@ export default function TournamentEventDetailsPage({
                 </div>
                 <div>
                   <p className="font-medium">Priyash Mandal</p>
-                  <p className="text-sm text-[var(--color-muted)]">
-                    +91 99212 48196
-                  </p>
-                  <p className="text-xs text-primary">
-                    Email2019123@gmail.com
-                  </p>
+                  <p className="text-sm text-[var(--color-muted)]">+91 99212 48196</p>
+                  <p className="text-xs text-primary">Email2019123@gmail.com</p>
                 </div>
               </div>
             </section>
@@ -141,15 +151,13 @@ export default function TournamentEventDetailsPage({
             {events.map((event) => (
               <Link
                 key={event.id}
-                href={`/org/tournaments/${params.id}/events/${event.id}`}
+                href={`/org/tournaments/${id}/events/${event.id}`}
                 className="card p-4 block"
               >
                 <div className="flex items-start justify-between mb-2">
                   <div>
                     <h4 className="font-semibold">{event.name}</h4>
-                    <p className="text-xs text-[var(--color-muted)]">
-                      {event.category}
-                    </p>
+                    <p className="text-xs text-[var(--color-muted)]">{event.category}</p>
                   </div>
                   <span className="px-2 py-1 rounded-full bg-[var(--color-success)]/20 text-[var(--color-success)] text-xs font-medium inline-flex items-center gap-1">
                     <CheckIcon size={14} className="text-[var(--color-success)]" />
@@ -157,8 +165,12 @@ export default function TournamentEventDetailsPage({
                   </span>
                 </div>
                 <div className="flex items-center gap-4 text-sm text-[var(--color-muted)]">
-                  <span className="flex items-center gap-1"><UsersIcon size={14} /> {event.registered}</span>
-                  <span className="flex items-center gap-1"><ChartIcon size={14} /> {event.total}</span>
+                  <span className="flex items-center gap-1">
+                    <UsersIcon size={14} /> {event.registered}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <ChartIcon size={14} /> {event.total}
+                  </span>
                 </div>
                 <p className="text-xs text-primary mt-2 flex items-center gap-1">
                   View More Details <ChevronRightIcon size={12} />

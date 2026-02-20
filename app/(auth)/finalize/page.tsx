@@ -2,9 +2,11 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { UserIcon, PhoneIcon, UserIcon as GenderIcon, CalendarIcon, HandIcon, GamepadIcon } from "@/components/Icons";
 
 export default function FinalizePage() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     fullName: "",
     contactNumber: "",
@@ -16,8 +18,9 @@ export default function FinalizePage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
+    // Handle form submission — navigate to user home
     console.log("Form submitted:", formData);
+    router.push("/user/home");
   };
 
   return (
@@ -153,7 +156,7 @@ export default function FinalizePage() {
         <p className="text-xs text-[var(--color-muted)] text-center mt-6">
           Already have an account?{" "}
           <Link href="/user/home" className="text-primary font-medium">
-            Login with Google
+            Go to Home
           </Link>
         </p>
       </div>
