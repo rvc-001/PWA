@@ -121,7 +121,7 @@ export default function LiveMatchPage() {
       onCloseSwitch={() => setShowSwitchServe(false)}
       onCloseWinner={() => setMatchWinner(null)}
       winnerName={matchWinner === 1 ? playerBName : playerAName}
-      confirmHref="/match/live"
+      confirmHref="/home"
     />
   );
 }
