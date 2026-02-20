@@ -3,10 +3,12 @@
 import { useState, UIEvent } from "react";
 import Link from "next/link";
 import BottomNav from "@/components/BottomNav";
-import ScheduleCard from "@/components/ScheduleCard";
+import LiveMatchCard from "@/components/Card/LiveMatchCard";
+import NextOnCourtSection from "@/components/Card/NextOnCourtSection";
+import QuickStatsSection from "@/components/Card/QuickStatsSection";
+import UserLiveMatchSection from "@/components/Card/UserLiveMatchSection";
 import ColorfulTournamentCard from "@/components/Card/ColorfulTournamentCard";
 import OngoingTournamentCard from "@/components/Card/OngoingTournamentCard";
-import QuickStats from "@/components/QuickStats";
 import { TrophyIcon } from "@/components/Icons";
 import NotificationsSlideOver, { NotificationItem } from "@/components/NotificationsSlideOver";
 
@@ -107,13 +109,22 @@ const ongoingTournaments = [
 const liveMatches = [
   {
     id: "l1",
-    sport: "Badminton",
-    matchName: "Finals - Men's Singles",
-    venue: "Court 1",
-    time: "LIVE NOW",
-    score: "21-19, 15-10",
-    colorVariant: "badminton" as const,
-  }
+    tournamentName: "Raipur Racket Sports League",
+    matchTitle: "Men's Doubles · Match #42",
+    teamA: {
+      players: ["S. Williams", "A. Lee"],
+    },
+    teamB: {
+      players: ["J. Brown", "K. Patel"],
+    },
+    score: {
+      teamA: 11,
+      teamB: 9,
+      currentSet: 2,
+    },
+    court: "Court 3",
+    isLive: true,
+  },
 ];
 
 const pastMatches = [
@@ -394,66 +405,79 @@ export default function UserHomePage() {
               </h3>
             </div>
             {liveMatches.map((match) => (
-              <ScheduleCard 
-                key={match.id} 
-                sport={match.sport} 
-                matchName={match.matchName} 
-                venue={match.venue} 
-                time={match.time} 
-                colorVariant={match.colorVariant} 
-                opponent={`Score: ${match.score}`} 
-              />
-            ))}
+            <LiveMatchCard
+              key={match.id}
+              tournamentName={match.tournamentName}
+              matchTitle={match.matchTitle}
+              teamA={match.teamA}
+              teamB={match.teamB}
+              score={match.score}
+              court={match.court}
+              isLive={match.isLive}
+            />
+          ))}
           </div>
         )}
 
         {/* ======================= */}
         {/* MY SPACE TAB            */}
         {/* ======================= */}
-        {activeTab === "myspace" && (
-          <div className="space-y-6 animate-fade-in">
-            <section><QuickStats played={38} lost={12} /></section>
+{activeTab === "myspace" && (
+  <div className="space-y-8 animate-fade-in">
+    
+    {/* Quick Stats */}
+    <section>
+      <QuickStatsSection won={28} played={38} lost={12} />
+    </section>
 
-            <section>
-              <h3 className="mb-3 font-heading text-lg font-semibold tracking-tight flex items-center gap-2 px-1">
-                <span className="h-2 w-2 rounded-full bg-[var(--color-error)] animate-pulse" /> Your Live Match
-              </h3>
-              <ScheduleCard sport="Badminton" matchName="Men's Singles - Round 3" venue="Court 2" time="LIVE NOW" colorVariant="badminton" opponent="vs Rohan K." />
-            </section>
+    {/* Your Live Match */}
+    <section>
+      <h3 className="mb-3 font-heading text-lg font-semibold tracking-tight flex items-center gap-2 px-1">
+        <span className="h-2 w-2 rounded-full bg-[var(--color-error)] animate-pulse" />
+        Your Live Match
+      </h3>
 
-            <section>
-              <h3 className="mb-3 font-heading text-lg font-semibold tracking-tight px-1">Your Tournaments</h3>
-              <Link href="/user/tournaments" className="card block p-4 hover:border-orange-500/40 transition-colors bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-card)] active:scale-[0.98]">
-                <div className="flex items-center gap-3">
-                  <div className="grid h-12 w-12 place-content-center rounded-full bg-orange-500/10 text-orange-600 shrink-0">
-                    <TrophyIcon size={20} />
-                  </div>
-                  <div>
-                    <h4 className="font-bold">Raipur League 2025</h4>
-                    <p className="text-xs text-[var(--color-text-secondary)] mt-0.5">View tournament events and brackets</p>
-                  </div>
-                </div>
-              </Link>
-            </section>
+      <LiveMatchCard
+        tournamentName="Badminton Championship"
+        matchTitle="Men's Singles - Round 3"
+        teamA={{ players: ["You"] }}
+        teamB={{ players: ["Rohan K."] }}
+        score={{ teamA: 0, teamB: 0, currentSet: 1 }}
+        court="Court 2"
+        isLive={true}
+      />
+    </section>
 
-            <section>
-              <h3 className="mb-3 font-heading text-lg font-semibold tracking-tight px-1">Past Matches</h3>
-              <div className="space-y-3">
-                {pastMatches.map((match) => (
-                   <ScheduleCard 
-                     key={match.id} 
-                     sport={match.sport} 
-                     matchName={match.matchName} 
-                     venue={match.venue} 
-                     time={match.time} 
-                     colorVariant={match.colorVariant} 
-                     opponent={match.score} 
-                   />
-                ))}
-              </div>
-            </section>
+    {/* Your Tournaments */}
+    <section>
+      <h3 className="mb-3 font-heading text-lg font-semibold tracking-tight px-1">
+        Your Tournaments
+      </h3>
+
+      <Link
+        href="/user/tournaments"
+        className="block p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl hover:border-orange-500/40 transition-colors active:scale-[0.98]"
+      >
+        <div className="flex items-center gap-3">
+          <div className="grid h-12 w-12 place-content-center rounded-full bg-orange-500/10 text-orange-600 shrink-0">
+            <TrophyIcon size={20} />
           </div>
-        )}
+
+          <div>
+            <h4 className="font-bold">Raipur League 2025</h4>
+            <p className="text-xs text-[var(--color-text-secondary)] mt-0.5">
+              View tournament events and brackets
+            </p>
+          </div>
+        </div>
+      </Link>
+    </section>
+
+    {/* Next On Court */}
+    <NextOnCourtSection />
+
+  </div>
+)}
       </main>
 
       {/* BOTTOM NAVIGATION BAR */}
