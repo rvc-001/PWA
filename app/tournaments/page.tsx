@@ -153,7 +153,7 @@ function TournamentCard({ item }: { item: TournamentItem }) {
   return (
     <Link
       href={`/tournaments/${item.id}`}
-      className="block rounded-2xl border border-[#ff8e40] bg-white p-3.5 dark:border-[#3b3354] dark:bg-[#16161d]"
+      className="block rounded-2xl border border-white/10 bg-[#3a2a5e] p-4 shadow-sm transition hover:border-[#ff7a1a]/40"
     >
       <div className="flex items-start gap-3">
         <div className="mt-0.5 grid h-12 w-12 shrink-0 place-content-center rounded-full border border-[#c8c8c8] bg-[#f3f3f3] text-[10px] font-bold text-[#6a6a6a] dark:border-[#504a5f] dark:bg-[#e7e7e7]">
@@ -209,7 +209,7 @@ function TournamentCard({ item }: { item: TournamentItem }) {
             </div>
 
             {item.cta === "Register" || item.cta === "View" ? (
-              <span className="inline-flex h-8 min-w-[92px] items-center justify-center rounded-full border border-[#ff8e40] px-4 text-[14px] font-medium text-[#ff7a1a] dark:border-[#ff7a1a]">
+              <span className="inline-flex h-8 min-w-[92px] items-center justify-center rounded-full border border-[#ff7a1a] px-4 text-[14px] font-semibold text-[#ff7a1a]">
                 {item.cta}
               </span>
             ) : null}
@@ -231,9 +231,9 @@ export default function TournamentsPage() {
   }, [activeTab]);
 
   return (
-    <div className="min-h-screen bg-[#ececec] pb-24 text-[#2d2d2d] dark:bg-[#0f0f16] dark:text-[#f5f5f5]">
+    <div className="min-h-screen bg-[#2b1f47] pb-24 text-white">
       <div className="bg-[#ff7a1a] px-4 pb-3 pt-[max(env(safe-area-inset-top),14px)] text-white dark:bg-[#2f204d]">
-        <div className="flex items-center justify-between">
+        <div className="mt-4 flex justify-around border-b border-white/10 text-[16px]">
           <div className="flex items-center gap-2.5">
             <div className="h-11 w-11 rounded-full border-2 border-white/80 bg-[radial-gradient(circle_at_30%_30%,#fce5c6,#7b523d)]" />
             <div>

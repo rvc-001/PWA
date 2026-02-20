@@ -96,27 +96,46 @@ export default function TournamentOverviewPage() {
                         </section>
 
                         <section className="bg-[var(--color-surface)] rounded-[var(--radius-card)] border border-[var(--color-border)] p-4">
-                            <h3 className="font-semibold mb-3">Contact Information</h3>
-                            <div className="space-y-2 text-sm">
-                                <div className="flex items-center gap-2">
-                                    <UserIcon size={16} className="text-[var(--color-text)]" />
-                                    <span className="text-[var(--color-text-secondary)]">
-                                        Rajesh Mehta
-                                    </span>
+                        <h3 className="font-semibold mb-4">Contact Information</h3>
+
+                        <div className="divide-y divide-[var(--color-border)]">
+                            {/* Contact Item */}
+                            <div className="py-4 flex gap-4">
+                            {/* Avatar */}
+                            <div className="w-10 h-10 rounded-full bg-[var(--color-surface-elevated)] flex items-center justify-center font-semibold text-primary shrink-0">
+                                RM
+                            </div>
+
+                            {/* Content */}
+                            <div className="flex-1 min-w-0">
+                                <div className="flex items-center justify-between">
+                                <h4 className="font-medium truncate">Rajesh Mehta</h4>
+
+                                <span className="text-xs px-2 py-0.5 rounded-full bg-primary/15 text-primary">
+                                    Organizer
+                                </span>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <MailIcon size={16} className="text-[var(--color-text)]" />
-                                    <span className="text-[var(--color-text-secondary)]">
-                                        rajesh@tournament.com
-                                    </span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <PhoneIcon size={16} className="text-[var(--color-text)]" />
-                                    <span className="text-[var(--color-text-secondary)]">
-                                        +91 98765 43210
-                                    </span>
+
+                                <div className="mt-2 space-y-1 text-sm text-[var(--color-text-secondary)]">
+                                <a
+                                    href="mailto:rajesh@tournament.com"
+                                    className="flex items-center gap-2 hover:text-primary transition-colors"
+                                >
+                                    <MailIcon size={14} />
+                                    rajesh@tournament.com
+                                </a>
+
+                                <a
+                                    href="tel:+919876543210"
+                                    className="flex items-center gap-2 hover:text-primary transition-colors"
+                                >
+                                    <PhoneIcon size={14} />
+                                    +91 98765 43210
+                                </a>
                                 </div>
                             </div>
+                            </div>
+                        </div>
                         </section>
                     </div>
                 )}

@@ -37,9 +37,27 @@ const events: EventData[] = [
 ];
 
 const contacts = [
-  { id: "c1", name: "Piyush Mantri", phone: "+918424959991", email: "piyushmantri0311@gmail.com" },
-  { id: "c2", name: "Piyush Mantri", phone: "+918424959991", email: "piyushmantri0311@gmail.com" },
-  { id: "c3", name: "Piyush Mantri", phone: "+918424959991", email: "piyushmantri0311@gmail.com" },
+  {
+    id: "c1",
+    name: "Piyush Mantri",
+    phone: "+918424959991",
+    email: "piyushmantri0311@gmail.com",
+    role: "Organizer",
+  },
+  {
+    id: "c2",
+    name: "Anil Kumar",
+    phone: "+919876543210",
+    email: "anil.kumar@gmail.com",
+    role: "Coordinator",
+  },
+  {
+    id: "c3",
+    name: "Rahul Sharma",
+    phone: "+917890123456",
+    email: "rahul.sharma@gmail.com",
+    role: "Support",
+  },
 ];
 
 function PersonChip({ name }: { name: string }) {
@@ -152,23 +170,43 @@ export default function TournamentDetailPage() {
             </section>
 
             <section className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3">
-              <h2 className="text-[18px] font-semibold">Contact Information</h2>
-              <div className="mt-2 space-y-2">
-                {contacts.map((contact) => (
-                  <div key={contact.id} className="border-b border-[var(--color-border)] pb-2 last:border-b-0">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="h-8 w-8 rounded-full bg-[radial-gradient(circle_at_30%_30%,#d1d1d1,#7b7b7b)]" />
-                        <p className="text-[16px] font-medium">{contact.name}</p>
-                      </div>
-                      <span className="rounded-full bg-[#26b34a] px-2 py-0.5 text-[11px] font-semibold text-white">Organizer</span>
-                    </div>
-                    <div className="mt-1 flex items-center gap-2 text-[15px] text-[var(--color-muted)]"><PhoneIcon size={12} className="text-primary" />{contact.phone}</div>
-                    <div className="mt-1 flex items-center gap-2 text-[15px] text-[var(--color-muted)]"><MailIcon size={12} className="text-primary" />{contact.email}</div>
-                  </div>
-                ))}
-              </div>
-            </section>
+  <h2 className="text-[18px] font-semibold">Contact Information</h2>
+
+  <div className="mt-3 divide-y divide-[var(--color-border)]">
+    {contacts.map((contact) => (
+      <div key={contact.id} className="py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-full bg-[radial-gradient(circle_at_30%_30%,#d1d1d1,#7b7b7b)]" />
+            <p className="text-[16px] font-medium">{contact.name}</p>
+          </div>
+
+          <span className="rounded-full bg-primary px-3 py-0.5 text-[11px] font-semibold text-white">
+            {contact.role}
+          </span>
+        </div>
+
+        <div className="mt-2 space-y-1 text-[14px]">
+          <a
+            href={`tel:${contact.phone}`}
+            className="flex items-center gap-2 text-[var(--color-muted)] hover:text-primary transition-colors"
+          >
+            <PhoneIcon size={14} />
+            {contact.phone}
+          </a>
+
+          <a
+            href={`mailto:${contact.email}`}
+            className="flex items-center gap-2 text-[var(--color-muted)] hover:text-primary transition-colors break-all"
+          >
+            <MailIcon size={14} />
+            {contact.email}
+          </a>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
           </>
         ) : (
           events.map((ev) => {
