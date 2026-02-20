@@ -5,6 +5,7 @@ import Link from "next/link";
 import BottomNav from "@/components/BottomNav";
 import ScheduleCard from "@/components/ScheduleCard";
 import ColorfulTournamentCard from "@/components/Card/ColorfulTournamentCard";
+import OngoingTournamentCard from "@/components/Card/OngoingTournamentCard";
 import QuickStats from "@/components/QuickStats";
 import { TrophyIcon } from "@/components/Icons";
 import NotificationsSlideOver, { NotificationItem } from "@/components/NotificationsSlideOver";
@@ -70,16 +71,21 @@ const ongoingTournaments = [
   {
     id: "103",
     name: "Winter Badminton League",
-    venue: "Raipur City Club",
-    address: "Civil Lines, Raipur",
+    venue: "Raipur City Club, Civil Lines",
     sport: "Badminton",
     category: "Mixed",
-    modes: "League Format",
-    colorVariant: "green" as const,
+    modes: "League",
     logoText: "WB",
-    entryFee: "₹800",
-    ctaText: "View Details"
   },
+  {
+    id: "104",
+    name: "Summer Squash Series",
+    venue: "Elite Squash Courts, Downtown",
+    sport: "Squash",
+    category: "Women's",
+    modes: "Knockout",
+    logoText: "SS",
+  }
 ];
 
 const liveMatches = [
@@ -129,6 +135,10 @@ export default function UserHomePage() {
   const [activeTab, setActiveTab] = useState("explore");
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   
+  // --- CAROUSEL PAGINATION STATES ---
+  const [activeUpcomingIndex, setActiveUpcomingIndex] = useState(0);
+  const [activeOngoingIndex, setActiveOngoingIndex] = useState(0);
+
   const unreadCount = mockNotifications.filter((n) => n.unread).length;
 
   const homeTabs = [
@@ -137,6 +147,21 @@ export default function UserHomePage() {
     { id: "myspace", label: "My Space" },
   ];
 
+  // Scroll handlers to calculate which card is currently centered
+  const handleUpcomingScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.currentTarget;
+    const itemWidth = (target.firstChild as HTMLElement)?.offsetWidth || target.clientWidth;
+    const scrollPosition = target.scrollLeft;
+    setActiveUpcomingIndex(Math.round(scrollPosition / itemWidth));
+  };
+
+  const handleOngoingScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.currentTarget;
+    const itemWidth = (target.firstChild as HTMLElement)?.offsetWidth || target.clientWidth;
+    const scrollPosition = target.scrollLeft;
+    setActiveOngoingIndex(Math.round(scrollPosition / itemWidth));
+  };
+
   return (
     <div className="font-body flex min-h-screen flex-col bg-[var(--color-background)] text-[var(--color-text)]">
       
@@ -144,13 +169,10 @@ export default function UserHomePage() {
       {/* UNIFIED ORANGE HERO CONTAINER             */}
       {/* ========================================= */}
       <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-b-[32px] px-4 pt-10 pb-12 shadow-md relative z-10 overflow-hidden transition-all duration-300">
-        
-        {/* Subtle decorative background element for depth */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
 
         <div className="mx-auto w-full max-w-md relative z-10">
           
-          {/* 1. GREETING ROW */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-full bg-white/20 border-2 border-white/40 flex items-center justify-center text-white font-bold text-lg overflow-hidden shrink-0">
@@ -176,7 +198,6 @@ export default function UserHomePage() {
             </button>
           </div>
 
-          {/* 2. TABS ROW */}
           <div className="flex gap-2 overflow-x-auto snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden mb-2">
             {homeTabs.map((tab) => (
               <button
@@ -193,7 +214,6 @@ export default function UserHomePage() {
             ))}
           </div>
 
-          {/* 3. CONDITIONAL BROWSE & JOIN HERO CONTENT */}
           {activeTab === "explore" && (
             <div className="animate-fade-in mt-6">
               <h2 className="text-[10px] font-extrabold tracking-widest text-orange-200 uppercase mb-2">
@@ -206,7 +226,6 @@ export default function UserHomePage() {
                 Compete. Track. Rise.
               </p>
               
-              {/* 4. CTA BUTTONS ROW */}
               <div className="flex gap-3">
                 <Link
                   href="/user/tournaments"
@@ -223,7 +242,6 @@ export default function UserHomePage() {
               </div>
             </div>
           )}
-
         </div>
       </div>
       {/* ========================================= */}
@@ -237,7 +255,6 @@ export default function UserHomePage() {
         {activeTab === "explore" && (
           <div className="space-y-8 animate-fade-in mt-2">
             
-            {/* QUICK MATCH CARD */}
             <Link href="/match/setup" className="block active:scale-[0.98] transition-transform cursor-pointer group">
               <section className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-4 shadow-sm flex items-center justify-between hover:border-orange-500/50 transition-colors">
                 <div>
@@ -258,30 +275,81 @@ export default function UserHomePage() {
                   View All
                 </Link>
               </div>
-              <div className="flex overflow-x-auto gap-4 pb-4 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-4 px-4">
+              <div 
+                className="flex overflow-x-auto gap-4 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-4 px-4 pb-2"
+                onScroll={handleUpcomingScroll}
+              >
                 {upcomingTournaments.map((t) => (
                   <div key={t.id} className="min-w-[85vw] sm:min-w-[320px] snap-center shrink-0">
                     <ColorfulTournamentCard {...t} />
                   </div>
                 ))}
               </div>
+              {/* Upcoming Dots Indicator */}
+              {upcomingTournaments.length > 1 && (
+                <div className="flex items-center justify-center gap-1.5 mt-2">
+                  {upcomingTournaments.map((_, idx) => (
+                    <div
+                      key={idx}
+                      className={`h-1.5 rounded-full transition-all duration-300 ${
+                        activeUpcomingIndex === idx
+                          ? "w-4 bg-orange-500"
+                          : "w-1.5 bg-neutral-300 dark:bg-neutral-600"
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
             </section>
 
             {/* ONGOING TOURNAMENTS */}
             <section>
               <div className="flex items-end justify-between mb-3 px-1">
-                <h3 className="font-heading text-xl font-bold tracking-tight">Ongoing Tournaments</h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="font-heading text-xl font-bold tracking-tight">Ongoing Tournaments</h3>
+                  {/* ORANGE LIVE PING ANIMATION */}
+                  <div className="relative flex h-3 w-3 items-center justify-center mb-0.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+                  </div>
+                </div>
                 <Link href="/user/tournaments" className="text-xs font-bold uppercase tracking-wider text-orange-600 hover:underline pb-1">
                   View All
                 </Link>
               </div>
-              <div className="flex overflow-x-auto gap-4 pb-4 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-4 px-4">
+              <div 
+                className="flex overflow-x-auto gap-4 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-4 px-4 pb-2"
+                onScroll={handleOngoingScroll}
+              >
                 {ongoingTournaments.map((t) => (
                   <div key={t.id} className="min-w-[85vw] sm:min-w-[320px] snap-center shrink-0">
-                    <ColorfulTournamentCard {...t} />
+                    <OngoingTournamentCard 
+                      id={t.id}
+                      name={t.name}
+                      sport={t.sport}
+                      category={t.category}
+                      modes={t.modes}
+                      venue={t.venue}
+                      logoText={t.logoText}
+                    />
                   </div>
                 ))}
               </div>
+              {/* Ongoing Dots Indicator */}
+              {ongoingTournaments.length > 1 && (
+                <div className="flex items-center justify-center gap-1.5 mt-2">
+                  {ongoingTournaments.map((_, idx) => (
+                    <div
+                      key={idx}
+                      className={`h-1.5 rounded-full transition-all duration-300 ${
+                        activeOngoingIndex === idx
+                          ? "w-4 bg-orange-500"
+                          : "w-1.5 bg-neutral-300 dark:bg-neutral-600"
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
             </section>
           </div>
         )}
@@ -292,7 +360,7 @@ export default function UserHomePage() {
         {activeTab === "live" && (
           <div className="space-y-4 animate-fade-in">
             <div className="flex items-center justify-center py-1 mb-2">
-              <span className="mr-2 h-2.5 w-2.5 rounded-full bg-[var(--color-error)] animate-pulse" />
+              <span className="mr-2 h-2.5 w-2.5 rounded-full bg-orange-500 animate-pulse" />
               <h3 className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-secondary)]">
                 Ongoing Matches
               </h3>
