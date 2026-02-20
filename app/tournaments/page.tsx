@@ -10,7 +10,7 @@ import {
   MapPinIcon,
   SearchIcon,
 } from "@/components/Icons";
-import BottomNav from "@/components/BottomNav";
+import Layout from "@/components/Layout";
 
 type TopTab = "browse" | "joined" | "history";
 type FormatTab = "all" | "singles" | "doubles";
@@ -153,25 +153,25 @@ function TournamentCard({ item }: { item: TournamentItem }) {
   return (
     <Link
       href={`/tournaments/${item.id}`}
-      className="block rounded-2xl border border-white/10 bg-[#3a2a5e] p-4 shadow-sm transition hover:border-[#ff7a1a]/40"
+      className="block rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-sm transition hover:border-primary"
     >
       <div className="flex items-start gap-3">
-        <div className="mt-0.5 grid h-12 w-12 shrink-0 place-content-center rounded-full border border-[#c8c8c8] bg-[#f3f3f3] text-[10px] font-bold text-[#6a6a6a] dark:border-[#504a5f] dark:bg-[#e7e7e7]">
+        <div className="mt-0.5 grid h-12 w-12 shrink-0 place-content-center rounded-full border border-[var(--color-border)] bg-[var(--color-surface-elevated)] text-[10px] font-bold text-[var(--color-text-muted)]">
           SOFT
         </div>
 
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <h3 className="truncate text-[16px] font-bold leading-5 text-[#2d2d2d] dark:text-[#f2f2f2]">{item.name}</h3>
-              <p className="truncate text-[12px] text-[#5e5e5e] dark:text-[#bfbfbf]">{item.subtitle}</p>
+              <h3 className="truncate text-[16px] font-bold leading-5 text-[var(--color-text)]">{item.name}</h3>
+              <p className="truncate text-[12px] text-[var(--color-text-muted)]">{item.subtitle}</p>
             </div>
             {item.cta === "Chevron" ? (
-              <ChevronRightIcon size={20} className="mt-1 text-[#2d2d2d] dark:text-[#f2f2f2]" />
+              <ChevronRightIcon size={20} className="mt-1 text-[var(--color-text)]" />
             ) : null}
           </div>
 
-          <div className="mt-3 grid grid-cols-2 gap-y-2 text-[12px] text-[#4a4a4a] dark:text-[#cccccc]">
+          <div className="mt-3 grid grid-cols-2 gap-y-2 text-[12px] text-[var(--color-text-muted)]">
             <div className="flex items-center gap-1.5">
               <CalendarIcon size={12} />
               <span>Start: {item.start}</span>
@@ -199,7 +199,7 @@ function TournamentCard({ item }: { item: TournamentItem }) {
           </div>
 
           <div className="mt-3 flex items-center justify-between">
-            <div className="flex items-center gap-1 text-[11px] text-[#444] dark:text-[#b8b2cb]">
+            <div className="flex items-center gap-1 text-[11px] text-[var(--color-text-muted)]">
               <div className="flex -space-x-1">
                 <div className="h-5 w-5 rounded-full bg-[#dbb27a] ring-1 ring-white dark:ring-[#1b1b1b]" />
                 <div className="h-5 w-5 rounded-full bg-[#3ea3bf] ring-1 ring-white dark:ring-[#1b1b1b]" />
@@ -209,7 +209,7 @@ function TournamentCard({ item }: { item: TournamentItem }) {
             </div>
 
             {item.cta === "Register" || item.cta === "View" ? (
-              <span className="inline-flex h-8 min-w-[92px] items-center justify-center rounded-full border border-[#ff7a1a] px-4 text-[14px] font-semibold text-[#ff7a1a]">
+              <span className="inline-flex h-8 min-w-[92px] items-center justify-center rounded-full border border-primary px-4 text-[14px] font-semibold text-primary">
                 {item.cta}
               </span>
             ) : null}
@@ -231,41 +231,29 @@ export default function TournamentsPage() {
   }, [activeTab]);
 
   return (
-    <div className="min-h-screen bg-[#2b1f47] pb-24 text-white">
-      <div className="bg-[#ff7a1a] px-4 pb-3 pt-[max(env(safe-area-inset-top),14px)] text-white dark:bg-[#2f204d]">
-        <div className="mt-4 flex justify-around border-b border-white/10 text-[16px]">
-          <div className="flex items-center gap-2.5">
-            <div className="h-11 w-11 rounded-full border-2 border-white/80 bg-[radial-gradient(circle_at_30%_30%,#fce5c6,#7b523d)]" />
-            <div>
-              <h1 className="text-[20px] leading-7 font-heading font-semibold">Tournaments</h1>
-              <p className="text-[13px] text-white/90">Browse and join tournaments</p>
-            </div>
-          </div>
-          <button className="relative grid h-9 w-9 place-content-center rounded-full bg-white/85 text-[#5f5f5f] dark:bg-white/15 dark:text-white">
-            <BellIcon size={16} />
-            <span className="absolute -right-0.5 -top-0.5 grid h-4 w-4 place-content-center rounded-full bg-[#ff7a1a] text-[10px] font-bold text-white">
-              2
-            </span>
-          </button>
-        </div>
-
-        <label className="mt-4 flex h-10 items-center gap-2 rounded-xl bg-white px-3 text-[#8a8a8a] dark:border dark:border-white/10 dark:bg-white/10 dark:text-white/60">
+    <Layout title="Tournaments">
+      <div className="bg-[var(--color-surface)] px-4 pb-3 pt-4 border-b border-[var(--color-border)]">
+        <label className="flex h-10 items-center gap-2 rounded-xl bg-[var(--color-surface-elevated)] px-3 text-[var(--color-text-muted)] border border-[var(--color-border)]">
           <SearchIcon size={16} />
           <input
             type="text"
             placeholder="Search tournaments, cities..."
-            className="w-full bg-transparent text-[13px] text-[#484848] outline-none placeholder:text-[#9f9f9f] dark:text-white/85 dark:placeholder:text-white/45"
+            className="w-full bg-transparent text-[14px] text-[var(--color-text)] outline-none placeholder:text-[var(--color-text-muted)]"
           />
         </label>
 
-        <div className="mt-3 grid grid-cols-3 text-center text-[16px]">
+        <div className="mt-4 grid grid-cols-3 text-center text-[15px]">
           {(["browse", "joined", "history"] as TopTab[]).map((tab) => {
             const active = activeTab === tab;
             return (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`h-9 capitalize ${active ? "font-semibold text-white" : "text-white/75"}`}
+                className={`h-10 capitalize border-b-2 transition-colors ${
+                  active
+                    ? "border-primary font-semibold text-[var(--color-text)]"
+                    : "border-transparent text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
+                }`}
               >
                 {tab}
               </button>
@@ -274,9 +262,9 @@ export default function TournamentsPage() {
         </div>
       </div>
 
-      <div className="border-t border-[#e3e3e3] px-2.5 pt-2 dark:border-[#2b233f]">
-        <div className="hide-scrollbar flex items-center gap-2 overflow-x-auto pb-2">
-          <button className="grid h-9 w-9 shrink-0 place-content-center rounded-full border border-[#dadada] bg-white text-[#ff7a1a] dark:border-[#3a3251] dark:bg-[#171424]">
+      <div className="border-b border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3">
+        <div className="hide-scrollbar flex items-center gap-2 overflow-x-auto">
+          <button className="grid h-9 w-9 shrink-0 place-content-center rounded-full border border-[var(--color-border)] bg-[var(--color-surface-elevated)] text-primary">
             <FilterIcon size={14} />
           </button>
           {([
@@ -289,10 +277,10 @@ export default function TournamentsPage() {
               <button
                 key={tab.id}
                 onClick={() => setFormat(tab.id)}
-                className={`h-9 shrink-0 rounded-xl border px-6 text-[14px] font-medium ${
+                className={`h-9 shrink-0 rounded-xl border px-6 text-[14px] font-medium transition-colors ${
                   active
-                    ? "border-[#ff7a1a] bg-[#ff7a1a] text-white"
-                    : "border-[#d6d6d6] bg-[#ededed] text-[#666] dark:border-[#3a3251] dark:bg-[#171424] dark:text-[#b8b2cb]"
+                    ? "border-primary bg-primary text-white"
+                    : "border-[var(--color-border)] bg-[var(--color-surface-elevated)] text-[var(--color-text-muted)]"
                 }`}
               >
                 {tab.label}
@@ -302,14 +290,14 @@ export default function TournamentsPage() {
         </div>
       </div>
 
-      <div className="space-y-3 px-2.5 pb-12 pt-1">
+      <div className="space-y-4 px-4 pb-8 pt-4">
         {activeTab === "browse" ? (
           <>
-            <h2 className="px-1 text-[18px] font-semibold">Trending Tournaments</h2>
+            <h2 className="text-[18px] font-semibold text-[var(--color-text)]">Trending Tournaments</h2>
             {list.map((item) => (
               <TournamentCard key={item.id} item={item} />
             ))}
-            <h2 className="px-1 pt-1 text-[18px] font-semibold">Tournaments Near You</h2>
+            <h2 className="pt-2 text-[18px] font-semibold text-[var(--color-text)]">Tournaments Near You</h2>
             {browseItems.map((item) => (
               <TournamentCard key={`near-${item.id}`} item={item} />
             ))}
@@ -318,8 +306,6 @@ export default function TournamentsPage() {
           list.map((item) => <TournamentCard key={item.id} item={item} />)
         )}
       </div>
-
-      <BottomNav />
-    </div>
+    </Layout>
   );
 }

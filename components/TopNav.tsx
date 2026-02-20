@@ -63,7 +63,6 @@ const mockNotifications: NotificationItem[] = [
 export default function TopNav({ title, showBack = false, onBack, right }: TopNavProps) {
   const pathname = usePathname();
   const isOrg = pathname.startsWith("/org");
-  const homeHref = isOrg ? "/org/home" : "/user/home";
   const profileHref = isOrg ? "/org/profile" : "/user/profile";
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const unreadCount = mockNotifications.filter((n) => n.unread).length;
@@ -81,7 +80,7 @@ export default function TopNav({ title, showBack = false, onBack, right }: TopNa
       >
         <div className="flex items-center justify-between h-14 px-4 gap-3">
           <div className="flex items-center gap-2 min-w-0">
-            {showBack ? (
+            {showBack && (
               <button
                 type="button"
                 onClick={handleBack}
@@ -90,14 +89,6 @@ export default function TopNav({ title, showBack = false, onBack, right }: TopNa
               >
                 <ArrowLeftIcon size={20} />
               </button>
-            ) : (
-              <Link
-                href={homeHref}
-                className="font-semibold text-primary truncate"
-                aria-label="Forehand home"
-              >
-                Forehand
-              </Link>
             )}
             {title && (
               <h1 className="text-lg font-semibold truncate" id="page-title">
