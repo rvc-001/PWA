@@ -18,39 +18,34 @@ type NavLink = {
 const userLinks = [
   { href: "/user/home", label: "Home", icon: HomeIcon },
   { href: "/user/tournaments", label: "Tournaments", icon: TrophyIcon },
-  { href: "/user/profile", label: "Profile", icon: ProfileIcon },
+  { href: "/user/settings", label: "Profile", icon: ProfileIcon },
 ] satisfies readonly NavLink[];
 
 const orgLinks = [
   { href: "/org/home", label: "Home", icon: HomeIcon },
   { href: "/org/tournaments", label: "Tournaments", icon: TrophyIcon },
-  { href: "/org/profile", label: "Profile", icon: ProfileIcon },
+  { href: "/org/settings", label: "Profile", icon: ProfileIcon },
 ] satisfies readonly NavLink[];
 
 const appLinks = [
   { href: "/home", label: "Home", icon: HomeIcon },
   { href: "/tournaments", label: "Tournaments", icon: TrophyIcon },
-  { href: "/profile", label: "Profile", icon: ProfileIcon },
+  { href: "/settings", label: "Profile", icon: ProfileIcon },
 ] satisfies readonly NavLink[];
 
 function isLinkActive(pathname: string, href: string) {
   if (pathname === href || pathname.startsWith(`${href}/`)) return true;
 
-  if (href === "/profile") {
-    return (
-      pathname === "/user/profile" ||
-      pathname.startsWith("/user/profile/") ||
-      pathname.startsWith("/user/settings") ||
-      pathname.startsWith("/settings")
-    );
+  if (href === "/settings") {
+    return pathname.startsWith("/profile");
   }
 
-  if (href === "/user/profile") {
-    return pathname.startsWith("/user/settings");
+  if (href === "/user/settings") {
+    return pathname.startsWith("/user/profile");
   }
 
-  if (href === "/org/profile") {
-    return pathname.startsWith("/org/settings");
+  if (href === "/org/settings") {
+    return pathname.startsWith("/org/profile");
   }
 
   if (href === "/user/tournaments") {

@@ -63,7 +63,10 @@ const mockNotifications: NotificationItem[] = [
 export default function TopNav({ title, showBack = false, onBack, right }: TopNavProps) {
   const pathname = usePathname();
   const isOrg = pathname.startsWith("/org");
-  const profileHref = isOrg ? "/org/profile" : "/user/profile";
+  
+  // CHANGED: Routes correctly to Settings instead of Profile
+  const profileHref = isOrg ? "/org/settings" : "/user/settings"; 
+  
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const unreadCount = mockNotifications.filter((n) => n.unread).length;
 
