@@ -281,19 +281,19 @@ export default function UserHomePage() {
               >
                 {upcomingTournaments.map((t) => (
                   <div key={t.id} className="min-w-[85vw] sm:min-w-[320px] snap-center shrink-0">
-                    <ColorfulTournamentCard 
-                      id={t.id}
-                      name={t.name}
-                      venue={t.venue}
-                      address={t.address}
-                      sport={t.sport}
-                      category={t.category}
-                      modes={t.modes}
-                      colorVariant={t.colorVariant}
-                      logoText={t.logoText}
-                      entryFee={t.entryFee}
-                      ctaText={t.ctaText}
-                    />
+                    <ColorfulTournamentCard
+                    id={t.id}
+                    name={t.name}
+                    venue={t.venue}
+                    address={t.address}
+                    sport={t.sport}
+                    category={t.category}
+                    modes={t.modes}
+                    colorVariant={t.colorVariant}
+                    logoText={t.logoText}
+                    entryFee={t.entryFee}
+                    ctaText={t.ctaText}
+                      />
                   </div>
                 ))}
               </div>
