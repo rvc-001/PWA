@@ -74,6 +74,11 @@
   --transition-fast: 150ms ease-out;
   --transition-base: 200ms ease-out;
   --transition-slow: 300ms ease-out;
+
+  /* NEW CARD COLORS FOR LIGHT MODE */
+  --card-orange-bg: linear-gradient(135deg, #ff8a2f 0%, #ff5e00 100%);
+  --card-green-bg: linear-gradient(135deg, #3bb273 0%, #2a8a56 100%);
+  --card-red-bg: linear-gradient(135deg, #ff4a4a 0%, #cc3b3b 100%);
 }
 
 .dark {
@@ -131,6 +136,11 @@
 
   --gradient-orange: linear-gradient(180deg, #ff8a2f 0%, #ff7a1a 100%);
   --gradient-card-overlay: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.22) 100%);
+
+  /* NEW CARD COLORS FOR DARK MODE */
+  --card-orange-bg: linear-gradient(135deg, #cc6a20 0%, #b34200 100%);
+  --card-green-bg: linear-gradient(135deg, #2b8254 0%, #1e633d 100%);
+  --card-red-bg: linear-gradient(135deg, #cc3b3b 0%, #992c2c 100%);
 }
 
 [data-touch-target] {

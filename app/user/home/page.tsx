@@ -2,38 +2,83 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import TopNav from "@/components/TopNav";
 import BottomNav from "@/components/BottomNav";
-import Tabs, { type TabItem } from "@/components/Tabs";
 import ScheduleCard from "@/components/ScheduleCard";
 import ColorfulTournamentCard from "@/components/Card/ColorfulTournamentCard";
+import QuickStats from "@/components/QuickStats";
 import { TrophyIcon } from "@/components/Icons";
-import QuickMatchFlow from "@/components/QuickMatch/QuickMatchFlow";
+import NotificationsSlideOver, { NotificationItem } from "@/components/NotificationsSlideOver";
 
-const homeTabs: TabItem[] = [
-  { id: "explore", label: "Explore" },
-  { id: "live", label: "Live Feed" },
-  { id: "myspace", label: "My Space" },
-];
+// --- CUSTOM ICONS ---
+function BellIcon({ size = 24 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+    </svg>
+  );
+}
 
-const exploreTournaments = [
+function LightningIcon({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth={1} strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+    </svg>
+  );
+}
+
+function ArrowRightIcon({ size = 20 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 12h14" />
+      <path d="m12 5 7 7-7 7" />
+    </svg>
+  );
+}
+
+// --- MOCK DATA FOR SPLIT CARDS ---
+const upcomingTournaments = [
   {
     id: "101",
-    name: "Monsoon Pickleball Open",
-    location: "Raipur | Chhattisgarh",
-    dateRange: "Jan 15 - 20",
-    registeredCount: 64,
+    name: "Monsoon Pickleball Raipur Open",
+    venue: "Sports Arena",
+    address: "24 block street, Raipur",
+    sport: "Pickleball",
+    category: "Men's",
+    modes: "Multiple Modes",
     colorVariant: "orange" as const,
-    entryFee: "INR 500",
+    logoText: "MP",
+    entryFee: "₹500",
+    ctaText: "Register"
   },
   {
     id: "102",
     name: "National Tennis Championship",
-    location: "Delhi Sports Complex",
-    dateRange: "Feb 10 - 15",
-    registeredCount: 120,
+    venue: "Delhi Sports Complex",
+    address: "Sector 14, New Delhi",
+    sport: "Tennis",
+    category: "Men's & Women's",
+    modes: "Singles & Doubles",
+    colorVariant: "blue" as const,
+    logoText: "NT",
+    entryFee: "₹1200",
+    ctaText: "Register"
+  },
+];
+
+const ongoingTournaments = [
+  {
+    id: "103",
+    name: "Winter Badminton League",
+    venue: "Raipur City Club",
+    address: "Civil Lines, Raipur",
+    sport: "Badminton",
+    category: "Mixed",
+    modes: "League Format",
     colorVariant: "green" as const,
-    entryFee: "INR 1200",
+    logoText: "WB",
+    entryFee: "₹800",
+    ctaText: "View Details"
   },
 ];
 
@@ -46,149 +91,273 @@ const liveMatches = [
     time: "LIVE NOW",
     score: "21-19, 15-10",
     colorVariant: "badminton" as const,
+  }
+];
+
+const pastMatches = [
+  {
+    id: "p1",
+    sport: "Pickleball",
+    matchName: "Group Stage",
+    venue: "Court 2",
+    time: "Yesterday",
+    score: "Won (11-5, 11-8)",
+    colorVariant: "basketball" as const,
+  }
+];
+
+const mockNotifications: NotificationItem[] = [
+  {
+    id: "1",
+    type: "match_start",
+    title: "Tennis match Started",
+    body: "Raipur Sports Academy",
+    timeAgo: "2 hours ago",
+    unread: true,
   },
   {
-    id: "l2",
-    sport: "Tennis",
-    matchName: "Semi-Final - Women's Doubles",
-    venue: "Center Court",
-    time: "LIVE NOW",
-    score: "6-4, 2-1",
-    colorVariant: "volleyball" as const,
-  },
+    id: "2",
+    type: "match_start",
+    title: "Pickleball Singles Started",
+    body: "Court 3",
+    timeAgo: "3 hours ago",
+    unread: true,
+  }
 ];
 
 export default function UserHomePage() {
   const [activeTab, setActiveTab] = useState("explore");
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  
+  const unreadCount = mockNotifications.filter((n) => n.unread).length;
+
+  const homeTabs = [
+    { id: "explore", label: "Explore" },
+    { id: "live", label: "Live Feed" },
+    { id: "myspace", label: "My Space" },
+  ];
 
   return (
     <div className="font-body flex min-h-screen flex-col bg-[var(--color-background)] text-[var(--color-text)]">
-      <div className="sticky top-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-surface)]">
-        <TopNav />
-        <div className="mx-auto w-full max-w-md px-4">
-          <Tabs tabs={homeTabs} activeId={activeTab} onChange={setActiveTab} ariaLabel="Home sections" />
-        </div>
-      </div>
+      
+      {/* ========================================= */}
+      {/* UNIFIED ORANGE HERO CONTAINER             */}
+      {/* ========================================= */}
+      <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-b-[32px] px-4 pt-10 pb-12 shadow-md relative z-10 overflow-hidden transition-all duration-300">
+        
+        {/* Subtle decorative background element for depth */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
 
-      <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 overflow-y-auto px-4 pb-28 pt-4">
-        {activeTab === "explore" && (
-          <div className="space-y-5">
-            <section className="rounded-2xl border border-primary/20 bg-primary/10 p-4">
-              <h2 className="text-xs font-semibold uppercase tracking-wide text-primary">Browse and Join</h2>
-              <p className="mt-1 font-heading text-2xl font-semibold">Upcoming tournaments</p>
-              <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Compete with the best players near you.</p>
-              <div className="mt-4 flex gap-3">
+        <div className="mx-auto w-full max-w-md relative z-10">
+          
+          {/* 1. GREETING ROW */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-white/20 border-2 border-white/40 flex items-center justify-center text-white font-bold text-lg overflow-hidden shrink-0">
+                A
+              </div>
+              <div>
+                <h1 className="text-white font-bold text-xl leading-tight tracking-tight">Hey Alex!</h1>
+                <p className="text-white/90 text-sm font-medium">Ready to dominate the court?</p>
+              </div>
+            </div>
+            
+            <button 
+              onClick={() => setNotificationsOpen(true)}
+              className="relative w-10 h-10 rounded-full bg-black/10 flex items-center justify-center text-white hover:bg-black/20 active:scale-95 transition-all shrink-0 cursor-pointer"
+              aria-label="Open notifications"
+            >
+              <BellIcon size={20} />
+              {unreadCount > 0 && (
+                <span className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 ring-2 ring-orange-500 text-[9px] font-bold text-white">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
+          </div>
+
+          {/* 2. TABS ROW */}
+          <div className="flex gap-2 overflow-x-auto snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden mb-2">
+            {homeTabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`snap-center shrink-0 px-6 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all duration-200 ${
+                  activeTab === tab.id
+                    ? "bg-white text-orange-600 shadow-md"
+                    : "bg-white/20 text-white hover:bg-white/30"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* 3. CONDITIONAL BROWSE & JOIN HERO CONTENT */}
+          {activeTab === "explore" && (
+            <div className="animate-fade-in mt-6">
+              <h2 className="text-[10px] font-extrabold tracking-widest text-orange-200 uppercase mb-2">
+                Browse & Join
+              </h2>
+              <h3 className="font-heading text-[28px] font-black uppercase leading-[1.1] text-white mb-2">
+                Upcoming Tournaments<br />Near You
+              </h3>
+              <p className="text-sm text-white/90 font-medium mb-6">
+                Compete. Track. Rise.
+              </p>
+              
+              {/* 4. CTA BUTTONS ROW */}
+              <div className="flex gap-3">
                 <Link
                   href="/user/tournaments"
-                  className="grid h-10 flex-1 place-content-center rounded-xl bg-primary text-sm font-medium text-white"
+                  className="flex-1 bg-white text-gray-900 rounded-full h-12 flex items-center justify-center gap-1.5 font-bold shadow-sm hover:bg-gray-50 active:scale-[0.98] transition-all"
                 >
-                  Register Now
+                  <LightningIcon size={16} /> Register Now
                 </Link>
                 <Link
                   href="/user/tournaments"
-                  className="grid h-10 flex-1 place-content-center rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] text-sm font-medium"
+                  className="flex-1 border-2 border-white/40 text-white rounded-full h-12 flex items-center justify-center font-bold hover:bg-white/10 active:scale-[0.98] transition-all"
                 >
+                  Explore All
+                </Link>
+              </div>
+            </div>
+          )}
+
+        </div>
+      </div>
+      {/* ========================================= */}
+
+      {/* MAIN CONTENT AREA */}
+      <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 overflow-x-hidden overflow-y-auto px-4 pb-28 pt-8">
+        
+        {/* ======================= */}
+        {/* EXPLORE TAB             */}
+        {/* ======================= */}
+        {activeTab === "explore" && (
+          <div className="space-y-8 animate-fade-in mt-2">
+            
+            {/* QUICK MATCH CARD */}
+            <Link href="/match/setup" className="block active:scale-[0.98] transition-transform cursor-pointer group">
+              <section className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-4 shadow-sm flex items-center justify-between hover:border-orange-500/50 transition-colors">
+                <div>
+                  <h3 className="font-heading text-lg font-bold text-[var(--color-text)] group-hover:text-orange-600 transition-colors">Quick Match</h3>
+                  <p className="text-xs font-medium text-[var(--color-text-secondary)] mt-0.5">Start a match quickly without saving data</p>
+                </div>
+                <div className="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-500/20 flex items-center justify-center text-orange-600 dark:text-orange-400 shrink-0 group-hover:scale-110 transition-transform">
+                  <ArrowRightIcon size={20} />
+                </div>
+              </section>
+            </Link>
+
+            {/* UPCOMING TOURNAMENTS */}
+            <section>
+              <div className="flex items-end justify-between mb-3 px-1">
+                <h3 className="font-heading text-xl font-bold tracking-tight">Upcoming Tournaments</h3>
+                <Link href="/user/tournaments" className="text-xs font-bold uppercase tracking-wider text-orange-600 hover:underline pb-1">
                   View All
                 </Link>
               </div>
+              <div className="flex overflow-x-auto gap-4 pb-4 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-4 px-4">
+                {upcomingTournaments.map((t) => (
+                  <div key={t.id} className="min-w-[85vw] sm:min-w-[320px] snap-center shrink-0">
+                    <ColorfulTournamentCard {...t} />
+                  </div>
+                ))}
+              </div>
             </section>
 
-            <QuickMatchFlow />
-
-            <section className="space-y-3">
-              <div className="flex items-center justify-between">
-                <h3 className="font-heading text-xl font-semibold">Featured Events</h3>
-                <Link href="/user/tournaments" className="text-xs font-medium uppercase text-primary">View All</Link>
+            {/* ONGOING TOURNAMENTS */}
+            <section>
+              <div className="flex items-end justify-between mb-3 px-1">
+                <h3 className="font-heading text-xl font-bold tracking-tight">Ongoing Tournaments</h3>
+                <Link href="/user/tournaments" className="text-xs font-bold uppercase tracking-wider text-orange-600 hover:underline pb-1">
+                  View All
+                </Link>
               </div>
-              <div className="space-y-4">
-                {exploreTournaments.map((t) => (
-                  <ColorfulTournamentCard
-                    key={t.id}
-                    id={t.id}
-                    name={t.name}
-                    location={t.location}
-                    dateRange={t.dateRange}
-                    registeredCount={t.registeredCount}
-                    colorVariant={t.colorVariant}
-                    entryFee={t.entryFee}
-                    ctaText="Details"
-                  />
+              <div className="flex overflow-x-auto gap-4 pb-4 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-4 px-4">
+                {ongoingTournaments.map((t) => (
+                  <div key={t.id} className="min-w-[85vw] sm:min-w-[320px] snap-center shrink-0">
+                    <ColorfulTournamentCard {...t} />
+                  </div>
                 ))}
               </div>
             </section>
           </div>
         )}
 
+        {/* ======================= */}
+        {/* LIVE FEED TAB           */}
+        {/* ======================= */}
         {activeTab === "live" && (
-          <div className="space-y-4">
-            <div className="flex items-center justify-center py-1">
-              <span className="mr-2 h-2.5 w-2.5 rounded-full bg-[var(--color-error)]" />
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-secondary)]">Live Action</h3>
+          <div className="space-y-4 animate-fade-in">
+            <div className="flex items-center justify-center py-1 mb-2">
+              <span className="mr-2 h-2.5 w-2.5 rounded-full bg-[var(--color-error)] animate-pulse" />
+              <h3 className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-secondary)]">
+                Ongoing Matches
+              </h3>
             </div>
             {liveMatches.map((match) => (
-              <ScheduleCard
-                key={match.id}
-                sport={match.sport}
-                matchName={match.matchName}
-                venue={match.venue}
-                time={match.time}
-                colorVariant={match.colorVariant}
-                opponent={`Score: ${match.score}`}
-              />
+              <ScheduleCard key={match.id} {...match} opponent={`Score: ${match.score}`} />
             ))}
           </div>
         )}
 
+        {/* ======================= */}
+        {/* MY SPACE TAB            */}
+        {/* ======================= */}
         {activeTab === "myspace" && (
-          <div className="space-y-5">
-            <section className="grid grid-cols-3 gap-3">
-              <div className="card p-4 text-center">
-                <p className="font-heading text-3xl font-bold text-primary">28</p>
-                <p className="mt-1 text-[11px] uppercase tracking-wide text-[var(--color-muted)]">Won</p>
-              </div>
-              <div className="card p-4 text-center">
-                <p className="font-heading text-3xl font-bold">38</p>
-                <p className="mt-1 text-[11px] uppercase tracking-wide text-[var(--color-muted)]">Played</p>
-              </div>
-              <div className="card p-4 text-center">
-                <p className="font-heading text-3xl font-bold">12</p>
-                <p className="mt-1 text-[11px] uppercase tracking-wide text-[var(--color-muted)]">Lost</p>
-              </div>
+          <div className="space-y-6 animate-fade-in">
+            <section><QuickStats played={38} lost={12} /></section>
+
+            <section>
+              <h3 className="mb-3 font-heading text-lg font-semibold tracking-tight flex items-center gap-2 px-1">
+                <span className="h-2 w-2 rounded-full bg-[var(--color-error)] animate-pulse" /> Your Live Match
+              </h3>
+              <ScheduleCard sport="Badminton" matchName="Men's Singles - Round 3" venue="Court 2" time="LIVE NOW" colorVariant="badminton" opponent="vs Rohan K." />
             </section>
 
             <section>
-              <h3 className="mb-3 font-heading text-xl font-semibold">Your Tournaments</h3>
-              <Link href="/user/tournaments" className="card block p-4 hover:border-primary/40">
+              <h3 className="mb-3 font-heading text-lg font-semibold tracking-tight px-1">Your Tournaments</h3>
+              <Link href="/user/tournaments" className="card block p-4 hover:border-orange-500/40 transition-colors bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-card)] active:scale-[0.98]">
                 <div className="flex items-center gap-3">
-                  <div className="grid h-10 w-10 place-content-center rounded-full bg-primary/15 text-primary">
-                    <TrophyIcon size={18} />
+                  <div className="grid h-12 w-12 place-content-center rounded-full bg-orange-500/10 text-orange-600 shrink-0">
+                    <TrophyIcon size={20} />
                   </div>
                   <div>
-                    <h4 className="font-medium">Raipur League 2025</h4>
-                    <p className="text-xs text-[var(--color-muted)]">View tournament events and brackets</p>
+                    <h4 className="font-bold">Raipur League 2025</h4>
+                    <p className="text-xs text-[var(--color-text-secondary)] mt-0.5">View tournament events and brackets</p>
                   </div>
                 </div>
               </Link>
             </section>
 
             <section>
-              <h3 className="mb-3 font-heading text-xl font-semibold">Next On Court</h3>
-              <div className="card border-l-4 border-l-primary p-4">
-                <div className="mb-2 flex items-start justify-between">
-                  <span className="text-xs font-semibold uppercase text-primary">Quarter Final</span>
-                  <span className="text-xs text-[var(--color-muted)]">Dec 18</span>
-                </div>
-                <h4 className="font-heading text-xl font-semibold">Pickleball Singles</h4>
-                <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Regional Semi-Final - Court 3</p>
+              <h3 className="mb-3 font-heading text-lg font-semibold tracking-tight px-1">Past Matches</h3>
+              <div className="space-y-3">
+                {pastMatches.map((match) => (
+                   <ScheduleCard key={match.id} {...match} opponent={match.score} />
+                ))}
               </div>
             </section>
           </div>
         )}
       </main>
 
+      {/* BOTTOM NAVIGATION BAR */}
       <div className="fixed bottom-0 left-0 right-0 z-50">
         <BottomNav />
       </div>
+
+      {/* NOTIFICATIONS SLIDEOVER */}
+      <NotificationsSlideOver
+        open={notificationsOpen}
+        onClose={() => setNotificationsOpen(false)}
+        items={mockNotifications}
+        unreadCount={unreadCount}
+        onMarkAllRead={() => console.log("Mark all read")}
+        onClearAll={() => console.log("Clear all")}
+      />
     </div>
   );
 }
