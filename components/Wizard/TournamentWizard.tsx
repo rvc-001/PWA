@@ -28,8 +28,6 @@ interface TournamentWizardProps {
 export default function TournamentWizard({ onComplete, onClose }: TournamentWizardProps) {
   const [currentStep, setCurrentStep] = useState(0);
 
-
-
   // Form State
   const [formData, setFormData] = useState({
     name: '',
@@ -60,148 +58,123 @@ export default function TournamentWizard({ onComplete, onClose }: TournamentWiza
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-300 py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-8">
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 py-4 sm:py-12 px-4 sm:px-6 flex justify-center items-start font-sans">
+      
+      {/* Main Container - Split Card Design */}
+      <div className="w-full max-w-4xl bg-white dark:bg-zinc-900 rounded-2xl shadow-xl ring-1 ring-zinc-200 dark:ring-zinc-800 flex flex-col md:flex-row overflow-hidden min-h-[600px]">
         
-        {/* --- PROGRESS SIDEBAR / TOPBAR --- */}
-        <div className="w-full md:w-64 flex-shrink-0">
-          <nav aria-label="Progress">
-            <ol role="list" className="space-y-4 md:space-y-6 flex flex-row md:flex-col overflow-x-auto md:overflow-visible pb-4 md:pb-0 gap-4 md:gap-0 hide-scrollbar">
-              {steps.map((step, index) => {
-                const isActive = index === currentStep;
-                const isComplete = index < currentStep;
+        {/* --- SIDEBAR / MOBILE HEADER --- */}
+        <div className="w-full md:w-1/3 bg-zinc-50 dark:bg-zinc-900/50 border-b md:border-b-0 md:border-r border-zinc-200 dark:border-zinc-800 p-6 md:p-8 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-8 md:mb-10">
+              <h1 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">Create Tournament</h1>
+              <button onClick={onClose} className="p-2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 rounded-full transition-colors">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
 
-                return (
-                  <li key={step.id} className="flex-shrink-0">
-                    <button
-                      onClick={() => setCurrentStep(index)}
-                      disabled={!isComplete && !isActive}
-                      className={`group flex items-start flex-col text-left transition-colors ${
-                        !isComplete && !isActive ? 'cursor-not-allowed opacity-50' : ''
-                      }`}
-                    >
-                      <span className="flex items-center space-x-3">
-                        <span
-                          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-300 ${
+            <nav aria-label="Progress">
+              <ol className="space-y-4 md:space-y-6 flex flex-row md:flex-col overflow-x-auto md:overflow-visible pb-2 md:pb-0 gap-4 md:gap-0 hide-scrollbar snap-x">
+                {steps.map((step, index) => {
+                  const isActive = index === currentStep;
+                  const isComplete = index < currentStep;
+
+                  return (
+                    <li key={step.id} className="snap-start flex-shrink-0">
+                      <div className={`group flex items-center md:items-start flex-row text-left transition-colors ${!isComplete && !isActive ? 'opacity-50' : ''}`}>
+                        <div className="flex items-center justify-center relative">
+                          <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold transition-all duration-300 ${
                             isActive
-                              ? 'border-blue-600 bg-blue-600 text-white dark:border-blue-500 dark:bg-blue-500 shadow-md shadow-blue-500/20'
+                              ? 'bg-blue-600 text-white ring-4 ring-blue-600/20'
                               : isComplete
-                              ? 'border-emerald-500 bg-emerald-500 text-white dark:border-emerald-400 dark:bg-emerald-400'
-                              : 'border-gray-300 bg-transparent text-gray-500 dark:border-gray-700 dark:text-gray-400'
-                          }`}
-                        >
-                          {isComplete ? (
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                            </svg>
-                          ) : (
-                            <span className="text-sm font-semibold">{index + 1}</span>
+                              ? 'bg-zinc-800 dark:bg-zinc-100 text-white dark:text-zinc-900'
+                              : 'bg-zinc-200 dark:bg-zinc-800 text-zinc-500'
+                          }`}>
+                            {isComplete ? (
+                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                            ) : (
+                              index + 1
+                            )}
+                          </span>
+                          {/* Desktop vertical connecting line */}
+                          {index !== steps.length - 1 && (
+                            <div className={`hidden md:block absolute top-10 w-0.5 h-6 -ml-0.5 transition-colors ${isComplete ? 'bg-zinc-800 dark:bg-zinc-100' : 'bg-zinc-200 dark:bg-zinc-800'}`} />
                           )}
-                        </span>
-                        <span className="hidden md:block">
-                          <span
-                            className={`text-sm font-bold ${
-                              isActive
-                                ? 'text-blue-600 dark:text-blue-400'
-                                : isComplete
-                                ? 'text-gray-900 dark:text-white'
-                                : 'text-gray-500 dark:text-gray-400'
-                            }`}
-                          >
+                        </div>
+                        <div className="ml-4 flex flex-col justify-center">
+                          <span className={`text-sm font-bold ${isActive ? 'text-blue-600 dark:text-blue-400' : isComplete ? 'text-zinc-900 dark:text-white' : 'text-zinc-500'}`}>
                             {step.name}
                           </span>
-                          <span className="block text-xs font-medium text-gray-500 dark:text-gray-400/80">{step.description}</span>
-                        </span>
-                      </span>
-                    </button>
-                  </li>
-                );
-              })}
-            </ol>
-          </nav>
+                          <span className="hidden md:block text-xs font-medium text-zinc-500 mt-0.5">{step.description}</span>
+                        </div>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ol>
+            </nav>
+          </div>
         </div>
 
-        {/* --- MAIN FORM AREA --- */}
-        <div className="flex-1 bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800/60 overflow-hidden transition-all duration-300 flex flex-col">
-          <div className="p-6 sm:p-8 flex-1">
-            <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-6 tracking-tight">
-              {steps[currentStep].name}
-            </h2>
-
+        {/* --- MAIN FORM CONTENT --- */}
+        <div className="w-full md:w-2/3 flex flex-col bg-white dark:bg-zinc-900 relative">
+          
+          {/* Scrollable Form Area */}
+          <div className="flex-1 overflow-y-auto p-6 md:p-10 hide-scrollbar">
+            
             {/* STEP 1: BASIC DETAILS */}
             {currentStep === 0 && (
-              <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
+              <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-900 dark:text-gray-200">
-                    Tournament Name <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="e.g., Summer Smash 2026"
-                    className="mt-2 block w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-gray-700 dark:bg-gray-800/50 dark:text-white dark:placeholder-gray-500 dark:focus:border-blue-400 dark:focus:ring-blue-400/10 transition-all sm:text-sm outline-none"
-                  />
+                  <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-1">Basic Details</h2>
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400">Let's start with the core information.</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Personalized Date Picker Component */}
+                <div className="space-y-5 pt-2">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-900 dark:text-gray-200 mb-2">
-                      Start Date
-                    </label>
-                    <div className="relative group">
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-400 group-focus-within:text-blue-500 dark:group-focus-within:text-blue-400 transition-colors">
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                      </div>
+                    <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">Tournament Name</label>
+                    <input
+                      type="text"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      placeholder="e.g. Summer Smash 2026"
+                      className="w-full rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-zinc-900 dark:text-zinc-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder:text-zinc-400 sm:text-sm shadow-sm"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">Start Date</label>
                       <input
                         type="date"
                         value={formData.startDate}
                         onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                        className="block w-full rounded-xl border border-gray-300 bg-white pl-10 pr-4 py-3 text-gray-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-gray-700 dark:bg-gray-800/50 dark:text-white dark:focus:border-blue-400 dark:focus:ring-blue-400/10 transition-all sm:text-sm outline-none [color-scheme:light] dark:[color-scheme:dark] cursor-pointer"
+                        className="w-full rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-zinc-900 dark:text-zinc-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all sm:text-sm shadow-sm [color-scheme:light] dark:[color-scheme:dark]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">End Date</label>
+                      <input
+                        type="date"
+                        value={formData.endDate}
+                        onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                        className="w-full rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-zinc-900 dark:text-zinc-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all sm:text-sm shadow-sm [color-scheme:light] dark:[color-scheme:dark]"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-900 dark:text-gray-200 mb-2">
-                      End Date
-                    </label>
-                    <div className="relative group">
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-400 group-focus-within:text-blue-500 dark:group-focus-within:text-blue-400 transition-colors">
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                      </div>
-                      <input
-                        type="date"
-                        value={formData.endDate}
-                        onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                        className="block w-full rounded-xl border border-gray-300 bg-white pl-10 pr-4 py-3 text-gray-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-gray-700 dark:bg-gray-800/50 dark:text-white dark:focus:border-blue-400 dark:focus:ring-blue-400/10 transition-all sm:text-sm outline-none [color-scheme:light] dark:[color-scheme:dark] cursor-pointer"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-gray-900 dark:text-gray-200">
-                    Venue / Location
-                  </label>
-                  <div className="relative mt-2">
-                     <div className="absolute top-3.5 left-0 flex items-center pl-3.5 pointer-events-none text-gray-400">
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                      </div>
+                    <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">Venue Address</label>
                     <textarea
                       rows={2}
                       value={formData.location}
                       onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                      placeholder="Enter the full address..."
-                      className="block w-full rounded-xl border border-gray-300 bg-white pl-10 pr-4 py-3 text-gray-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-gray-700 dark:bg-gray-800/50 dark:text-white dark:placeholder-gray-500 dark:focus:border-blue-400 dark:focus:ring-blue-400/10 transition-all sm:text-sm resize-none outline-none"
+                      placeholder="Full street address..."
+                      className="w-full rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-zinc-900 dark:text-zinc-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all sm:text-sm shadow-sm resize-none placeholder:text-zinc-400"
                     />
                   </div>
                 </div>
@@ -210,151 +183,122 @@ export default function TournamentWizard({ onComplete, onClose }: TournamentWiza
 
             {/* STEP 2: EVENTS */}
             {currentStep === 1 && (
-              <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                {formData.events.map((event, index) => (
-                  <div key={event.id} className="flex flex-col sm:flex-row gap-3 items-start sm:items-center p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30">
-                    <div className="flex-1 w-full">
-                      <input
-                        type="text"
-                        placeholder="Event Name (e.g. Men's Singles)"
-                        value={event.name}
-                        onChange={(e) => {
-                          const newEvents = [...formData.events];
-                          newEvents[index].name = e.target.value;
-                          setFormData({ ...formData, events: newEvents });
-                        }}
-                        className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white outline-none"
-                      />
+              <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
+                <div>
+                  <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-1">Tournament Events</h2>
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400">Add the categories players can register for.</p>
+                </div>
+
+                <div className="space-y-3 pt-2">
+                  {formData.events.map((event, index) => (
+                    <div key={event.id} className="flex flex-col sm:flex-row gap-3 items-start sm:items-center p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 group">
+                      <div className="flex-1 w-full relative">
+                        <input
+                          type="text"
+                          placeholder="Event Name (e.g. Men's Singles)"
+                          value={event.name}
+                          onChange={(e) => {
+                            const newEvents = [...formData.events];
+                            newEvents[index].name = e.target.value;
+                            setFormData({ ...formData, events: newEvents });
+                          }}
+                          className="w-full bg-transparent border-0 border-b-2 border-transparent focus:border-blue-500 px-2 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:ring-0 outline-none transition-colors placeholder:text-zinc-400 font-medium"
+                        />
+                      </div>
+                      <div className="flex items-center gap-2 w-full sm:w-auto px-2 sm:px-0">
+                        <select
+                          value={event.format}
+                          onChange={(e) => {
+                            const newEvents = [...formData.events];
+                            newEvents[index].format = e.target.value;
+                            setFormData({ ...formData, events: newEvents });
+                          }}
+                          className="flex-1 sm:flex-none rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-sm font-medium text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-blue-500/20 outline-none shadow-sm cursor-pointer"
+                        >
+                          <option>Knockout</option>
+                          <option>Round Robin</option>
+                          <option>League</option>
+                        </select>
+                        <button
+                          onClick={() => removeEvent(event.id)}
+                          className="p-2 text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors"
+                          title="Remove Event"
+                        >
+                          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex gap-2 w-full sm:w-auto">
-                      <select
-                        value={event.format}
-                        onChange={(e) => {
-                          const newEvents = [...formData.events];
-                          newEvents[index].format = e.target.value;
-                          setFormData({ ...formData, events: newEvents });
-                        }}
-                        className="flex-1 sm:flex-none rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white outline-none"
-                      >
-                        <option>Knockout</option>
-                        <option>Round Robin</option>
-                        <option>League</option>
-                      </select>
-                      <button
-                        onClick={() => removeEvent(event.id)}
-                        className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors"
-                      >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                ))}
-                
-                <button
-                  onClick={addEvent}
-                  className="mt-4 flex items-center justify-center w-full py-3 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors"
-                >
-                  <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-                  </svg>
-                  Add Another Event
-                </button>
+                  ))}
+                  
+                  <button
+                    onClick={addEvent}
+                    className="w-full flex items-center justify-center py-3.5 mt-2 rounded-xl border border-dashed border-zinc-300 dark:border-zinc-700 text-sm font-semibold text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-500 transition-all shadow-sm"
+                  >
+                    <svg className="w-5 h-5 mr-2 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Add Another Event
+                  </button>
+                </div>
               </div>
             )}
 
-            {/* STEP 3: REGISTRATION (RADIO CARDS) */}
+            {/* STEP 3: REGISTRATION */}
             {currentStep === 2 && (
-              <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                <div className="space-y-4">
-                  <label className="block text-sm font-semibold text-gray-900 dark:text-gray-100">
-                    Entry Fee Structure
-                  </label>
-                  
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {/* Free Card */}
-                    <label className={`relative flex cursor-pointer rounded-xl border p-5 transition-all duration-200 ${
-                        formData.isFree 
-                          ? 'border-blue-600 bg-blue-50 dark:border-blue-500 dark:bg-blue-500/10 ring-1 ring-blue-600 dark:ring-blue-500 shadow-sm' 
-                          : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800/50 dark:hover:border-gray-600 dark:hover:bg-gray-800'
-                      }`}
-                    >
-                      <input 
-                        type="radio" 
-                        name="pricing" 
-                        className="sr-only" 
-                        checked={formData.isFree} 
-                        onChange={() => setFormData({ ...formData, isFree: true })} 
-                      />
-                      <div className="flex w-full items-start justify-between">
-                        <div className="flex flex-col">
-                          <span className={`text-base font-bold ${formData.isFree ? 'text-blue-900 dark:text-blue-100' : 'text-gray-900 dark:text-white'}`}>
-                            Free Entry
-                          </span>
-                          <span className={`text-sm mt-1 font-medium ${formData.isFree ? 'text-blue-700 dark:text-blue-300' : 'text-gray-500 dark:text-gray-400'}`}>
-                            No cost for participants to join.
-                          </span>
-                        </div>
-                        <div className={`shrink-0 ${formData.isFree ? 'text-blue-600 dark:text-blue-400' : 'text-transparent'}`}>
-                          <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                            <polyline points="22 4 12 14.01 9 11.01" />
-                          </svg>
-                        </div>
-                      </div>
-                    </label>
-
-                    {/* Paid Card */}
-                    <label className={`relative flex cursor-pointer rounded-xl border p-5 transition-all duration-200 ${
-                        !formData.isFree 
-                          ? 'border-blue-600 bg-blue-50 dark:border-blue-500 dark:bg-blue-500/10 ring-1 ring-blue-600 dark:ring-blue-500 shadow-sm' 
-                          : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800/50 dark:hover:border-gray-600 dark:hover:bg-gray-800'
-                      }`}
-                    >
-                      <input 
-                        type="radio" 
-                        name="pricing" 
-                        className="sr-only" 
-                        checked={!formData.isFree} 
-                        onChange={() => setFormData({ ...formData, isFree: false })} 
-                      />
-                      <div className="flex w-full items-start justify-between">
-                        <div className="flex flex-col">
-                          <span className={`text-base font-bold ${!formData.isFree ? 'text-blue-900 dark:text-blue-100' : 'text-gray-900 dark:text-white'}`}>
-                            Paid Entry
-                          </span>
-                          <span className={`text-sm mt-1 font-medium ${!formData.isFree ? 'text-blue-700 dark:text-blue-300' : 'text-gray-500 dark:text-gray-400'}`}>
-                            Require a fee to participate.
-                          </span>
-                        </div>
-                        <div className={`shrink-0 ${!formData.isFree ? 'text-blue-600 dark:text-blue-400' : 'text-transparent'}`}>
-                          <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                            <polyline points="22 4 12 14.01 9 11.01" />
-                          </svg>
-                        </div>
-                      </div>
-                    </label>
-                  </div>
+              <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
+                <div>
+                  <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-1">Registration Settings</h2>
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400">Manage entry fees and pricing.</p>
                 </div>
 
-                {/* Conditional Price Input */}
-                <div className={`grid transition-all duration-400 ease-in-out ${!formData.isFree ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0 pointer-events-none'}`}>
-                  <div className="overflow-hidden">
-                    <div className="pt-2">
-                      <label className="block text-sm font-semibold text-gray-900 dark:text-gray-200 mb-2">
-                        Registration Amount <span className="text-red-500">*</span>
+                <div className="pt-4">
+                  <div className="flex items-center justify-between p-4 sm:p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm">
+                    <div className="pr-4">
+                      <label className="text-base font-bold text-zinc-900 dark:text-white cursor-pointer select-none" onClick={() => setFormData({ ...formData, isFree: !formData.isFree })}>
+                        Paid Tournament
                       </label>
-                      <div className="relative max-w-xs">
+                      <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
+                        Toggle on to require an entry fee for participants.
+                      </p>
+                    </div>
+                    
+                    {/* iOS Style Toggle */}
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={!formData.isFree}
+                      onClick={() => setFormData({ ...formData, isFree: !formData.isFree })}
+                      className={`relative inline-flex h-7 w-14 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-500/20 ${
+                        !formData.isFree ? 'bg-blue-600' : 'bg-zinc-200 dark:bg-zinc-700'
+                      }`}
+                    >
+                      <span
+                        className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                          !formData.isFree ? 'translate-x-7' : 'translate-x-0'
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  {/* Price Input (Animated Height) */}
+                  <div className={`grid transition-[grid-template-rows,opacity,margin] duration-300 ease-out ${
+                    !formData.isFree ? 'grid-rows-[1fr] opacity-100 mt-5' : 'grid-rows-[0fr] opacity-0 mt-0 pointer-events-none'
+                  }`}>
+                    <div className="overflow-hidden">
+                      <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                        Entry Fee Amount <span className="text-red-500">*</span>
+                      </label>
+                      <div className="relative w-full sm:max-w-xs">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                          <span className="text-gray-500 dark:text-gray-400 sm:text-sm font-bold">₹</span>
+                          <span className="text-zinc-500 dark:text-zinc-400 font-semibold">₹</span>
                         </div>
                         <input
                           type="number"
                           value={formData.price}
                           onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                          className="block w-full rounded-xl border border-gray-300 bg-white py-3 pl-8 pr-4 text-gray-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-gray-700 dark:bg-gray-800/50 dark:text-white dark:placeholder-gray-500 dark:focus:border-blue-400 dark:focus:ring-blue-400/10 sm:text-sm transition-all outline-none"
+                          className="w-full rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 py-3 pl-9 pr-4 text-zinc-900 dark:text-zinc-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all sm:text-sm shadow-sm placeholder:text-zinc-400"
                           placeholder="0.00"
                           min="0"
                         />
@@ -367,65 +311,66 @@ export default function TournamentWizard({ onComplete, onClose }: TournamentWiza
 
             {/* STEP 4: REVIEW */}
             {currentStep === 3 && (
-              <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                <div className="rounded-xl bg-gray-50 dark:bg-gray-800/40 p-6 border border-gray-200 dark:border-gray-800">
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Summary</h3>
-                  <dl className="space-y-4 text-sm">
-                    <div className="flex justify-between border-b border-gray-200 dark:border-gray-700 pb-2">
-                      <dt className="text-gray-500 dark:text-gray-400">Tournament Name</dt>
-                      <dd className="font-medium text-gray-900 dark:text-white">{formData.name || 'Not specified'}</dd>
+              <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
+                <div>
+                  <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-1">Review & Publish</h2>
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400">Ensure everything looks correct before going live.</p>
+                </div>
+
+                <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 p-6 overflow-hidden">
+                  <dl className="divide-y divide-zinc-200 dark:divide-zinc-800">
+                    <div className="py-3 flex justify-between items-center">
+                      <dt className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Tournament Name</dt>
+                      <dd className="text-sm font-bold text-zinc-900 dark:text-white text-right">{formData.name || '—'}</dd>
                     </div>
-                    <div className="flex justify-between border-b border-gray-200 dark:border-gray-700 pb-2">
-                      <dt className="text-gray-500 dark:text-gray-400">Dates</dt>
-                      <dd className="font-medium text-gray-900 dark:text-white">
-                        {formData.startDate} - {formData.endDate}
+                    <div className="py-3 flex justify-between items-center">
+                      <dt className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Dates</dt>
+                      <dd className="text-sm font-semibold text-zinc-900 dark:text-white text-right">
+                        {formData.startDate || 'TBD'} {formData.endDate && `to ${formData.endDate}`}
                       </dd>
                     </div>
-                    <div className="flex justify-between border-b border-gray-200 dark:border-gray-700 pb-2">
-                      <dt className="text-gray-500 dark:text-gray-400">Events Included</dt>
-                      <dd className="font-medium text-gray-900 dark:text-white">{formData.events.length} Event(s)</dd>
+                    <div className="py-3 flex justify-between items-center">
+                      <dt className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Events Included</dt>
+                      <dd className="text-sm font-semibold text-zinc-900 dark:text-white text-right">{formData.events.length} Event(s)</dd>
                     </div>
-                    <div className="flex justify-between pb-2">
-                      <dt className="text-gray-500 dark:text-gray-400">Entry Fee</dt>
-                      <dd className="font-medium text-gray-900 dark:text-white">
-                        {formData.isFree ? 'Free Entry' : `₹${formData.price || '0.00'}`}
+                    <div className="py-3 flex justify-between items-center">
+                      <dt className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Entry Fee</dt>
+                      <dd className="text-sm font-bold text-zinc-900 dark:text-white text-right">
+                        {formData.isFree ? (
+                          <span className="text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded-md">Free</span>
+                        ) : (
+                          `₹${formData.price || '0.00'}`
+                        )}
                       </dd>
                     </div>
                   </dl>
                 </div>
-                <p className="text-sm text-center text-gray-500 dark:text-gray-400">
-                  By publishing, your tournament will be live and open for registration.
-                </p>
               </div>
             )}
           </div>
 
-          {/* --- FOOTER CONTROLS --- */}
-          <div className="bg-gray-50 dark:bg-gray-900/50 px-6 py-5 border-t border-gray-200 dark:border-gray-800/80 flex items-center justify-between sm:px-8 mt-auto backdrop-blur-sm">
+          {/* --- FOOTER ACTIONS --- */}
+          <div className="px-6 py-4 md:px-10 md:py-6 border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex items-center justify-between z-10">
             <button
               onClick={prevStep}
-              disabled={currentStep === 0}
               className={`px-5 py-2.5 text-sm font-semibold rounded-xl transition-all ${
                 currentStep === 0
-                  ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-50'
-                  : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-900 shadow-sm dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-700 dark:hover:text-white'
+                  ? 'text-zinc-400 dark:text-zinc-600 opacity-50 cursor-not-allowed'
+                  : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'
               }`}
+              disabled={currentStep === 0}
             >
               Back
             </button>
             <button
-              onClick={
-  currentStep === steps.length - 1
-    ? () => onComplete(formData)
-    : nextStep
-}
-              className="px-6 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 rounded-xl shadow-sm shadow-blue-500/30 focus:ring-4 focus:ring-blue-500/20 dark:focus:ring-blue-400/20 transition-all duration-200"
+              onClick={currentStep === steps.length - 1 ? () => onComplete(formData) : nextStep}
+              className="px-6 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-xl shadow-md shadow-blue-500/20 transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/20"
             >
               {currentStep === steps.length - 1 ? 'Publish Tournament' : 'Continue'}
             </button>
           </div>
+          
         </div>
-        
       </div>
     </div>
   );
