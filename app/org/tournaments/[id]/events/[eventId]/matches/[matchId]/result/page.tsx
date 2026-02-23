@@ -6,6 +6,7 @@ import Layout from "@/components/Layout";
 import { getItem, removeItem } from "@/lib/storage";
 import type { LiveMatchState, MatchConfig } from "@/types/models";
 import { Trophy } from "lucide-react";
+import { motion } from "framer-motion";
 
 type SidePlayer = { name: string; initials: string };
 
@@ -14,6 +15,7 @@ function ensurePlayers(players: unknown, format: MatchConfig["format"]) {
     side0: [{ initials: "A", name: "Side A" }],
     side1: [{ initials: "B", name: "Side B" }],
   };
+
   const fallbackDoubles = {
     side0: [
       { initials: "KV", name: "Kunal Verma" },
@@ -26,7 +28,10 @@ function ensurePlayers(players: unknown, format: MatchConfig["format"]) {
   };
 
   const p = players as { side0?: SidePlayer[]; side1?: SidePlayer[] } | null;
-  if (!p?.side0?.length || !p?.side1?.length) return format === "doubles" ? fallbackDoubles : fallbackSingles;
+
+  if (!p?.side0?.length || !p?.side1?.length) {
+    return format === "doubles" ? fallbackDoubles : fallbackSingles;
+  }
 
   if (format === "doubles") {
     return {
@@ -44,11 +49,13 @@ function ensurePlayers(players: unknown, format: MatchConfig["format"]) {
 function computeWinner(setScores: [number, number][]) {
   let winsA = 0;
   let winsB = 0;
+
   setScores.forEach(([a, b]) => {
     if (a === b) return;
     if (a > b) winsA += 1;
     else winsB += 1;
   });
+
   if (winsA === winsB) return null;
   return winsA > winsB ? 0 : 1;
 }
@@ -57,7 +64,6 @@ export default function OrgMatchResultPage() {
   const router = useRouter();
   const params = useParams();
   const tournamentId = String(params.id);
-  const eventId = String(params.eventId);
   const matchId = String(params.matchId);
 
   const config = useMemo(
@@ -73,61 +79,123 @@ export default function OrgMatchResultPage() {
     [matchId]
   );
 
-  const state = useMemo(() => getItem<LiveMatchState>(`match:${matchId}:state`), [matchId]);
-  const format: MatchConfig["format"] =
-    config.format === "singles" || config.format === "doubles" ? config.format : "doubles";
-  const players = useMemo(() => ensurePlayers(getItem(`match:${matchId}:players`), format), [matchId, format]);
+  const state = useMemo(
+    () => getItem<LiveMatchState>(`match:${matchId}:state`),
+    [matchId]
+  );
 
-  const setScores: [number, number][] = (state?.setScores ?? []).map((score) => [
-    score?.[0] ?? 0,
-    score?.[1] ?? 0,
-  ]);
-  const lastCompletedSet = setScores[Math.max(0, (state?.currentSet ?? 1) - 1)] ?? [0, 0];
+  const format =
+    config.format === "singles" || config.format === "doubles"
+      ? config.format
+      : "doubles";
+
+  const players = useMemo(
+    () => ensurePlayers(getItem(`match:${matchId}:players`), format),
+    [matchId, format]
+  );
+
+const setScores: [number, number][] =
+  (state?.setScores ?? [])
+    .map(
+      (s): [number, number] => [
+        s?.[0] ?? 0,
+        s?.[1] ?? 0,
+      ]
+    )
+    .filter(([a, b]) => a !== 0 || b !== 0);
+
   const winner = computeWinner(setScores);
-  const winnerName = winner === null
-    ? "Match Complete"
-    : winner === 0
-      ? (format === "doubles"
-        ? `${players.side0[0].name} & ${players.side0[1].name}`
-        : players.side0[0].name)
-      : (format === "doubles"
-        ? `${players.side1[0].name} & ${players.side1[1].name}`
-        : players.side1[0].name);
 
-  const scoreLine = setScores.length
-    ? setScores.map(([a, b]) => `${a}-${b}`).join(", ")
-    : `${lastCompletedSet[0]}-${lastCompletedSet[1]}`;
+  const winnerName =
+    winner === null
+      ? "Match Complete"
+      : winner === 0
+      ? format === "doubles"
+        ? `${players.side0[0].name} & ${players.side0[1].name}`
+        : players.side0[0].name
+      : format === "doubles"
+      ? `${players.side1[0].name} & ${players.side1[1].name}`
+      : players.side1[0].name;
+
+  const scoreLine =
+    setScores.length > 0
+      ? setScores.map(([a, b]) => `${a}-${b}`).join("   •   ")
+      : "No sets recorded";
 
   return (
-    <Layout title="Confirm Results" showBack showBottomNav={false} onBack={() => router.back()}>
-      <div className="p-4">
-        <div className="flex min-h-[70vh] flex-col items-center justify-center text-center">
-          <div className="w-full max-w-[360px] rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-8 shadow-[var(--shadow-card)]">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-surface-elevated)] text-[#F7B31B]">
-              <Trophy size={34} strokeWidth={2.2} />
-            </div>
-            <p className="text-sm font-semibold text-[var(--color-muted)]">Winner</p>
-            <p className="mt-1 text-[22px] font-semibold text-[var(--color-text)]">{winnerName}</p>
-            <p className="mt-2 text-sm text-[var(--color-muted)]">Final Score: {scoreLine}</p>
-            <p className="mt-3 text-xs text-[var(--color-muted)]">
-              {config.scoringSystem === "sideout" ? "Side-out scoring" : "Rally scoring"} - {format}
-            </p>
-          </div>
-        </div>
+  <Layout
+    title="Live Match"
+    showBack
+    showBottomNav={false}
+    onBack={() => router.back()}
+  >
+    <div className="relative min-h-screen">
+      
+      {/* 🔵 Blurred Background Overlay */}
+      <div className="fixed inset-0 z-40 bg-black/30 backdrop-blur-md" />
 
-        <button
-          type="button"
-          onClick={() => {
-            removeItem(`match:${matchId}:state`);
-            router.replace(`/org/tournaments/${tournamentId}`);
-          }}
-          className="w-full min-h-[44px] rounded-[var(--radius-button)] bg-primary text-[var(--color-primary-contrast)] font-medium"
+      {/* 🏆 Center Winner Content */}
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center px-6 text-center">
+
+        {/* Trophy */}
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 180, damping: 12 }}
+          className="mb-4 text-[#F7B31B]"
         >
-          Confirm Results
-        </button>
+          <Trophy size={52} strokeWidth={2.3} />
+        </motion.div>
+
+        {/* Winner Label */}
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="text-sm font-semibold text-white/80"
+        >
+          Winner
+        </motion.p>
+
+        {/* Winner Name */}
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="mt-2 text-2xl font-bold text-white"
+        >
+          {winnerName}
+        </motion.p>
+
+        {/* Final Score */}
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="mt-2 text-sm text-white/80"
+        >
+          Final Score: {scoreLine}
+        </motion.p>
       </div>
-    </Layout>
-  );
-}
 
-
+      {/* 🔶 Bottom Confirm Button */}
+      <motion.div
+  initial={{ y: 60 }}
+  animate={{ y: 0 }}
+  transition={{ delay: 0.4 }}
+  className="fixed inset-x-0 bottom-0 z-50 bg-transparent px-6 pb-6 pt-4"
+>
+  <button
+    type="button"
+    onClick={() => {
+      removeItem(`match:${matchId}:state`);
+      router.replace(`/org/tournaments/${tournamentId}`);
+    }}
+    className="w-full rounded-2xl bg-primary py-4 text-base font-semibold text-white shadow-lg active:scale-[0.98] transition"
+  >
+    Confirm Results
+  </button>
+</motion.div>
+    </div>
+  </Layout>
+)};

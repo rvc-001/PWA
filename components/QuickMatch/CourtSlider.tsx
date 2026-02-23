@@ -126,6 +126,7 @@ export default function CourtSlider({ onBack, onStart }: CourtSliderProps) {
     rightTop: null,
     rightBottom: null,
   });
+const handleRef = useRef<HTMLSpanElement>(null);
 
   const [pickerSlot, setPickerSlot] = useState<SlotId | null>(null);
 
@@ -134,14 +135,17 @@ export default function CourtSlider({ onBack, onStart }: CourtSliderProps) {
   const [maxDrag, setMaxDrag] = useState(180);
 
   useEffect(() => {
-    const update = () => {
-      const width = trackRef.current?.offsetWidth ?? 240;
-      setMaxDrag(Math.max(0, width - 48));
-    };
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
+  const update = () => {
+    const trackWidth = trackRef.current?.offsetWidth ?? 240;
+    const handleWidth = handleRef.current?.offsetWidth ?? 36;
+
+    setMaxDrag(Math.max(0, trackWidth - handleWidth - 6));
+  };
+
+  update();
+  window.addEventListener("resize", update);
+  return () => window.removeEventListener("resize", update);
+}, []);
 
   const visibleSlots = form.doubles
     ? SLOT_ORDER
@@ -392,25 +396,27 @@ export default function CourtSlider({ onBack, onStart }: CourtSliderProps) {
         </section>
 
         <button
-          ref={trackRef}
-          type="button"
-          className="relative flex h-12 w-full items-center overflow-hidden rounded-full bg-[#FF7A1A] px-1.5 text-white"
-        >
-          <motion.span
-            drag="x"
-            dragConstraints={{ left: 0, right: maxDrag }}
-            dragElastic={0}
-            dragMomentum={false}
-            style={{ x }}
-            onDragEnd={handleSwipeEnd}
-            className="z-10 flex h-9 w-9 cursor-grab items-center justify-center rounded-full bg-white text-xl font-medium text-[#FF7A1A] active:cursor-grabbing"
-          >
-            {"->"}
-          </motion.span>
-          <span className="pointer-events-none absolute inset-0 flex items-center justify-center text-[15px] font-semibold">
-            {canStart ? "Swipe to start match" : "Select players to start"}
-          </span>
-        </button>
+  ref={trackRef}
+  type="button"
+  className="relative flex h-12 w-full items-center overflow-hidden rounded-full bg-[#FF7A1A] px-1.5 text-white"
+>
+  <motion.span
+    ref={handleRef}
+    drag="x"
+    dragConstraints={{ left: 0, right: maxDrag }}
+    dragElastic={0}
+    dragMomentum={false}
+    style={{ x }}
+    onDragEnd={handleSwipeEnd}
+    className="z-10 flex h-9 w-9 cursor-grab items-center justify-center rounded-full bg-white shadow-md active:cursor-grabbing"
+  >
+    <ChevronDown className="-rotate-90 text-[#FF7A1A]" size={18} />
+  </motion.span>
+
+  <span className="pointer-events-none absolute inset-0 flex items-center justify-center text-[15px] font-semibold">
+    {canStart ? "Swipe to start match" : "Select players to start"}
+  </span>
+</button>
       </div>
 
       {pickerSlot && (
