@@ -109,7 +109,7 @@ export default function TournamentWizard({ onComplete, onClose }: TournamentWiza
                           <span className={`text-sm font-bold ${isActive ? 'text-blue-600 dark:text-blue-400' : isComplete ? 'text-zinc-900 dark:text-white' : 'text-zinc-500'}`}>
                             {step.name}
                           </span>
-                          <span className="hidden md:block text-xs font-medium text-zinc-500 mt-0.5">{step.description}</span>
+                          <span className="block text-xs font-medium text-zinc-500 mt-0.5">{step.description}</span>
                         </div>
                       </div>
                     </li>
