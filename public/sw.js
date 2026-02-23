@@ -27,7 +27,17 @@ self.addEventListener("fetch", (event) => {
     );
     return;
   }
+  
+  // NETWORK-FIRST STRATEGY
   event.respondWith(
-    caches.match(event.request).then((cached) => cached || fetch(event.request))
+    fetch(event.request)
+      .then((response) => {
+        // Optional: Update the cache with the new response
+        return response;
+      })
+      .catch(() => {
+        // If the network fails (offline), fall back to the cache
+        return caches.match(event.request);
+      })
   );
 });

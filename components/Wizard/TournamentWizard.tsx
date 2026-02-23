@@ -1,376 +1,478 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { XIcon, ImageIcon, ArrowLeftIcon, ChevronRightIcon, TrashIcon } from "@/components/Icons";
 
-const steps = [
-  { id: '1', name: 'Basic Details', description: 'Name, dates, and location' },
-  { id: '2', name: 'Events', description: 'Categories & formats' },
-  { id: '3', name: 'Registration', description: 'Pricing & deadlines' },
-  { id: '4', name: 'Review', description: 'Confirm and publish' },
-];
+// --- REBUILT UI COMPONENTS ---
 
-interface Tournament {
-  name: string;
-  startDate: string;
-  endDate: string;
-  location: string;
-  events: any[];
-  isFree: boolean;
-  price: string;
-  registrationDeadline: string;
-}
+// 1. Native Styled Select
+const NativeSelect = ({ label, value, options, onChange }: any) => (
+  <div className="relative">
+    <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">
+      {label}
+    </label>
+    <div className="relative">
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary focus:ring-1 focus:ring-primary outline-none appearance-none cursor-pointer font-medium"
+      >
+        <option value="" disabled>Select {label}</option>
+        {options.map((opt: string) => (
+          <option key={opt} value={opt}>{opt}</option>
+        ))}
+      </select>
+      <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-[var(--color-muted)]">
+        <ChevronRightIcon size={16} className="rotate-90" />
+      </div>
+    </div>
+  </div>
+);
+
+// 2. Clean, Premium Toggle Switch (Updated Proportions & Glow)
+const ToggleSwitch = ({ checked, onChange, label }: any) => (
+  <div className="flex items-center justify-between py-3">
+    <span className="text-sm font-semibold text-[var(--color-text)]">
+      {label}
+    </span>
+
+    <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      onClick={() => onChange(!checked)}
+      className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors duration-300 ${
+        checked ? "bg-primary shadow-[0_0_10px_rgba(255,107,0,0.4)]" : "bg-[var(--color-border)]"
+      }`}
+    >
+      <span
+        className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-300 ${
+          checked ? "translate-x-6" : "translate-x-1"
+        }`}
+      />
+    </button>
+  </div>
+);
+
+// --- MAIN COMPONENT ---
 
 interface TournamentWizardProps {
-  onComplete: (tournament: Partial<Tournament>) => void;
+  onComplete: (tournament: any) => void;
   onClose: () => void;
 }
 
 export default function TournamentWizard({ onComplete, onClose }: TournamentWizardProps) {
-  const [currentStep, setCurrentStep] = useState(0);
+  const [step, setStep] = useState(1);
+  const totalSteps = 4;
 
-  // Form State
   const [formData, setFormData] = useState({
-    name: '',
-    startDate: '',
-    endDate: '',
-    location: '',
-    events: [{ id: 1, name: "Men's Singles", format: 'Knockout' }],
-    isFree: true,
-    price: '',
-    registrationDeadline: '',
+    // Step 1
+    name: "", description: "", startDate: "", endDate: "",
+    // Step 2
+    venueName: "", city: "", area: "", addressLine: "", zipCode: "", numCourts: 1, organizerName: "", organizerPhone: "", organizerEmail: "",
+    // Step 3
+    events: [] as any[],
   });
 
-  const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
-  const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0));
+  const sportsOpts = ["Pickleball", "Tennis", "Badminton", "Padel"];
+  const formatOpts = ["Knockout", "Round Robin", "League", "Groups + Knockout"];
+  const genderOpts = ["Men's", "Women's", "Mixed", "Open"];
+  const partTypeOpts = ["Singles", "Doubles", "Team"];
+  const setsOpts = ["Best of 1", "Best of 3", "Best of 5"];
+  const pointsOpts = ["11", "15", "21"];
+  const paymentOpts = ["Pay at venue", "Pay online (UPI)"];
+
+  const handleNext = () => {
+    // Non-blocking progression
+    setStep((prev) => Math.min(prev + 1, totalSteps));
+  };
 
   const addEvent = () => {
     setFormData((prev) => ({
       ...prev,
-      events: [...prev.events, { id: Date.now(), name: '', format: 'Knockout' }],
+      events: [...prev.events, {
+        id: Date.now(), name: "", sport: "", format: "", regDueDate: "", startDate: "", 
+        gender: "", partType: "", sets: "", points: "", ageRestricted: "",
+        isFree: true, paymentOption: "", upiId: "", fee: ""
+      }],
     }));
+  };
+
+  const updateEvent = (index: number, field: string, value: any) => {
+    const newEvents = [...formData.events];
+    newEvents[index] = { ...newEvents[index], [field]: value };
+    setFormData({ ...formData, events: newEvents });
   };
 
   const removeEvent = (id: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      events: prev.events.filter((e) => e.id !== id),
-    }));
+    setFormData((prev) => ({ ...prev, events: prev.events.filter((e) => e.id !== id) }));
   };
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 py-4 sm:py-12 px-4 sm:px-6 flex justify-center items-start font-sans">
+    <div className="h-[100dvh] md:h-screen bg-[var(--color-background)] md:py-10 md:px-6 flex justify-center items-start font-sans overflow-hidden">
       
-      {/* Main Container - Split Card Design */}
-      <div className="w-full max-w-4xl bg-white dark:bg-zinc-900 rounded-2xl shadow-xl ring-1 ring-zinc-200 dark:ring-zinc-800 flex flex-col md:flex-row overflow-hidden min-h-[600px]">
+      {/* Container Column */}
+      <div className="w-full max-w-3xl h-full md:h-auto md:max-h-[85vh] bg-[var(--color-surface)] md:rounded-2xl md:shadow-2xl md:border border-[var(--color-border)] flex flex-col relative overflow-hidden">
         
-        {/* --- SIDEBAR / MOBILE HEADER --- */}
-        <div className="w-full md:w-1/3 bg-zinc-50 dark:bg-zinc-900/50 border-b md:border-b-0 md:border-r border-zinc-200 dark:border-zinc-800 p-6 md:p-8 flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between mb-8 md:mb-10">
-              <h1 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">Create Tournament</h1>
-              <button onClick={onClose} className="p-2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 rounded-full transition-colors">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
+        {/* HEADER */}
+        <div className="flex-none bg-[var(--color-surface)] border-b border-[var(--color-border)] p-5 flex items-center justify-between z-10">
+          <h1 className="text-xl font-bold text-[var(--color-text)]">Create Tournament</h1>
+          <button onClick={onClose} className="p-2 bg-[var(--color-surface-elevated)] text-[var(--color-muted)] hover:text-[var(--color-text)] rounded-full transition-colors">
+            <XIcon size={18} />
+          </button>
+        </div>
 
-            <nav aria-label="Progress">
-              <ol className="space-y-4 md:space-y-6 flex flex-row md:flex-col overflow-x-auto md:overflow-visible pb-2 md:pb-0 gap-4 md:gap-0 hide-scrollbar snap-x">
-                {steps.map((step, index) => {
-                  const isActive = index === currentStep;
-                  const isComplete = index < currentStep;
-
-                  return (
-                    <li key={step.id} className="snap-start flex-shrink-0">
-                      <div className={`group flex items-center md:items-start flex-row text-left transition-colors ${!isComplete && !isActive ? 'opacity-50' : ''}`}>
-                        <div className="flex items-center justify-center relative">
-                          <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold transition-all duration-300 ${
-                            isActive
-                              ? 'bg-blue-600 text-white ring-4 ring-blue-600/20'
-                              : isComplete
-                              ? 'bg-zinc-800 dark:bg-zinc-100 text-white dark:text-zinc-900'
-                              : 'bg-zinc-200 dark:bg-zinc-800 text-zinc-500'
-                          }`}>
-                            {isComplete ? (
-                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                              </svg>
-                            ) : (
-                              index + 1
-                            )}
-                          </span>
-                          {/* Desktop vertical connecting line */}
-                          {index !== steps.length - 1 && (
-                            <div className={`hidden md:block absolute top-10 w-0.5 h-6 -ml-0.5 transition-colors ${isComplete ? 'bg-zinc-800 dark:bg-zinc-100' : 'bg-zinc-200 dark:bg-zinc-800'}`} />
-                          )}
-                        </div>
-                        <div className="ml-4 flex flex-col justify-center">
-                          <span className={`text-sm font-bold ${isActive ? 'text-blue-600 dark:text-blue-400' : isComplete ? 'text-zinc-900 dark:text-white' : 'text-zinc-500'}`}>
-                            {step.name}
-                          </span>
-                          <span className="block text-xs font-medium text-zinc-500 mt-0.5">{step.description}</span>
-                        </div>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ol>
-            </nav>
+        {/* STEPPER */}
+        <div className="flex-none px-6 pt-4 pb-2 z-10 bg-[var(--color-surface)]">
+          <div className="flex items-center gap-2">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className={`flex-1 h-1.5 rounded-full transition-all duration-500 ${step >= i ? "bg-primary" : "bg-[var(--color-border)] opacity-50"}`} />
+            ))}
+          </div>
+          <div className="mt-2 text-xs font-bold text-primary text-right tracking-wide">
+            STEP {step} OF {totalSteps}
           </div>
         </div>
 
-        {/* --- MAIN FORM CONTENT --- */}
-        <div className="w-full md:w-2/3 flex flex-col bg-white dark:bg-zinc-900 relative">
+        {/* SCROLLABLE CONTENT */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-8 animate-in fade-in duration-300">
           
-          {/* Scrollable Form Area */}
-          <div className="flex-1 overflow-y-auto p-6 md:p-10 hide-scrollbar">
-            
-            {/* STEP 1: BASIC DETAILS */}
-            {currentStep === 0 && (
-              <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
+          {/* STEP 1: Tournament Info */}
+          {step === 1 && (
+            <div className="space-y-8 pb-4">
+              <div>
+                <h2 className="text-2xl font-bold text-[var(--color-text)] mb-2">Tournament Info</h2>
+                <p className="text-sm text-[var(--color-muted)]">Let's start with the basic details of your tournament.</p>
+              </div>
+
+              <div className="space-y-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-1">Basic Details</h2>
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400">Let's start with the core information.</p>
+                  <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">Tournament Name <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    placeholder="e.g., Summer Smash 2025"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary focus:outline-none transition-all"
+                  />
                 </div>
 
-                <div className="space-y-5 pt-2">
-                  <div>
-                    <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">Tournament Name</label>
-                    <input
-                      type="text"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="e.g. Summer Smash 2026"
-                      className="w-full rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-zinc-900 dark:text-zinc-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder:text-zinc-400 sm:text-sm shadow-sm"
-                    />
-                  </div>
+                <div>
+                  <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">Description</label>
+                  <textarea
+                    placeholder="Describe your tournament's rules, format, or general info..."
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    rows={4}
+                    className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary focus:outline-none resize-none transition-all"
+                  />
+                </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="pt-4 border-t border-[var(--color-border)]">
+                  <h3 className="text-lg font-bold mb-4 text-[var(--color-text)]">Timeline</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">Start Date</label>
+                      <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">Start Date <span className="text-red-500">*</span></label>
                       <input
                         type="date"
                         value={formData.startDate}
                         onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                        className="w-full rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-zinc-900 dark:text-zinc-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all sm:text-sm shadow-sm [color-scheme:light] dark:[color-scheme:dark]"
+                        className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary focus:outline-none transition-all cursor-pointer [color-scheme:light] dark:[color-scheme:dark]"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">End Date</label>
+                      <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">End Date</label>
                       <input
                         type="date"
                         value={formData.endDate}
                         onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                        className="w-full rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-zinc-900 dark:text-zinc-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all sm:text-sm shadow-sm [color-scheme:light] dark:[color-scheme:dark]"
+                        className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary focus:outline-none transition-all cursor-pointer [color-scheme:light] dark:[color-scheme:dark]"
                       />
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+          )}
 
+          {/* STEP 2: Venue Details */}
+          {step === 2 && (
+            <div className="space-y-8 pb-4">
+              <div>
+                <h2 className="text-2xl font-bold text-[var(--color-text)] mb-2">Venue Details</h2>
+                <p className="text-sm text-[var(--color-muted)]">Where is the tournament taking place?</p>
+              </div>
+
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">Venue Name <span className="text-red-500">*</span></label>
+                  <input type="text" placeholder="e.g., Andheri Sports Complex" value={formData.venueName} onChange={(e) => setFormData({ ...formData, venueName: e.target.value })} className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary outline-none" />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">Venue Address</label>
-                    <textarea
-                      rows={2}
-                      value={formData.location}
-                      onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                      placeholder="Full street address..."
-                      className="w-full rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-zinc-900 dark:text-zinc-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all sm:text-sm shadow-sm resize-none placeholder:text-zinc-400"
-                    />
+                    <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">City <span className="text-red-500">*</span></label>
+                    <input type="text" placeholder="e.g., Mumbai" value={formData.city} onChange={(e) => setFormData({ ...formData, city: e.target.value })} className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary outline-none" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">Area / Locality <span className="text-red-500">*</span></label>
+                    <input type="text" placeholder="e.g., Andheri West" value={formData.area} onChange={(e) => setFormData({ ...formData, area: e.target.value })} className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary outline-none" />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-end">
+                  <div>
+                    <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">Zip Code <span className="text-red-500">*</span></label>
+                    <input type="text" placeholder="000000" value={formData.zipCode} onChange={(e) => setFormData({ ...formData, zipCode: e.target.value })} className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary outline-none" />
+                  </div>
+                  
+                  {/* UPDATE: Compact Number of Courts Stepper */}
+                  <div>
+                    <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">
+                      Number of Courts
+                    </label>
+                    <div className="inline-flex items-center gap-4">
+                      <button
+                        onClick={() =>
+                          setFormData({
+                            ...formData,
+                            numCourts: Math.max(1, formData.numCourts - 1),
+                          })
+                        }
+                        className="w-9 h-9 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-elevated)] text-[var(--color-text)] hover:bg-[var(--color-border)] transition"
+                      >
+                        −
+                      </button>
+                      <span className="text-3xl font-extrabold text-[var(--color-text)] min-w-[40px] text-center">
+                        {formData.numCourts}
+                      </span>
+                      <button
+                        onClick={() =>
+                          setFormData({
+                            ...formData,
+                            numCourts: formData.numCourts + 1,
+                          })
+                        }
+                        className="w-9 h-9 rounded-lg bg-primary text-white hover:opacity-90 transition"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-6 border-t border-[var(--color-border)]">
+                  <h3 className="text-lg font-bold mb-4 text-[var(--color-text)]">Organizer Info</h3>
+                  <div className="space-y-5">
+                    <div>
+                      <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">Organizer's Name <span className="text-red-500">*</span></label>
+                      <input type="text" placeholder="Enter Name" value={formData.organizerName} onChange={(e) => setFormData({ ...formData, organizerName: e.target.value })} className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary outline-none" />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                      <div>
+                        <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">Phone Number <span className="text-red-500">*</span></label>
+                        <input type="tel" placeholder="Phone" value={formData.organizerPhone} onChange={(e) => setFormData({ ...formData, organizerPhone: e.target.value })} className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary outline-none" />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
-            {/* STEP 2: EVENTS */}
-            {currentStep === 1 && (
-              <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
-                <div>
-                  <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-1">Tournament Events</h2>
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400">Add the categories players can register for.</p>
+          {/* STEP 3: Create Events */}
+          {step === 3 && (
+            <div className="space-y-6 pb-4">
+              <div>
+                <h2 className="text-2xl font-bold text-[var(--color-text)] mb-2">Create Events</h2>
+                <p className="text-sm text-[var(--color-muted)]">Set up formats, rules, and entry fees for each category.</p>
+              </div>
+
+              {/* UPDATE: Polished Empty State */}
+              {formData.events.length === 0 ? (
+                <div className="text-center py-16 bg-[var(--color-surface-elevated)] border border-[var(--color-border)] rounded-2xl">
+                  <div className="w-14 h-14 mx-auto rounded-full bg-[var(--color-surface)] border border-[var(--color-border)] flex items-center justify-center mb-5">
+                    <ImageIcon size={20} className="text-[var(--color-muted)]" />
+                  </div>
+                  <p className="text-lg font-semibold text-[var(--color-text)]">
+                    No events created yet
+                  </p>
+                  <p className="text-sm text-[var(--color-muted)] mt-1 mb-6">
+                    Create your first event category to continue.
+                  </p>
+                  <button
+                    onClick={addEvent}
+                    className="px-6 py-3 rounded-xl font-semibold text-white shadow-md hover:scale-[1.02] transition-transform"
+                    style={{ background: "var(--gradient-orange)" }}
+                  >
+                    + Add Event
+                  </button>
                 </div>
-
-                <div className="space-y-3 pt-2">
+              ) : (
+                <div className="space-y-8">
                   {formData.events.map((event, index) => (
-                    <div key={event.id} className="flex flex-col sm:flex-row gap-3 items-start sm:items-center p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 group">
-                      <div className="flex-1 w-full relative">
-                        <input
-                          type="text"
-                          placeholder="Event Name (e.g. Men's Singles)"
-                          value={event.name}
-                          onChange={(e) => {
-                            const newEvents = [...formData.events];
-                            newEvents[index].name = e.target.value;
-                            setFormData({ ...formData, events: newEvents });
-                          }}
-                          className="w-full bg-transparent border-0 border-b-2 border-transparent focus:border-blue-500 px-2 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:ring-0 outline-none transition-colors placeholder:text-zinc-400 font-medium"
-                        />
-                      </div>
-                      <div className="flex items-center gap-2 w-full sm:w-auto px-2 sm:px-0">
-                        <select
-                          value={event.format}
-                          onChange={(e) => {
-                            const newEvents = [...formData.events];
-                            newEvents[index].format = e.target.value;
-                            setFormData({ ...formData, events: newEvents });
-                          }}
-                          className="flex-1 sm:flex-none rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-sm font-medium text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-blue-500/20 outline-none shadow-sm cursor-pointer"
-                        >
-                          <option>Knockout</option>
-                          <option>Round Robin</option>
-                          <option>League</option>
-                        </select>
-                        <button
-                          onClick={() => removeEvent(event.id)}
-                          className="p-2 text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors"
-                          title="Remove Event"
-                        >
-                          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
+                    <div key={event.id} className="p-5 sm:p-6 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] shadow-sm relative overflow-hidden">
+                      <div className="flex justify-between items-center mb-6 pb-4 border-b border-[var(--color-border)]">
+                        <h3 className="text-lg font-bold text-[var(--color-text)]">Event {index + 1}</h3>
+                        <button onClick={() => removeEvent(event.id)} className="p-2 text-[var(--color-muted)] hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors">
+                           <TrashIcon size={18} />
                         </button>
+                      </div>
+
+                      <div className="space-y-5">
+                        <div>
+                          <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">Event Name <span className="text-red-500">*</span></label>
+                          <input type="text" placeholder="e.g. Men's Singles Pro" value={event.name} onChange={(e) => updateEvent(index, "name", e.target.value)} className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary outline-none" />
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                          <NativeSelect label="Sport" value={event.sport} options={sportsOpts} onChange={(v: string) => updateEvent(index, "sport", v)} />
+                          <NativeSelect label="Format" value={event.format} options={formatOpts} onChange={(v: string) => updateEvent(index, "format", v)} />
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                           <div>
+                            <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">Reg. Due Date <span className="text-red-500">*</span></label>
+                            <input type="date" value={event.regDueDate} onChange={(e) => updateEvent(index, "regDueDate", e.target.value)} className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary outline-none [color-scheme:light] dark:[color-scheme:dark]" />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">Event Start Date <span className="text-red-500">*</span></label>
+                            <input type="date" value={event.startDate} onChange={(e) => updateEvent(index, "startDate", e.target.value)} className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary outline-none [color-scheme:light] dark:[color-scheme:dark]" />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                          <NativeSelect label="Gender" value={event.gender} options={genderOpts} onChange={(v: string) => updateEvent(index, "gender", v)} />
+                          <NativeSelect label="Participation Type" value={event.partType} options={partTypeOpts} onChange={(v: string) => updateEvent(index, "partType", v)} />
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                          <NativeSelect label="Sets Per Match" value={event.sets} options={setsOpts} onChange={(v: string) => updateEvent(index, "sets", v)} />
+                          <NativeSelect label="Points Per Set" value={event.points} options={pointsOpts} onChange={(v: string) => updateEvent(index, "points", v)} />
+                        </div>
+
+                        <div className="pt-4 border-t border-[var(--color-border)]">
+                          <ToggleSwitch 
+                            label="Free Entry" 
+                            checked={event.isFree} 
+                            onChange={(val: boolean) => updateEvent(index, "isFree", val)} 
+                          />
+                        </div>
+
+                        {!event.isFree && (
+                          <div className="p-5 bg-[var(--color-surface)] rounded-xl border border-[var(--color-border)] space-y-5 animate-in fade-in duration-300">
+                             <NativeSelect label="Payment Option" value={event.paymentOption} options={paymentOpts} onChange={(v: string) => updateEvent(index, "paymentOption", v)} />
+                             
+                             {event.paymentOption === "Pay online (UPI)" && (
+                               <div>
+                                 <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">Add UPI ID <span className="text-red-500">*</span></label>
+                                 <input type="text" placeholder="e.g. name@okhdfc" value={event.upiId} onChange={(e) => updateEvent(index, "upiId", e.target.value)} className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary outline-none" />
+                               </div>
+                             )}
+
+                             <div>
+                               <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">Entry Fee <span className="text-red-500">*</span></label>
+                               <div className="relative">
+                                 <span className="absolute left-4 top-3.5 text-[var(--color-muted)] font-bold">₹</span>
+                                 <input type="number" placeholder="0.00" value={event.fee} onChange={(e) => updateEvent(index, "fee", e.target.value)} className="w-full pl-9 pr-4 py-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary outline-none" />
+                               </div>
+                             </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
                   
-                  <button
-                    onClick={addEvent}
-                    className="w-full flex items-center justify-center py-3.5 mt-2 rounded-xl border border-dashed border-zinc-300 dark:border-zinc-700 text-sm font-semibold text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-500 transition-all shadow-sm"
-                  >
-                    <svg className="w-5 h-5 mr-2 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-                    </svg>
-                    Add Another Event
+                  <button onClick={addEvent} className="w-full flex items-center justify-center py-4 rounded-xl border-2 border-dashed border-[var(--color-border)] text-[var(--color-text)] font-semibold hover:border-primary hover:text-primary transition-colors bg-[var(--color-surface-elevated)]">
+                    + Add Another Event
                   </button>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
+          )}
 
-            {/* STEP 3: REGISTRATION */}
-            {currentStep === 2 && (
-              <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
-                <div>
-                  <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-1">Registration Settings</h2>
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400">Manage entry fees and pricing.</p>
-                </div>
+          {/* STEP 4: Review & Publish */}
+          {step === 4 && (
+             <div className="space-y-6 pb-4">
+               <div>
+                 <h2 className="text-2xl font-bold text-[var(--color-text)] mb-2">Review & Publish</h2>
+                 <p className="text-sm text-[var(--color-muted)]">Ensure everything looks correct before going live.</p>
+               </div>
 
-                <div className="pt-4">
-                  <div className="flex items-center justify-between p-4 sm:p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm">
-                    <div className="pr-4">
-                      <label className="text-base font-bold text-zinc-900 dark:text-white cursor-pointer select-none" onClick={() => setFormData({ ...formData, isFree: !formData.isFree })}>
-                        Paid Tournament
-                      </label>
-                      <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
-                        Toggle on to require an entry fee for participants.
-                      </p>
+               <div className="space-y-4">
+                 <div className="p-5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)]">
+                    <h3 className="text-sm font-bold text-[var(--color-muted)] uppercase tracking-wider mb-4 border-b border-[var(--color-border)] pb-2">Tournament Details</h3>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex justify-between"><span className="text-[var(--color-muted)]">Name</span><span className="font-semibold text-[var(--color-text)]">{formData.name || '—'}</span></div>
+                      <div className="flex justify-between"><span className="text-[var(--color-muted)]">Start Date</span><span className="font-semibold text-[var(--color-text)]">{formData.startDate || '—'}</span></div>
                     </div>
-                    
-                    {/* iOS Style Toggle */}
-                    <button
-                      type="button"
-                      role="switch"
-                      aria-checked={!formData.isFree}
-                      onClick={() => setFormData({ ...formData, isFree: !formData.isFree })}
-                      className={`relative inline-flex h-7 w-14 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-500/20 ${
-                        !formData.isFree ? 'bg-blue-600' : 'bg-zinc-200 dark:bg-zinc-700'
-                      }`}
-                    >
-                      <span
-                        className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                          !formData.isFree ? 'translate-x-7' : 'translate-x-0'
-                        }`}
-                      />
-                    </button>
-                  </div>
+                 </div>
 
-                  {/* Price Input (Animated Height) */}
-                  <div className={`grid transition-[grid-template-rows,opacity,margin] duration-300 ease-out ${
-                    !formData.isFree ? 'grid-rows-[1fr] opacity-100 mt-5' : 'grid-rows-[0fr] opacity-0 mt-0 pointer-events-none'
-                  }`}>
-                    <div className="overflow-hidden">
-                      <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-                        Entry Fee Amount <span className="text-red-500">*</span>
-                      </label>
-                      <div className="relative w-full sm:max-w-xs">
-                        <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                          <span className="text-zinc-500 dark:text-zinc-400 font-semibold">₹</span>
-                        </div>
-                        <input
-                          type="number"
-                          value={formData.price}
-                          onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                          className="w-full rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 py-3 pl-9 pr-4 text-zinc-900 dark:text-zinc-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all sm:text-sm shadow-sm placeholder:text-zinc-400"
-                          placeholder="0.00"
-                          min="0"
-                        />
+                 <div className="p-5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)]">
+                    <h3 className="text-sm font-bold text-[var(--color-muted)] uppercase tracking-wider mb-4 border-b border-[var(--color-border)] pb-2">Venue & Organizer</h3>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex justify-between"><span className="text-[var(--color-muted)]">Venue</span><span className="font-semibold text-[var(--color-text)]">{formData.venueName || '—'}</span></div>
+                      <div className="flex justify-between"><span className="text-[var(--color-muted)]">Courts</span><span className="font-semibold text-[var(--color-text)]">{formData.numCourts}</span></div>
+                      <div className="flex justify-between"><span className="text-[var(--color-muted)]">Organizer</span><span className="font-semibold text-[var(--color-text)]">{formData.organizerName || '—'}</span></div>
+                    </div>
+                 </div>
+
+                 <div className="p-5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)]">
+                    <h3 className="text-sm font-bold text-[var(--color-muted)] uppercase tracking-wider mb-4 border-b border-[var(--color-border)] pb-2">Events ({formData.events.length})</h3>
+                    {formData.events.length === 0 ? (
+                      <p className="text-sm text-[var(--color-muted)] italic">No events created.</p>
+                    ) : (
+                      <div className="space-y-3">
+                        {formData.events.map((ev, i) => (
+                          <details key={ev.id} className="group border border-[var(--color-border)] rounded-lg bg-[var(--color-surface)] open:ring-1 open:ring-primary">
+                            <summary className="flex justify-between items-center font-medium cursor-pointer list-none p-4 text-sm text-[var(--color-text)]">
+                              <span>{ev.name || `Event ${i+1}`} <span className="text-[var(--color-muted)] font-normal ml-2">({ev.sport || 'Sport'})</span></span>
+                              <ChevronRightIcon size={16} className="text-[var(--color-muted)] group-open:rotate-90 transition-transform" />
+                            </summary>
+                            <div className="text-[var(--color-muted)] text-xs px-4 pb-4 space-y-2 border-t border-[var(--color-border)] pt-3">
+                              <div className="flex justify-between"><span>Format:</span> <span className="text-[var(--color-text)] font-semibold">{ev.format}</span></div>
+                              <div className="flex justify-between"><span>Gender:</span> <span className="text-[var(--color-text)] font-semibold">{ev.gender}</span></div>
+                              <div className="flex justify-between"><span>Sets:</span> <span className="text-[var(--color-text)] font-semibold">{ev.sets}</span></div>
+                              <div className="flex justify-between"><span>Fee:</span> <span className="text-[var(--color-text)] font-semibold">{ev.isFree ? "Free Entry" : `₹${ev.fee}`}</span></div>
+                            </div>
+                          </details>
+                        ))}
                       </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* STEP 4: REVIEW */}
-            {currentStep === 3 && (
-              <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
-                <div>
-                  <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-1">Review & Publish</h2>
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400">Ensure everything looks correct before going live.</p>
-                </div>
-
-                <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 p-6 overflow-hidden">
-                  <dl className="divide-y divide-zinc-200 dark:divide-zinc-800">
-                    <div className="py-3 flex justify-between items-center">
-                      <dt className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Tournament Name</dt>
-                      <dd className="text-sm font-bold text-zinc-900 dark:text-white text-right">{formData.name || '—'}</dd>
-                    </div>
-                    <div className="py-3 flex justify-between items-center">
-                      <dt className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Dates</dt>
-                      <dd className="text-sm font-semibold text-zinc-900 dark:text-white text-right">
-                        {formData.startDate || 'TBD'} {formData.endDate && `to ${formData.endDate}`}
-                      </dd>
-                    </div>
-                    <div className="py-3 flex justify-between items-center">
-                      <dt className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Events Included</dt>
-                      <dd className="text-sm font-semibold text-zinc-900 dark:text-white text-right">{formData.events.length} Event(s)</dd>
-                    </div>
-                    <div className="py-3 flex justify-between items-center">
-                      <dt className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Entry Fee</dt>
-                      <dd className="text-sm font-bold text-zinc-900 dark:text-white text-right">
-                        {formData.isFree ? (
-                          <span className="text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded-md">Free</span>
-                        ) : (
-                          `₹${formData.price || '0.00'}`
-                        )}
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* --- FOOTER ACTIONS --- */}
-          <div className="px-6 py-4 md:px-10 md:py-6 border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex items-center justify-between z-10">
-            <button
-              onClick={prevStep}
-              className={`px-5 py-2.5 text-sm font-semibold rounded-xl transition-all ${
-                currentStep === 0
-                  ? 'text-zinc-400 dark:text-zinc-600 opacity-50 cursor-not-allowed'
-                  : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'
-              }`}
-              disabled={currentStep === 0}
-            >
-              Back
-            </button>
-            <button
-              onClick={currentStep === steps.length - 1 ? () => onComplete(formData) : nextStep}
-              className="px-6 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-xl shadow-md shadow-blue-500/20 transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/20"
-            >
-              {currentStep === steps.length - 1 ? 'Publish Tournament' : 'Continue'}
-            </button>
-          </div>
-          
+                    )}
+                 </div>
+               </div>
+             </div>
+          )}
         </div>
+
+        {/* FOOTER ACTIONS */}
+        <div className="flex-none bg-[var(--color-surface)] border-t border-[var(--color-border)] p-4 md:px-6 flex justify-between items-center z-10">
+          <button
+            onClick={() => setStep(Math.max(1, step - 1))}
+            className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${step === 1 ? "opacity-0 pointer-events-none" : "text-[var(--color-text)] hover:bg-[var(--color-surface-elevated)]"}`}
+          >
+            <ArrowLeftIcon size={16} /> Back
+          </button>
+          
+          {step < totalSteps ? (
+            <button
+              onClick={handleNext}
+              className="px-6 py-2.5 rounded-xl font-bold text-white flex items-center gap-2 hover:opacity-90 transition-opacity"
+              style={{ background: "var(--gradient-orange)" }}
+            >
+              Continue <ChevronRightIcon size={16} />
+            </button>
+          ) : (
+            <button
+              onClick={() => onComplete(formData)}
+              className="px-6 py-2.5 rounded-xl font-bold text-white flex items-center gap-2 shadow-[0_0_15px_rgba(255,107,0,0.3)] hover:scale-[1.02] transition-transform"
+              style={{ background: "var(--gradient-orange)" }}
+            >
+              Publish <ChevronRightIcon size={16} />
+            </button>
+          )}
+        </div>
+
       </div>
     </div>
   );
