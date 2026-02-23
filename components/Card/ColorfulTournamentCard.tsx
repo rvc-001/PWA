@@ -44,19 +44,19 @@ export default function ColorfulTournamentCard({
     const url = href ?? `/tournaments/${id}`;
 
     const bgVariants = {
-        orange: "from-orange-500 to-orange-700",
-        green: "from-emerald-500 to-emerald-700",
-        red: "from-rose-500 to-rose-700",
-        blue: "from-blue-600 to-indigo-800",
-        purple: "from-purple-600 to-purple-900"
+        orange: "from-orange-500 to-orange-700 dark:from-orange-600 dark:to-orange-800",
+        green: "from-emerald-500 to-emerald-700 dark:from-emerald-600 dark:to-emerald-800",
+        red: "from-rose-500 to-rose-700 dark:from-rose-600 dark:to-rose-800",
+        blue: "from-blue-600 to-indigo-800 dark:from-blue-700 dark:to-indigo-900",
+        purple: "from-purple-600 to-purple-900 dark:from-purple-700 dark:to-purple-950"
     };
 
     const btnVariants = {
-        orange: "border-orange-500 text-orange-600 hover:bg-orange-50",
-        green: "border-emerald-500 text-emerald-600 hover:bg-emerald-50",
-        red: "border-rose-500 text-rose-600 hover:bg-rose-50",
-        blue: "border-blue-500 text-blue-600 hover:bg-blue-50",
-        purple: "border-purple-500 text-purple-600 hover:bg-purple-50"
+        orange: "border-orange-500 text-orange-600 hover:bg-orange-50 dark:text-orange-400 dark:hover:bg-orange-500/10",
+        green: "border-emerald-500 text-emerald-600 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-500/10",
+        red: "border-rose-500 text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-500/10",
+        blue: "border-blue-500 text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-500/10",
+        purple: "border-purple-500 text-purple-600 hover:bg-purple-50 dark:text-purple-400 dark:hover:bg-purple-500/10"
     };
 
     const bgClass = bgVariants[colorVariant] || bgVariants.orange;
@@ -65,7 +65,7 @@ export default function ColorfulTournamentCard({
     return (
         <Link href={url} className="block group w-full active:scale-[0.98] transition-transform">
             {/* Reduced border radius from 24px to 16px */}
-            <div className="relative overflow-hidden rounded-[16px] bg-white shadow-sm transition-shadow duration-300 group-hover:shadow-md flex flex-col border border-gray-100">
+            <div className="relative overflow-hidden rounded-[16px] bg-[var(--color-surface)] shadow-sm transition-shadow duration-300 group-hover:shadow-md flex flex-col border border-[var(--color-border)]">
                 
                 {/* TOP SECTION - Reduced padding from p-5 to p-3 */}
                 <div className={`relative bg-gradient-to-br ${bgClass} p-3 text-white flex-1 overflow-hidden`}>
@@ -82,7 +82,7 @@ export default function ColorfulTournamentCard({
                     <div className="relative z-10 flex flex-col h-full">
                         
                         {/* Reduced Logo from w-12/h-12 to w-8/h-8, smaller text */}
-                        <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm text-gray-900 font-black text-sm shrink-0 mb-2">
+                        <div className="w-8 h-8 bg-white dark:bg-[var(--color-surface-elevated)] text-gray-900 dark:text-orange-400 rounded-full flex items-center justify-center shadow-sm">
                             {logoText || name.substring(0, 1)}
                         </div>
 
@@ -113,13 +113,13 @@ export default function ColorfulTournamentCard({
                 </div>
 
                 {/* BOTTOM SECTION - Reduced padding from px-5 py-4 to px-3 py-2.5 */}
-                <div className="bg-white px-3 py-2.5 flex items-center justify-between">
+                <div className="bg-[var(--color-surface)] px-3 py-2.5 flex items-center justify-between">
                     <div>
-                        <p className="text-gray-400 text-[8px] font-bold uppercase tracking-wider mb-0.5">
+                        <p className="text-[var(--color-text-secondary)] text-[8px] font-bold uppercase tracking-wider mb-0.5">
                             Entry Fee
                         </p>
                         {/* Reduced Fee text from text-lg to text-sm */}
-                        <p className="text-gray-900 font-black text-sm leading-none">
+                        <p className="text-[var(--color-text)] font-black text-sm leading-none">
                             {entryFee ? entryFee : "Free"}
                         </p>
                     </div>

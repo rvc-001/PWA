@@ -64,10 +64,10 @@ export default function QuickStats({
       
       {/* Header */}
       <div className="flex items-center justify-between px-1">
-        <h3 className="text-lg font-bold text-neutral-900">
+        <h3 className="text-lg font-bold text-[var(--color-text)]">
           Quick Stats
         </h3>
-        <span className="text-xs font-semibold text-neutral-500">
+        <span className="text-xs font-semibold text-[var(--color-muted)]">
           LIFETIME STATS
         </span>
       </div>
@@ -76,7 +76,7 @@ export default function QuickStats({
       <div className="flex gap-3">
         
         {/* WON */}
-        <div className="flex-1 bg-orange-500 text-white rounded-3xl py-6 text-center shadow-sm flex flex-col items-center justify-center">
+        <div className="flex-1 bg-orange-500 dark:bg-orange-600 text-white rounded-3xl py-6 text-center shadow-sm flex flex-col items-center justify-center">
           <TrophyIcon />
           <div className="text-2xl font-bold">{won}</div>
           <div className="text-xs font-semibold mt-1 tracking-wide">
@@ -85,23 +85,23 @@ export default function QuickStats({
         </div>
 
         {/* PLAYED */}
-        <div className="flex-1 bg-white rounded-3xl py-6 text-center border border-neutral-200 shadow-sm flex flex-col items-center justify-center">
-          <PlayedIcon className="text-neutral-600" />
-          <div className="text-2xl font-bold text-neutral-900">
+        <div className="flex-1 bg-[var(--color-surface)] rounded-3xl py-6 text-center border border-[var(--color-border)] shadow-sm flex flex-col items-center justify-center">
+          <PlayedIcon className="text-[var(--color-text-secondary)]" />
+          <div className="text-2xl font-bold text-[var(--color-text)]">
             {played}
           </div>
-          <div className="text-xs font-semibold text-neutral-500 mt-1">
+          <div className="text-xs font-semibold text-[var(--color-text-secondary)] mt-1">
             Played
           </div>
         </div>
 
         {/* LOST */}
-        <div className="flex-1 bg-white rounded-3xl py-6 text-center border border-neutral-200 shadow-sm flex flex-col items-center justify-center">
-          <LossIcon />
-          <div className="text-2xl font-bold text-neutral-900">
+        <div className="flex-1 bg-[var(--color-surface)] rounded-3xl py-6 text-center border border-[var(--color-border)] shadow-sm flex flex-col items-center justify-center">
+          <LossIcon className="text-[var(--color-text-secondary)]" />
+          <div className="text-2xl font-bold text-[var(--color-text)]">
             {lost}
           </div>
-          <div className="text-xs font-semibold text-neutral-500 mt-1">
+          <div className="text-xs font-semibold text-[var(--color-text-secondary)] mt-1">
             Lost
           </div>
         </div>

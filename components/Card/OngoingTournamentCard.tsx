@@ -22,16 +22,16 @@ export default function OngoingTournamentCard({
 }: OngoingTournamentCardProps) {
   return (
     <Link href={`/user/tournaments/${id}`} className="block w-full active:scale-[0.98] transition-transform group">
-      <div className="flex flex-col rounded-2xl overflow-hidden shadow-sm border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
+      <div className="flex flex-col rounded-2xl overflow-hidden shadow-sm border border-[var(--color-border)] bg-[var(--color-surface)]">
         
         {/* --- TOP SECTION (Orange) --- */}
-        <div className="bg-orange-500 p-4 flex items-center gap-4 relative overflow-hidden">
+        <div className="bg-orange-500 dark:bg-[#c2410c] p-4 flex items-center gap-4 relative overflow-hidden">
           {/* Decorative highlight */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none" />
 
           {/* Logo Badge */}
-          <div className="w-14 h-14 shrink-0 rounded-full bg-white flex items-center justify-center shadow-sm relative z-10">
-            <span className="text-orange-600 font-black text-xl tracking-tighter">
+          <div className="w-14 h-14 shrink-0 rounded-full bg-white dark:bg-[var(--color-surface-elevated)] flex items-center justify-center shadow-sm relative z-10">
+            <span className="text-orange-600 dark:text-orange-400 font-black text-xl tracking-tighter">
               {logoText}
             </span>
           </div>
@@ -51,13 +51,13 @@ export default function OngoingTournamentCard({
         <div className="p-4 flex items-center justify-between gap-4">
           {/* Venue Info */}
           <div className="flex flex-col truncate">
-            <span className="text-sm font-medium text-neutral-500 dark:text-neutral-400 truncate">
+            <span className="text-sm font-medium text-[var(--color-text-secondary)] truncate">
               {venue}
             </span>
           </div>
 
           {/* Action Button */}
-          <button className="shrink-0 px-4 py-1.5 rounded-full border-2 border-orange-500 text-orange-600 font-bold text-xs uppercase tracking-wider group-hover:bg-orange-500 group-hover:text-white transition-colors duration-200">
+          <button className="shrink-0 px-4 py-1.5 rounded-full border-2 border-orange-500 text-orange-600 dark:text-orange-400 font-bold text-xs uppercase tracking-wider group-hover:bg-orange-500 group-hover:text-white dark:group-hover:bg-orange-500/10 dark:group-hover:text-orange-300 transition-colors duration-200">
             View More
           </button>
         </div>
