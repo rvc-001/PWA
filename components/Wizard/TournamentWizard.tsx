@@ -1,7 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { XIcon, ImageIcon, ArrowLeftIcon, ChevronRightIcon, TrashIcon } from "@/components/Icons";
+
+// --- CUSTOM ICONS FOR DATE PICKER ---
+const CalendarIcon = ({ size = 20, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+    <line x1="16" y1="2" x2="16" y2="6"></line>
+    <line x1="8" y1="2" x2="8" y2="6"></line>
+    <line x1="3" y1="10" x2="21" y2="10"></line>
+  </svg>
+);
 
 // --- REBUILT UI COMPONENTS ---
 
@@ -29,13 +39,12 @@ const NativeSelect = ({ label, value, options, onChange }: any) => (
   </div>
 );
 
-// 2. Clean, Premium Toggle Switch (Updated Proportions & Glow)
+// 2. Clean, Premium Toggle Switch
 const ToggleSwitch = ({ checked, onChange, label }: any) => (
   <div className="flex items-center justify-between py-3">
     <span className="text-sm font-semibold text-[var(--color-text)]">
       {label}
     </span>
-
     <button
       type="button"
       role="switch"
@@ -53,6 +62,150 @@ const ToggleSwitch = ({ checked, onChange, label }: any) => (
     </button>
   </div>
 );
+
+// 3. Custom Date Picker (Responsive Popover / Bottom Sheet)
+const CustomDatePicker = ({ value, onChange, placeholder }: any) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [viewDate, setViewDate] = useState(value ? new Date(value) : new Date());
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Safely detect mobile to avoid hydration mismatch in Next.js
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile(); // Check on mount
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const daysInMonth = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 0).getDate();
+  const firstDay = new Date(viewDate.getFullYear(), viewDate.getMonth(), 1).getDay();
+  
+  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+  const blanks = Array.from({ length: firstDay }, (_, i) => i);
+  const weekDays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+  const handlePrevMonth = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1));
+  };
+
+  const handleNextMonth = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1));
+  };
+
+  const selectDate = (day: number) => {
+    const year = viewDate.getFullYear();
+    const month = String(viewDate.getMonth() + 1).padStart(2, '0');
+    const dayStr = String(day).padStart(2, '0');
+    onChange(`${year}-${month}-${dayStr}`);
+    setIsOpen(false);
+  };
+
+  const displayDate = value ? new Date(value).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : "";
+
+  return (
+    <div className="relative w-full">
+      {/* Input Trigger */}
+      <div 
+        onClick={() => setIsOpen(!isOpen)}
+        className={`w-full px-4 py-3 rounded-xl bg-[var(--color-surface-elevated)] border flex items-center justify-between cursor-pointer transition-all duration-200 ${isOpen ? 'border-primary ring-2 ring-primary/20 shadow-sm' : 'border-[var(--color-border)] hover:border-gray-400'}`}
+      >
+        <span className={value ? "text-[var(--color-text)] font-semibold" : "text-[var(--color-muted)] font-medium"}>
+          {displayDate || placeholder || "Select a date..."}
+        </span>
+        <CalendarIcon className={`transition-colors ${isOpen ? 'text-primary' : 'text-[var(--color-muted)]'}`} size={18} />
+      </div>
+
+      {/* Responsive Calendar Popover / Modal */}
+      {isOpen && (
+        <>
+          {/* Dark backdrop for both mobile and desktop overlay click */}
+          <div 
+            className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[998]" 
+            onClick={() => setIsOpen(false)}
+          />
+          
+          <div 
+            className={`
+              z-[999] bg-[var(--color-surface)] border border-[var(--color-border)]
+              ${isMobile
+                ? "fixed bottom-0 left-0 right-0 rounded-t-3xl p-6 animate-in slide-in-from-bottom duration-300"
+                : "absolute top-[calc(100%+8px)] left-0 max-w-[380px] w-full rounded-2xl p-5 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200 backdrop-blur-xl"
+              }
+            `}
+          >
+            {/* Mobile Drag Handle */}
+            {isMobile && (
+              <div className="w-10 h-1.5 bg-[var(--color-border)] rounded-full mx-auto mb-4" />
+            )}
+
+            {/* Header Controls */}
+            <div className="flex items-center justify-between mb-6 text-lg sm:text-base">
+              <button onClick={handlePrevMonth} className="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-full hover:bg-[var(--color-surface-elevated)] text-[var(--color-text)] transition-colors border border-transparent hover:border-[var(--color-border)]">
+                <ChevronRightIcon size={16} className="rotate-180" />
+              </button>
+              <div className="font-bold text-[var(--color-text)] tracking-wide">
+                {monthNames[viewDate.getMonth()]} {viewDate.getFullYear()}
+              </div>
+              <button onClick={handleNextMonth} className="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-full hover:bg-[var(--color-surface-elevated)] text-[var(--color-text)] transition-colors border border-transparent hover:border-[var(--color-border)]">
+                <ChevronRightIcon size={16} />
+              </button>
+            </div>
+
+            {/* Weekdays */}
+            <div className="grid grid-cols-7 gap-2 mb-3">
+              {weekDays.map(day => (
+                <div key={day} className="text-center text-xs font-bold text-[var(--color-muted)] uppercase tracking-wider">
+                  {day}
+                </div>
+              ))}
+            </div>
+
+            {/* Days Grid - Fluid Spacing */}
+            <div className="grid grid-cols-7 gap-2">
+              {blanks.map(blank => (
+                <div key={`blank-${blank}`} className="aspect-square w-full"></div>
+              ))}
+              {days.map(day => {
+                const dateString = `${viewDate.getFullYear()}-${String(viewDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const isSelected = value === dateString;
+                const isToday = new Date().toISOString().split('T')[0] === dateString;
+
+                return (
+                  <button
+                    key={day}
+                    onClick={() => selectDate(day)}
+                    className={`aspect-square w-full rounded-full flex items-center justify-center text-sm sm:text-base transition-all duration-200
+                      ${isSelected 
+                        ? 'bg-primary text-white font-bold shadow-md scale-105' 
+                        : isToday 
+                          ? 'border-2 border-primary text-primary font-bold hover:bg-primary/10' 
+                          : 'text-[var(--color-text)] font-medium hover:bg-[var(--color-surface-elevated)] hover:scale-110'
+                      }`}
+                  >
+                    {day}
+                  </button>
+                );
+              })}
+            </div>
+            
+            {/* Quick Actions Footer */}
+            <div className="mt-5 pt-4 border-t border-[var(--color-border)] flex justify-between">
+               <button onClick={() => { onChange(""); setIsOpen(false); }} className="text-xs font-semibold text-[var(--color-muted)] hover:text-[var(--color-text)] transition-colors">Clear</button>
+               <button onClick={() => { 
+                 const today = new Date();
+                 onChange(`${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`);
+                 setIsOpen(false);
+               }} className="text-xs font-bold text-primary hover:text-orange-600 transition-colors">Today</button>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
 
 // --- MAIN COMPONENT ---
 
@@ -83,7 +236,6 @@ export default function TournamentWizard({ onComplete, onClose }: TournamentWiza
   const paymentOpts = ["Pay at venue", "Pay online (UPI)"];
 
   const handleNext = () => {
-    // Non-blocking progression
     setStep((prev) => Math.min(prev + 1, totalSteps));
   };
 
@@ -135,7 +287,7 @@ export default function TournamentWizard({ onComplete, onClose }: TournamentWiza
         </div>
 
         {/* SCROLLABLE CONTENT */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-8 animate-in fade-in duration-300">
+        <div className="flex-1 overflow-y-auto p-6 pb-32 space-y-8 animate-in fade-in duration-300 relative">
           
           {/* STEP 1: Tournament Info */}
           {step === 1 && (
@@ -173,20 +325,18 @@ export default function TournamentWizard({ onComplete, onClose }: TournamentWiza
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">Start Date <span className="text-red-500">*</span></label>
-                      <input
-                        type="date"
+                      <CustomDatePicker 
                         value={formData.startDate}
-                        onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary focus:outline-none transition-all cursor-pointer [color-scheme:light] dark:[color-scheme:dark]"
+                        onChange={(date: string) => setFormData({ ...formData, startDate: date })}
+                        placeholder="Select start date"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">End Date</label>
-                      <input
-                        type="date"
+                      <CustomDatePicker 
                         value={formData.endDate}
-                        onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary focus:outline-none transition-all cursor-pointer [color-scheme:light] dark:[color-scheme:dark]"
+                        onChange={(date: string) => setFormData({ ...formData, endDate: date })}
+                        placeholder="Select end date"
                       />
                     </div>
                   </div>
@@ -226,7 +376,6 @@ export default function TournamentWizard({ onComplete, onClose }: TournamentWiza
                     <input type="text" placeholder="000000" value={formData.zipCode} onChange={(e) => setFormData({ ...formData, zipCode: e.target.value })} className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary outline-none" />
                   </div>
                   
-                  {/* UPDATE: Compact Number of Courts Stepper */}
                   <div>
                     <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">
                       Number of Courts
@@ -288,7 +437,6 @@ export default function TournamentWizard({ onComplete, onClose }: TournamentWiza
                 <p className="text-sm text-[var(--color-muted)]">Set up formats, rules, and entry fees for each category.</p>
               </div>
 
-              {/* UPDATE: Polished Empty State */}
               {formData.events.length === 0 ? (
                 <div className="text-center py-16 bg-[var(--color-surface-elevated)] border border-[var(--color-border)] rounded-2xl">
                   <div className="w-14 h-14 mx-auto rounded-full bg-[var(--color-surface)] border border-[var(--color-border)] flex items-center justify-center mb-5">
@@ -311,7 +459,7 @@ export default function TournamentWizard({ onComplete, onClose }: TournamentWiza
               ) : (
                 <div className="space-y-8">
                   {formData.events.map((event, index) => (
-                    <div key={event.id} className="p-5 sm:p-6 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] shadow-sm relative overflow-hidden">
+                    <div key={event.id} className="p-5 sm:p-6 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] shadow-sm relative overflow-visible">
                       <div className="flex justify-between items-center mb-6 pb-4 border-b border-[var(--color-border)]">
                         <h3 className="text-lg font-bold text-[var(--color-text)]">Event {index + 1}</h3>
                         <button onClick={() => removeEvent(event.id)} className="p-2 text-[var(--color-muted)] hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors">
@@ -333,11 +481,19 @@ export default function TournamentWizard({ onComplete, onClose }: TournamentWiza
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                            <div>
                             <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">Reg. Due Date <span className="text-red-500">*</span></label>
-                            <input type="date" value={event.regDueDate} onChange={(e) => updateEvent(index, "regDueDate", e.target.value)} className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary outline-none [color-scheme:light] dark:[color-scheme:dark]" />
+                            <CustomDatePicker 
+                              value={event.regDueDate} 
+                              onChange={(date: string) => updateEvent(index, "regDueDate", date)}
+                              placeholder="Select Due Date"
+                            />
                           </div>
                           <div>
                             <label className="block text-sm font-semibold text-[var(--color-text)] mb-2">Event Start Date <span className="text-red-500">*</span></label>
-                            <input type="date" value={event.startDate} onChange={(e) => updateEvent(index, "startDate", e.target.value)} className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary outline-none [color-scheme:light] dark:[color-scheme:dark]" />
+                            <CustomDatePicker 
+                              value={event.startDate} 
+                              onChange={(date: string) => updateEvent(index, "startDate", date)}
+                              placeholder="Select Start Date"
+                            />
                           </div>
                         </div>
 
@@ -446,7 +602,7 @@ export default function TournamentWizard({ onComplete, onClose }: TournamentWiza
         </div>
 
         {/* FOOTER ACTIONS */}
-        <div className="flex-none bg-[var(--color-surface)] border-t border-[var(--color-border)] p-4 md:px-6 flex justify-between items-center z-10">
+        <div className="flex-none bg-[var(--color-surface)] border-t border-[var(--color-border)] p-4 md:px-6 flex justify-between items-center z-10 relative">
           <button
             onClick={() => setStep(Math.max(1, step - 1))}
             className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${step === 1 ? "opacity-0 pointer-events-none" : "text-[var(--color-text)] hover:bg-[var(--color-surface-elevated)]"}`}

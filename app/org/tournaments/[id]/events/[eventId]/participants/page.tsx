@@ -11,8 +11,11 @@ const participants = [
   { id: "4", name: "Anil Kumar", phone: "+91 XXXX", avatar: "AK", confirmed: false },
 ];
 
-export default function EventParticipantsPage() {
+export default function EventParticipantsPage({ params }: { params: { id: string, eventId: string } }) {
   const [filter, setFilter] = useState<"all" | "confirmed" | "pending">("all");
+
+  // Fallback to "1" just in case params are not passed during testing
+  const tournamentId = params?.id || "1"; 
 
   const filtered = participants.filter((p) => {
     if (filter === "confirmed") return p.confirmed;
@@ -24,7 +27,7 @@ export default function EventParticipantsPage() {
     <div className="min-h-screen bg-[var(--color-background)]">
       {/* Header */}
       <div className="sticky top-0 z-40 bg-[var(--color-surface)] border-b border-[var(--color-border)] p-4 flex items-center gap-3">
-        <Link href="/org/tournaments/1" className="p-2 -ml-2">
+        <Link href={`/org/tournaments/${tournamentId}`} className="p-2 -ml-2">
           <ArrowLeftIcon size={20} />
         </Link>
         <h1 className="font-semibold">Participant Confirmation</h1>
@@ -97,8 +100,8 @@ export default function EventParticipantsPage() {
       {/* Bottom Action */}
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-[var(--color-surface)] border-t border-[var(--color-border)]">
         <Link
-          href="/org/tournaments/1/events/1/fixture"
-          className="btn-primary w-full text-center"
+          href={`/org/tournaments/${tournamentId}`}
+          className="btn-primary w-full text-center block"
         >
           Save and Proceed
         </Link>

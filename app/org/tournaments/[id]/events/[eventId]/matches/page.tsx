@@ -69,8 +69,9 @@ export default function OrgManageMatchesPage() {
       showBottomNav={false}
       title="Manage Matches"
       showBack
-      onBack={() => router.back()}
+      onBack={() => router.push(`/org/tournaments/${tournamentId}`)}
     >
+      {/* Rest of the component code remains the exact same */}
       <div className="p-4 space-y-4">
         <div className="rounded-[var(--radius-card)] bg-[var(--color-surface)] border border-[var(--color-border)] shadow-[var(--shadow-card)] p-4">
           <p className="text-sm text-[var(--color-muted)]">Tournament</p>
@@ -181,4 +182,3 @@ export default function OrgManageMatchesPage() {
     </Layout>
   );
 }
-

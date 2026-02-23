@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { ArrowLeftIcon, XIcon, TrophyIcon, UserIcon } from "@/components/Icons";
 
 const standings = [
@@ -11,14 +12,18 @@ const standings = [
 ];
 
 export default function EventChampionPage() {
+    const params = useParams();
+    const tournamentId = String(params.id);
+    const eventId = String(params.eventId);
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-orange-500 to-orange-600">
             {/* Header */}
             <div className="flex items-center justify-between p-4">
-                <Link href="/org/tournaments/1/events/1/matches" className="p-2 text-white">
+                <Link href={`/org/tournaments/${tournamentId}/events/${eventId}/matches`} className="p-2 text-white">
                     <ArrowLeftIcon size={20} />
                 </Link>
-                <Link href="/org/tournaments/1" className="p-2 text-white">
+                <Link href={`/org/tournaments/${tournamentId}`} className="p-2 text-white">
                     <XIcon size={20} />
                 </Link>
             </div>
@@ -77,7 +82,7 @@ export default function EventChampionPage() {
                 </div>
 
                 <Link
-                    href="/org/tournaments/1"
+                    href={`/org/tournaments/${tournamentId}`}
                     className="block w-full mt-6 py-4 rounded-xl font-semibold text-white text-center"
                     style={{ background: "var(--gradient-orange)" }}
                 >

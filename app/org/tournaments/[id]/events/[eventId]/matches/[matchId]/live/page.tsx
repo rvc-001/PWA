@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Layout from "@/components/Layout";
@@ -72,7 +72,9 @@ export default function OrgLiveMatchPage() {
     if (stored) return stored;
     return createInitialLiveState(matchId, config);
   });
+  
   const [matchWinner, setMatchWinner] = useState<0 | 1 | null>(null);
+  const redirectedRef = useRef(false);
 
   const persist = useCallback((next: LiveMatchState) => {
     setItem(`match:${matchId}:state`, next);
@@ -104,27 +106,15 @@ export default function OrgLiveMatchPage() {
     [config, persist]
   );
 
-  const goToResult = () => {
-    router.push(`/org/tournaments/${tournamentId}/events/${eventId}/matches/${matchId}/result`);
-  };
+  useEffect(() => {
+    if (matchWinner === null || redirectedRef.current) return;
+    redirectedRef.current = true;
+    router.replace(`/org/tournaments/${tournamentId}/events/${eventId}/matches/${matchId}/result`);
+  }, [eventId, matchId, matchWinner, router, tournamentId]);
 
   return (
     <Layout title="Live Match" showBack showBottomNav={false} onBack={() => router.back()}>
       <div className="p-4 space-y-4">
-        {matchWinner != null && (
-          <div className="rounded-[var(--radius-card)] bg-primary/10 border border-primary/30 p-4 text-center space-y-1">
-            <p className="font-semibold">Winner</p>
-            <p className="text-sm text-[var(--color-muted)]">{matchWinner === 0 ? "Pair A" : "Pair B"}</p>
-            <button
-              type="button"
-              onClick={goToResult}
-              className="mt-2 w-full min-h-[44px] rounded-[var(--radius-button)] bg-primary text-[var(--color-primary-contrast)] font-medium"
-            >
-              Confirm Results
-            </button>
-          </div>
-        )}
-
         <Scoreboard
           state={state}
           player1Name={config.format === "doubles" ? "Pair A" : players.side0[0].name}
@@ -144,15 +134,13 @@ export default function OrgLiveMatchPage() {
           onSide1Rally={() => onRally(1)}
           onSide0Fault={() => onFault(0)}
           onSide1Fault={() => onFault(1)}
-          onUndo={() => {
-            // Placeholder: recomputation from log not implemented.
-          }}
+          onUndo={() => {}}
           side0Label={config.format === "doubles" ? "Pair A" : players.side0[0].initials}
           side1Label={config.format === "doubles" ? "Pair B" : players.side1[0].initials}
           canUndo={false}
         />
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 mt-8">
           <LinkButton
             href={`/org/tournaments/${tournamentId}/events/${eventId}/matches/${matchId}/setup`}
             variant="secondary"
@@ -166,12 +154,13 @@ export default function OrgLiveMatchPage() {
               setState(createInitialLiveState(matchId, config));
               setMatchWinner(null);
             }}
-            className="min-h-[44px] rounded-[var(--radius-button)] border border-[var(--color-border)] bg-[var(--color-surface)] font-medium"
+            className="min-h-[44px] rounded-[var(--radius-button)] border border-[var(--color-border)] bg-[var(--color-surface)] font-medium text-[var(--color-danger)]"
           >
-            Reset
+            Reset Match
           </button>
         </div>
       </div>
+
     </Layout>
   );
 }
