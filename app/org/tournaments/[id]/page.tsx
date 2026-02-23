@@ -238,8 +238,8 @@ const SummaryTab = () => {
         <div className="p-4 space-y-4">
           <h3 className="font-semibold text-[var(--color-text)]">Men's Open | Pickleball</h3>
           <div className="flex gap-2 flex-wrap">
-            <span className="px-2.5 py-1 text-[11px] font-semibold tracking-wide rounded-full border bg-red-100 text-red-700 border-red-200">🔴 Round 2 Live</span>
-            <span className="px-2.5 py-1 text-[11px] font-semibold tracking-wide rounded-full border bg-green-100 text-green-700 border-green-200">🟢 ₹3400 Collected</span>
+            <span className="px-2.5 py-1 text-[11px] font-semibold tracking-wide rounded-full border bg-red-100 text-red-700 border-red-200"> Round 2 Live</span>
+            <span className="px-2.5 py-1 text-[11px] font-semibold tracking-wide rounded-full border bg-green-100 text-green-700 border-green-200"> ₹3400 Collected</span>
           </div>
           <div className="grid grid-cols-2 gap-3 text-sm text-[var(--color-text-secondary)] bg-[var(--color-surface-elevated)] p-3 rounded-lg border border-[var(--color-border)]">
             <div>3 Matches left in round 1</div>
