@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { routes } from "@/lib/routes";
 
 type Player = {
   name: string;
@@ -41,7 +42,7 @@ export default function MatchCard({
   progress = 50,
   href,
 }: MatchCardProps) {
-  const url = href ?? `/match/${id}`;
+  const url = href ?? routes.matchLive({ matchId: id });
   
   const statusConfig = {
     live: {
@@ -193,3 +194,4 @@ export default function MatchCard({
     </div>
   );
 }
+

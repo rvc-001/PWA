@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Forehand</string>
+    <string name="title_activity_main">Forehand</string>
+    <string name="package_name">com.yourorg.forehand</string>
+    <string name="custom_url_scheme">com.yourorg.forehand</string>
+</resources>

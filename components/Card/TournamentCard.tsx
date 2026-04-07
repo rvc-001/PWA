@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import type { TournamentSummary } from "@/types/models";
 import { ChevronRightIcon } from "@/components/Icons";
+import { routes } from "@/lib/routes";
 
 type TournamentCardProps = {
   tournament: TournamentSummary;
@@ -12,7 +13,7 @@ type TournamentCardProps = {
 };
 
 export default function TournamentCard({ tournament, cta = "View", href }: TournamentCardProps) {
-  const url = href ?? `/tournaments/${tournament.id}`;
+  const url = href ?? routes.tournamentDetail(tournament.id);
   const statusColor =
     tournament.status === "live"
       ? "bg-primary/20 text-primary"
@@ -53,3 +54,4 @@ export default function TournamentCard({ tournament, cta = "View", href }: Tourn
     </Link>
   );
 }
+

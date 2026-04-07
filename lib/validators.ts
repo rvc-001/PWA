@@ -67,3 +67,4 @@ export function validateTournamentBasic(data: { name?: string; startDate?: strin
     return { ok: false, message: "Invalid start date" };
   return { ok: true };
 }
+

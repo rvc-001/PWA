@@ -65,3 +65,4 @@ export default function FeynmanStep({
     </section>
   );
 }
+

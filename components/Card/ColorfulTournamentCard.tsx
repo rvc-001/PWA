@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { routes } from "@/lib/routes";
 
 function MapPinIcon({ size = 12 }: { size?: number }) {
   return (
@@ -41,7 +42,7 @@ export default function ColorfulTournamentCard({
     href,
     logoText,
 }: ColorfulTournamentCardProps) {
-    const url = href ?? `/tournaments/${id}`;
+    const url = href ?? routes.tournamentDetail(id);
 
     const bgVariants = {
         orange: "from-orange-500 to-orange-700 dark:from-orange-600 dark:to-orange-800",
@@ -134,3 +135,4 @@ export default function ColorfulTournamentCard({
         </Link>
     );
 }
+

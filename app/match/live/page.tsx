@@ -1,46 +1,130 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import LiveMatchReplica from "@/components/QuickMatch/LiveMatchReplica";
+import { appendScoreLog, pushOfflineQueue } from "@/lib/storage";
+import type { LiveMatchState, MatchConfig, ScoreEvent } from "@/types/models";
+import { applyFault, applyRally, createInitialLiveState, maybeAdvanceSet } from "@/lib/matchEngine";
+import { useClientSearchParams } from "@/lib/useClientSearchParams";
+
+function parseConfig(params: URLSearchParams): MatchConfig {
+  const scoringSystem = params.get("scoring") === "rally" ? "rally" : "sideout";
+  const format = params.get("format") === "doubles" ? "doubles" : "singles";
+  const bestOf = Number(params.get("bestOf") ?? "3") || 3;
+  const pointsToWin = Number(params.get("points") ?? "11") || 11;
+  const winByTwo = params.get("winByTwo") !== "false";
+  const initialServer = params.get("server") === "2" ? 2 : 1;
+  return { scoringSystem, format, bestOf, pointsToWin, winByTwo, initialServer };
+}
 
 export default function LiveMatchPage() {
-  const [sideA, setSideA] = useState(0);
-  const [sideB, setSideB] = useState(1);
-  const [serverSide, setServerSide] = useState<0 | 1>(1);
-  const [showSwitch, setShowSwitch] = useState(false);
+  const router = useRouter();
+  const searchParams = useClientSearchParams();
+  const matchId = searchParams.get("matchId") || "demo";
 
-  const reachedMatchPoint = sideA >= 11 || sideB >= 11;
-  const hasTwoPointLead = Math.abs(sideA - sideB) >= 2;
-  const showWinner = reachedMatchPoint && hasTwoPointLead;
+  const config = useMemo(() => parseConfig(searchParams), [searchParams]);
+
+  const [state, setState] = useState<LiveMatchState>(() => createInitialLiveState(matchId, config));
+  const [history, setHistory] = useState<LiveMatchState[]>([]);
+  const [seq, setSeq] = useState(0);
+  const [showSwitchServe, setShowSwitchServe] = useState(false);
+  const [matchWinner, setMatchWinner] = useState<0 | 1 | null>(null);
+  const playerAName = searchParams.get("p1") || "Kunal Verma";
+  const playerBName = searchParams.get("p2") || "Anil Kumar";
+
+  const emit = useCallback(
+    (type: ScoreEvent["type"], details: Record<string, unknown>) => {
+      const event: ScoreEvent = {
+        seq: seq + 1,
+        timestamp: Date.now(),
+        actorId: "user",
+        type,
+        details,
+      };
+      setSeq((current) => current + 1);
+      appendScoreLog(matchId, event).catch(() => pushOfflineQueue(event));
+    },
+    [matchId, seq]
+  );
+
+  const applyRallyAction = useCallback(
+    (winnerSide: 0 | 1) => {
+      emit("rally", { side: winnerSide });
+      setState((previous) => {
+        setHistory((historyPrevious) => [...historyPrevious, previous]);
+        const next = applyRally(previous, config, winnerSide);
+        const advanced = maybeAdvanceSet(next, config);
+        setMatchWinner(advanced.matchWinner);
+        return advanced.state;
+      });
+    },
+    [config, emit]
+  );
+
+  const applyFaultAction = useCallback(
+    (faultSide: 0 | 1) => {
+      emit("fault", { side: faultSide });
+      setState((previous) => {
+        setHistory((historyPrevious) => [...historyPrevious, previous]);
+        const next = applyFault(previous, config, faultSide);
+        const advanced = maybeAdvanceSet(next, config);
+        setMatchWinner(advanced.matchWinner);
+        return advanced.state;
+      });
+      setShowSwitchServe(true);
+    },
+    [config, emit]
+  );
+
+  const undo = useCallback(() => {
+    emit("undo", {});
+    setHistory((previous) => {
+      const snapshot = previous[previous.length - 1];
+      if (snapshot) {
+        setState(snapshot);
+        setMatchWinner(null);
+      }
+      return previous.slice(0, -1);
+    });
+  }, [emit]);
+
+  const currentSet: [number, number] = [
+    state.setScores[state.currentSet]?.[0] ?? 0,
+    state.setScores[state.currentSet]?.[1] ?? 0,
+  ];
+  const setScores: Array<[number | null, number | null]> = Array.from({ length: config.bestOf }).map((_, index) => [
+    state.setScores[index]?.[0] ?? (index === 0 ? 0 : null),
+    state.setScores[index]?.[1] ?? (index === 0 ? 0 : null),
+  ]);
 
   return (
     <LiveMatchReplica
-      currentSetNumber={1}
-      sideAScore={sideA}
-      sideBScore={sideB}
-      setScores={[[sideA, sideB], [null, null], [null, null]]}
-      bestOf={3}
-      scoringLabel="Side-Out Scoring"
-      sideAServing={serverSide === 0}
-      sideBServing={serverSide === 1}
-      showSwitchServe={showSwitch}
-      showWinner={showWinner}
-      onBack={() => window.history.back()}
-      onUndo={() => {
-        setSideA((prev) => (prev > 0 ? prev - 1 : 0));
-      }}
-      onSideARally={() => setSideA((prev) => prev + 1)}
-      onSideBRally={() => setSideB((prev) => prev + 1)}
-      onSideAFault={() => {
-        setServerSide(1);
-        setShowSwitch(true);
-      }}
-      onSideBFault={() => {
-        setServerSide(0);
-      }}
-      onCloseSwitch={() => setShowSwitch(false)}
-      onCloseWinner={() => {}}
+      currentSetNumber={Math.min(state.currentSet + 1, config.bestOf)}
+      sideAScore={currentSet[0] ?? 0}
+      sideBScore={currentSet[1] ?? 0}
+      setScores={setScores}
+      bestOf={config.bestOf}
+      scoringLabel={config.scoringSystem === "sideout" ? "Side-Out Scoring" : "Rally Scoring"}
+      sideAServing={state.serverSide === 0}
+      sideBServing={state.serverSide === 1}
+      sideALabel={playerAName}
+      sideBLabel={playerBName}
+      showSwitchServe={showSwitchServe}
+      showWinner={matchWinner != null}
+      onBack={() => router.back()}
+      onUndo={undo}
+      onSideARally={() => applyRallyAction(0)}
+      onSideBRally={() => applyRallyAction(1)}
+      onSideAFault={() => applyFaultAction(0)}
+      onSideBFault={() => applyFaultAction(1)}
+      onCloseSwitch={() => setShowSwitchServe(false)}
+      onCloseWinner={() => setMatchWinner(null)}
+      winnerName={matchWinner === 1 ? playerBName : playerAName}
       confirmHref="/home"
     />
   );
 }
+
+
+

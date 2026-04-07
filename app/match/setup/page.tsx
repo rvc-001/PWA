@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import CourtSlider from "@/components/QuickMatch/CourtSlider";
 import MatchSplash from "@/components/QuickMatch/MatchSplash";
+import { routes } from "@/lib/routes";
 
 type PageState = "setup" | "loading";
 
@@ -23,22 +24,23 @@ export default function QuickMatchSetupPage() {
         players: Record<string, string | null>;
     }) => {
         const matchId = `quick-${Date.now()}`;
-        const params = new URLSearchParams({
-            format: payload.format,
-            scoring: payload.scoring,
-            bestOf: String(payload.bestOf),
-            points: String(payload.points),
-            winByTwo: String(payload.winByTwo),
-            server: String(payload.initialServer),
-            p1: payload.players.leftTop ?? "Player 1",
-            p2: payload.players.rightBottom ?? "Player 2",
-            p3: payload.players.leftBottom ?? "",
-            p4: payload.players.rightTop ?? "",
-            court: payload.courtId,
-            quick: "1",
-        });
-
-        setPendingParams(`/match/${matchId}?${params.toString()}`);
+        setPendingParams(
+            routes.matchLive({
+                matchId,
+                format: payload.format,
+                scoring: payload.scoring,
+                bestOf: payload.bestOf,
+                points: payload.points,
+                winByTwo: payload.winByTwo,
+                server: payload.initialServer,
+                p1: payload.players.leftTop ?? "Player 1",
+                p2: payload.players.rightBottom ?? "Player 2",
+                p3: payload.players.leftBottom ?? "",
+                p4: payload.players.rightTop ?? "",
+                court: payload.courtId,
+                quick: "1",
+            })
+        );
         setPageState("loading");
     };
 
@@ -61,3 +63,4 @@ export default function QuickMatchSetupPage() {
         </div>
     );
 }
+

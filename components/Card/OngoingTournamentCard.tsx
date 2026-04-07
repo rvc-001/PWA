@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { routes } from "@/lib/routes";
 
 interface OngoingTournamentCardProps {
   id: string;
@@ -21,7 +22,7 @@ export default function OngoingTournamentCard({
   logoText,
 }: OngoingTournamentCardProps) {
   return (
-    <Link href={`/user/tournaments/${id}`} className="block w-full active:scale-[0.98] transition-transform group">
+    <Link href={routes.tournamentDetail(id)} className="block w-full active:scale-[0.98] transition-transform group">
       <div className="flex flex-col rounded-2xl overflow-hidden shadow-sm border border-[var(--color-border)] bg-[var(--color-surface)]">
         
         {/* --- TOP SECTION (Orange) --- */}
@@ -66,3 +67,4 @@ export default function OngoingTournamentCard({
     </Link>
   );
 }
+

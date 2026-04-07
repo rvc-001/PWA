@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import Tabs, { type TabItem } from "@/components/Tabs";
 import Link from "next/link";
 import { TrophyIcon, MapPinIcon, CalendarIcon, WalletIcon, FilterIcon, EditIcon, UsersIcon } from "@/components/Icons";
+import { routes } from "@/lib/routes";
 
 
 const tabs: TabItem[] = [
@@ -112,7 +113,7 @@ export default function OrgTournamentsPage() {
             {tournaments.map((t) => (
               <Link
                 key={t.id}
-                href={`/org/tournaments/${t.id}`}
+                href={routes.orgTournamentDetail(t.id)}
                 className="card p-4 block hover:border-primary/30 transition-colors"
               >
                 <div className="flex items-start justify-between mb-2">
@@ -284,3 +285,4 @@ export default function OrgTournamentsPage() {
     </Layout>
   );
 }
+

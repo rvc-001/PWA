@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
@@ -11,6 +11,7 @@ import {
   SearchIcon,
 } from "@/components/Icons";
 import Layout from "@/components/Layout";
+import { routes } from "@/lib/routes";
 
 type TopTab = "browse" | "joined" | "history";
 type FormatTab = "all" | "singles" | "doubles";
@@ -152,7 +153,7 @@ const historyItems: TournamentItem[] = [
 function TournamentCard({ item }: { item: TournamentItem }) {
   return (
     <Link
-      href={`/tournaments/${item.id}`}
+      href={routes.tournamentDetail(item.id)}
       className="block rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-sm transition hover:border-primary"
     >
       <div className="flex items-start gap-3">
@@ -309,3 +310,4 @@ export default function TournamentsPage() {
     </Layout>
   );
 }
+

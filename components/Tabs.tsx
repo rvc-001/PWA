@@ -42,3 +42,4 @@ export default function Tabs({ tabs, activeId, onChange, ariaLabel = "Tabs" }: T
     </div>
   );
 }
+

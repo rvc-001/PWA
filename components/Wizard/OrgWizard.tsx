@@ -270,3 +270,4 @@ export default function OrgWizard({ onComplete, onClose }: OrgWizardProps) {
     </div>
   );
 }
+

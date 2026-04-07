@@ -69,3 +69,4 @@ export default function EventCard({ event, cta = "View", onCta, href }: EventCar
   }
   return content;
 }
+

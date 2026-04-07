@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import CourtSlider from "./CourtSlider";
 import MatchSplash from "./MatchSplash";
 import MatchReadyPopup from "./MatchReadyPopup";
+import { routes } from "@/lib/routes";
 
 type FlowStep = "select" | "confirm" | "loading";
 type SetupPayload = {
@@ -102,22 +103,24 @@ export default function QuickMatchFlow() {
                 return;
               }
               const matchId = `quick-${Date.now()}`;
-              const params = new URLSearchParams({
-                format: setup.format,
-                scoring: setup.scoring,
-                bestOf: String(setup.bestOf),
-                points: String(setup.points),
-                winByTwo: String(setup.winByTwo),
-                server: String(setup.initialServer),
-                p1: setup.players.leftTop ?? "Kunal Verma",
-                p2: setup.players.rightBottom ?? "Anil Kumar",
-                p3: setup.players.leftBottom ?? "",
-                p4: setup.players.rightTop ?? "",
-                court: setup.courtId,
-                quick: "1",
-              });
               closeAll();
-              router.push(`/match/${matchId}?${params.toString()}`);
+              router.push(
+                routes.matchLive({
+                  matchId,
+                  format: setup.format,
+                  scoring: setup.scoring,
+                  bestOf: setup.bestOf,
+                  points: setup.points,
+                  winByTwo: setup.winByTwo,
+                  server: setup.initialServer,
+                  p1: setup.players.leftTop ?? "Kunal Verma",
+                  p2: setup.players.rightBottom ?? "Anil Kumar",
+                  p3: setup.players.leftBottom ?? "",
+                  p4: setup.players.rightTop ?? "",
+                  court: setup.courtId,
+                  quick: "1",
+                })
+              );
             }}
           />
         )}
@@ -125,3 +128,4 @@ export default function QuickMatchFlow() {
     </>
   );
 }
+

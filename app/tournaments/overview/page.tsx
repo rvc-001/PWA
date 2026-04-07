@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Layout from "@/components/Layout";
 import Tabs, { type TabItem } from "@/components/Tabs";
 import Link from "next/link";
+import { routes } from "@/lib/routes";
 import { GamepadIcon, MapPinIcon, UsersIcon, CalendarIcon, UserIcon, MailIcon, PhoneIcon } from "@/components/Icons";
 
 const tournamentTabs: TabItem[] = [
@@ -164,7 +165,7 @@ export default function TournamentOverviewPage() {
                                             </p>
                                         </div>
                                         <Link
-                                            href="/tournaments/1/event"
+                                            href={routes.tournamentEvent("1")}
                                             className="px-4 py-2 rounded-[var(--radius-button)] text-sm font-semibold text-white"
                                             style={{ background: "var(--gradient-orange)" }}
                                         >
@@ -201,3 +202,4 @@ export default function TournamentOverviewPage() {
         </Layout>
     );
 }
+
