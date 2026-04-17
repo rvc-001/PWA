@@ -3,6 +3,7 @@ import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import ClientInit from "@/components/ClientInit";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { AuthProvider } from "@/components/AuthProvider";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -42,10 +43,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className={`${dmSans.variable} subpixel-antialiased`}>
-        <ThemeProvider>
-          <ClientInit />
-          {children}
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider>
+            <ClientInit />
+            {children}
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );

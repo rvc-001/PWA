@@ -1,4 +1,4 @@
-package com.yourorg.forehand;
+package com.forehand.app;
 
 import com.getcapacitor.BridgeActivity;
 

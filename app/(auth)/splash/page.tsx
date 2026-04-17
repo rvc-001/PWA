@@ -1,10 +1,37 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/AuthProvider";
 import { GamepadIcon } from "@/components/Icons";
 
 export default function SplashPage() {
+  const router = useRouter();
+  const { isAuthenticated, isLoading, signInWithGoogle } = useAuth();
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (isLoading) return;
+    if (isAuthenticated) {
+      router.replace("/finalize");
+    }
+  }, [isAuthenticated, isLoading, router]);
+
+  const handleGoogleLogin = async () => {
+    if (isLoading || isSubmitting) return;
+
+    try {
+      setIsSubmitting(true);
+      setError(null);
+      await signInWithGoogle();
+    } catch (cause) {
+      const message = cause instanceof Error ? cause.message : "Unable to start Google sign-in.";
+      setError(message);
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-between p-6 bg-[var(--color-background)] relative overflow-hidden">
       {/* Decorative orange triangle */}
@@ -43,13 +70,19 @@ export default function SplashPage() {
 
       {/* Bottom CTA */}
       <div className="w-full max-w-sm relative z-10 pb-safe">
-        <Link
-          href="/finalize"
+        <button
+          type="button"
+          onClick={handleGoogleLogin}
+          aria-disabled={isLoading || isSubmitting}
           className="w-full min-h-[52px] flex items-center justify-center rounded-xl font-semibold text-white shadow-lg transition-transform active:scale-95"
           style={{ background: "var(--gradient-orange)" }}
         >
-          Login with Google
-        </Link>
+          {isSubmitting ? "Connecting..." : "Login with Google"}
+        </button>
+
+        {error ? (
+          <p className="text-xs text-red-500 mt-3 text-center">{error}</p>
+        ) : null}
 
         <p className="text-xs text-[var(--color-muted)] mt-4 text-center">
           By continuing, you agree to our{" "}

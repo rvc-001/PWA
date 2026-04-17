@@ -1,14 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { UserIcon, PhoneIcon, UserIcon as GenderIcon, CalendarIcon, HandIcon, GamepadIcon } from "@/components/Icons";
+import { useAuth } from "@/components/AuthProvider";
+import {
+  CalendarIcon,
+  GamepadIcon,
+  HandIcon,
+  PhoneIcon,
+  UserIcon,
+  UserIcon as GenderIcon,
+} from "@/components/Icons";
 
 export default function FinalizePage() {
   const router = useRouter();
+  const { isAuthenticated, isLoading, user } = useAuth();
   const [formData, setFormData] = useState({
-    fullName: "",
+    name: "",
     contactNumber: "",
     gender: "",
     dob: "",
@@ -16,17 +25,42 @@ export default function FinalizePage() {
     privacySport: "",
   });
 
+  useEffect(() => {
+    if (isLoading) return;
+    if (!isAuthenticated) {
+      router.replace("/splash");
+      return;
+    }
+
+    setFormData((current) => ({
+      ...current,
+      name:
+        current.name ||
+        user?.user_metadata?.full_name ||
+        user?.user_metadata?.name ||
+        "",
+    }));
+  }, [isAuthenticated, isLoading, router, user]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission — navigate to user home
-    console.log("Form submitted:", formData);
+    console.log("Registration placeholder:", formData);
     router.push("/user/home");
   };
+
+  if (isLoading || !isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[var(--color-background)] text-[var(--color-text)]">
+        <p className="text-sm text-[var(--color-muted)]">
+          Loading your account...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[var(--color-background)] p-6 pb-safe">
       <div className="max-w-md mx-auto">
-        {/* Header with orange gradient */}
         <div
           className="rounded-2xl p-6 mb-6 text-white"
           style={{ background: "var(--gradient-orange)" }}
@@ -35,27 +69,27 @@ export default function FinalizePage() {
           <p className="text-sm opacity-90">
             Let&apos;s set up your player profile
           </p>
+          {user?.email ? (
+            <p className="text-xs opacity-75 mt-2">{user.email}</p>
+          ) : null}
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Full Name */}
           <div>
             <label className="block text-sm font-medium text-[var(--color-text)] mb-2 flex items-center gap-2">
               <UserIcon size={14} /> Full Name
             </label>
             <input
               type="text"
-              value={formData.fullName}
+              value={formData.name}
               onChange={(e) =>
-                setFormData({ ...formData, fullName: e.target.value })
+                setFormData({ ...formData, name: e.target.value })
               }
               className="w-full px-4 py-3 rounded-[var(--radius-input)] bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text)] placeholder:text-[var(--color-muted)] focus:border-primary focus:outline-none transition-colors"
               placeholder="Enter your full name"
             />
           </div>
 
-          {/* Contact Number */}
           <div>
             <label className="block text-sm font-medium text-[var(--color-text)] mb-2 flex items-center gap-2">
               <PhoneIcon size={14} /> Contact Number
@@ -71,7 +105,6 @@ export default function FinalizePage() {
             />
           </div>
 
-          {/* Gender */}
           <div>
             <label className="block text-sm font-medium text-[var(--color-text)] mb-2 flex items-center gap-2">
               <GenderIcon size={14} /> Gender
@@ -90,7 +123,6 @@ export default function FinalizePage() {
             </select>
           </div>
 
-          {/* Date of Birth */}
           <div>
             <label className="block text-sm font-medium text-[var(--color-text)] mb-2 flex items-center gap-2">
               <CalendarIcon size={14} /> Date of Birth
@@ -105,7 +137,6 @@ export default function FinalizePage() {
             />
           </div>
 
-          {/* Playing Hand */}
           <div>
             <label className="block text-sm font-medium text-[var(--color-text)] mb-2 flex items-center gap-2">
               <HandIcon size={14} /> Playing Hand
@@ -123,40 +154,34 @@ export default function FinalizePage() {
             </select>
           </div>
 
-          {/* Privacy Sport */}
           <div>
             <label className="block text-sm font-medium text-[var(--color-text)] mb-2 flex items-center gap-2">
               <GamepadIcon size={14} /> Privacy Sport
             </label>
-            <select
+            <input
+              type="text"
               value={formData.privacySport}
               onChange={(e) =>
                 setFormData({ ...formData, privacySport: e.target.value })
               }
               className="w-full px-4 py-3 rounded-[var(--radius-input)] bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text)] focus:border-primary focus:outline-none transition-colors"
-            >
-              <option value="">Select privacy preference</option>
-              <option value="public">Public</option>
-              <option value="friends">Friends Only</option>
-              <option value="private">Private</option>
-            </select>
+              placeholder="e.g. Badminton"
+            />
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             className="w-full min-h-[52px] flex items-center justify-center rounded-xl font-semibold text-white shadow-lg transition-transform active:scale-95 mt-6"
             style={{ background: "var(--gradient-orange)" }}
           >
-            Create Profile
+            Continue
           </button>
         </form>
 
-        {/* Bottom text */}
         <p className="text-xs text-[var(--color-muted)] text-center mt-6">
-          Already have an account?{" "}
-          <Link href="/user/home" className="text-primary font-medium">
-            Go to Home
+          Want to continue later?{" "}
+          <Link href="/splash" className="text-primary font-medium">
+            Back to sign in
           </Link>
         </p>
       </div>

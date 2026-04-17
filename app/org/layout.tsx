@@ -1,4 +1,6 @@
+import ProtectedRoute from "@/components/ProtectedRoute";
+
 export default function OrgLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return <ProtectedRoute>{children}</ProtectedRoute>;
 }
 

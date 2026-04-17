@@ -2,14 +2,15 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTheme } from "@/components/ThemeProvider";
+import { useAuth } from "@/components/AuthProvider";
 import BottomNav from "@/components/BottomNav";
 import { 
   BellIcon, 
   LockIcon, 
   SettingsIcon, 
   HelpCircleIcon, 
-  PhoneIcon, 
   MailIcon, 
   LogOutIcon, 
   MoonIcon, 
@@ -19,8 +20,11 @@ import {
 } from "@/components/Icons";
 
 export default function UserSettingsPage() {
+  const router = useRouter();
   const { theme, toggleTheme } = useTheme();
+  const { signOut, user } = useAuth();
   const [showSwitchModal, setShowSwitchModal] = useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   const settingsItems = [
     { href: "/user/settings/notifications", icon: BellIcon, label: "Notifications", sub: "Manage preferences" },
@@ -28,6 +32,19 @@ export default function UserSettingsPage() {
     { href: "/user/settings", icon: SettingsIcon, label: "Settings", sub: "App preferences" },
     { href: "/user/settings/help", icon: HelpCircleIcon, label: "Help & Support", sub: "Connect with support team" },
   ];
+
+  const initials = (user?.email ?? "F").trim().charAt(0).toUpperCase();
+
+  const handleSignOut = async () => {
+    try {
+      setIsSigningOut(true);
+      await signOut();
+      router.replace("/splash");
+    } catch (error) {
+      console.error("Failed to sign out", error);
+      setIsSigningOut(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[var(--color-background)] text-[var(--color-text)] flex flex-col">
@@ -51,16 +68,13 @@ export default function UserSettingsPage() {
         <div className="bg-[var(--color-surface)] rounded-2xl border border-[var(--color-border)] p-5 shadow-sm">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-full bg-primary flex flex-shrink-0 items-center justify-center text-white text-2xl font-bold">
-              A
+              {initials}
             </div>
             <div className="flex-1 min-w-0">
-              <h2 className="text-lg font-bold truncate">Alex Costa</h2>
+              <h2 className="text-lg font-bold truncate">{user?.user_metadata?.full_name ?? user?.email ?? "Forehand User"}</h2>
               <div className="mt-1 space-y-1 text-sm text-[var(--color-text-muted)]">
                 <p className="flex items-center gap-2 truncate">
-                  <PhoneIcon size={14} className="shrink-0 text-[var(--color-text)]" /> +91 98765 43210
-                </p>
-                <p className="flex items-center gap-2 truncate">
-                  <MailIcon size={14} className="shrink-0 text-[var(--color-text)]" /> alex@forehand.app
+                  <MailIcon size={14} className="shrink-0 text-[var(--color-text)]" /> {user?.email ?? "No email"}
                 </p>
               </div>
             </div>
@@ -128,8 +142,13 @@ export default function UserSettingsPage() {
         </div>
 
         <div className="pt-2">
-          <button className="w-full py-3.5 rounded-2xl border-2 border-red-500/20 bg-red-500/10 text-red-600 dark:text-red-400 font-bold text-[15px] flex items-center justify-center gap-2 hover:bg-red-500/20 transition-colors">
-            <LogOutIcon size={18} className="shrink-0" /> Log Out
+          <button
+            type="button"
+            onClick={handleSignOut}
+            disabled={isSigningOut}
+            className="w-full py-3.5 rounded-2xl border-2 border-red-500/20 bg-red-500/10 text-red-600 dark:text-red-400 font-bold text-[15px] flex items-center justify-center gap-2 hover:bg-red-500/20 transition-colors"
+          >
+            <LogOutIcon size={18} className="shrink-0" /> {isSigningOut ? "Signing Out..." : "Log Out"}
           </button>
         </div>
         
